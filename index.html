@@ -173,6 +173,29 @@
   .review p{font-size:1rem;margin-bottom:22px}
   .review .who{font-size:.88rem;color:var(--ink-soft);letter-spacing:.02em}
 
+  /* ── Apply (실측 신청 폼) ─────────────── */
+  .apply{background:var(--white)}
+  .apply-desc{color:var(--ink-soft);max-width:640px;margin-bottom:44px;font-size:1.08rem}
+  .apply-form{max-width:760px}
+  .field{margin-bottom:26px}
+  .field label{display:block;font-size:.95rem;font-weight:600;margin-bottom:10px}
+  .field label .req{color:var(--accent);margin-left:2px}
+  .field input,.field select,.field textarea{
+    width:100%;font-family:inherit;font-size:1rem;color:var(--ink);
+    background:var(--bg);border:1px solid var(--line);border-radius:2px;
+    padding:14px 16px;transition:border-color .2s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+  .field textarea{min-height:120px;resize:vertical;line-height:1.7}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .apply .btn-accent{width:100%;padding:18px;font-size:1.05rem;margin-top:6px;cursor:pointer;border:none}
+  .apply-note{font-size:.88rem;color:var(--ink-soft);margin-top:16px;line-height:1.7}
+  .apply-sent{
+    display:none;margin-top:18px;padding:16px 20px;border-radius:2px;
+    background:#eef3ea;border:1px solid #cdddc2;color:#3d5233;font-size:.95rem;
+  }
+  @media (max-width:640px){.field-row{grid-template-columns:1fr;gap:0}}
+
   /* ── Contact ────────────────────────── */
   .contact{background:var(--dark);color:#d9d2c6}
   .contact .kicker{color:#c99a63}
@@ -292,9 +315,10 @@
       <li><a href="#services">서비스</a></li>
       <li><a href="#process">진행 과정</a></li>
       <li><a href="reviews/">시공후기</a></li>
+      <li><a href="#apply">실측 신청</a></li>
       <li><a href="#contact">상담 문의</a></li>
     </ul>
-    <a href="#contact" class="nav-tel">무료 상담</a>
+    <a href="#apply" class="nav-tel">무료 상담</a>
     <button class="menu-btn" id="menuBtn" aria-label="메뉴">☰</button>
   </div>
 </header>
@@ -311,7 +335,7 @@
     원단 샘플을 들고 직접 찾아가 창 앞에서 대드리고,<br class="bd">
     실측부터 제작·설치까지 한 번에 끝내드립니다.</p>
     <div class="hero-btns">
-      <a href="#contact" class="btn btn-accent">무료 실측 상담 신청</a>
+      <a href="#apply" class="btn btn-accent">무료 실측 상담 신청</a>
       <a href="reviews/" class="btn btn-line">시공후기 보기</a>
     </div>
     <div class="hero-stats">
@@ -465,6 +489,94 @@
   </div>
 </section>
 
+<!-- ── Apply (실측 신청) ─────────────────── -->
+<section class="apply" id="apply">
+  <div class="container">
+    <span class="kicker">APPLY</span>
+    <h2 class="section-title">실측 신청하기</h2>
+    <p class="apply-desc">아래 내용을 남겨주시면 지역 담당 실장이 확인 후 연락드립니다.<br class="bd">신청 버튼을 누르면 담당 실장에게 보낼 문자가 자동으로 작성됩니다.</p>
+
+    <form class="apply-form" id="applyForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="af-name">성함<span class="req">*</span></label>
+          <input type="text" id="af-name" placeholder="홍길동" required>
+        </div>
+        <div class="field">
+          <label for="af-tel">연락처<span class="req">*</span></label>
+          <input type="tel" id="af-tel" placeholder="010-0000-0000" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="af-region">시공 지역<span class="req">*</span></label>
+        <select id="af-region" required>
+          <option value="" data-tel="">지역을 선택해 주세요</option>
+          <optgroup label="대구광역시">
+            <option data-tel="010-5495-9500">대구 중구</option>
+            <option data-tel="010-5495-9500">대구 동구</option>
+            <option data-tel="010-5495-9500">대구 서구</option>
+            <option data-tel="010-5495-9500">대구 남구</option>
+            <option data-tel="010-5495-9500">대구 북구</option>
+            <option data-tel="010-5495-9500">대구 수성구</option>
+            <option data-tel="010-5495-9500">대구 달서구</option>
+            <option data-tel="010-5495-9500">대구 달성군</option>
+            <option data-tel="010-5495-9500">대구 군위군</option>
+          </optgroup>
+          <optgroup label="경상북도 (서부)">
+            <option data-tel="010-5495-9500">경산시</option>
+            <option data-tel="010-5495-9500">구미시</option>
+            <option data-tel="010-5495-9500">김천시</option>
+            <option data-tel="010-5495-9500">청도군</option>
+            <option data-tel="010-5495-9500">칠곡군</option>
+            <option data-tel="010-5495-9500">성주군</option>
+            <option data-tel="010-5495-9500">고령군</option>
+          </optgroup>
+          <optgroup label="경상북도 (동부·북부)">
+            <option data-tel="010-2825-7275">포항시</option>
+            <option data-tel="010-2825-7275">경주시</option>
+            <option data-tel="010-2825-7275">안동시</option>
+            <option data-tel="010-2825-7275">영천시</option>
+            <option data-tel="010-2825-7275">영주시</option>
+            <option data-tel="010-2825-7275">의성군</option>
+            <option data-tel="010-2825-7275">울진군</option>
+            <option data-tel="010-2825-7275">영덕군</option>
+            <option data-tel="010-2825-7275">청송군</option>
+            <option data-tel="010-2825-7275">봉화군</option>
+            <option data-tel="010-2825-7275">영양군</option>
+            <option data-tel="010-2825-7275">문경시</option>
+            <option data-tel="010-2825-7275">상주시</option>
+            <option data-tel="010-2825-7275">예천군</option>
+            <option data-tel="010-2825-7275">울릉군</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="af-product">문의 제품</label>
+        <select id="af-product">
+          <option value="">선택 안 함 / 잘 모르겠어요</option>
+          <option>커튼</option>
+          <option>블라인드</option>
+          <option>커튼 + 블라인드</option>
+          <option>전동 커튼·블라인드</option>
+          <option>롤스크린</option>
+          <option>기타 / 상담 후 결정</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="af-msg">문의 내용</label>
+        <textarea id="af-msg" placeholder="예) 거실 통창 암막커튼 알아보고 있어요. 창 가로 약 3m입니다. 방문 가능한 요일도 알려주세요."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-accent">문자로 신청하기</button>
+      <p class="apply-note">* 신청 버튼을 누르면 휴대폰 문자 앱이 열리고, 위 내용이 담당 실장 번호로 자동 작성됩니다. <b>전송 버튼만 눌러</b> 주시면 접수됩니다. 창 사진이 있으시면 문자에 함께 첨부해 보내주시면 더 정확합니다.</p>
+      <div class="apply-sent" id="applySent"></div>
+    </form>
+  </div>
+</section>
+
 <!-- ── Contact ──────────────────────────── -->
 <section class="contact" id="contact">
   <div class="container">
@@ -573,6 +685,34 @@
   // 스크롤 리빌
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // 실측 신청 폼 → 담당 실장에게 보낼 문자 자동 작성
+  const form=document.getElementById('applyForm');
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const name=document.getElementById('af-name').value.trim();
+    const tel=document.getElementById('af-tel').value.trim();
+    const regionSel=document.getElementById('af-region');
+    const region=regionSel.value;
+    const mgrTel=regionSel.selectedOptions[0].dataset.tel;
+    const product=document.getElementById('af-product').value;
+    const msg=document.getElementById('af-msg').value.trim();
+    if(!name||!tel||!region){alert('성함, 연락처, 시공 지역을 입력해 주세요.');return;}
+
+    const mgrName=mgrTel==='010-5495-9500'?'정실장':'이실장';
+    const lines=['[따솜커튼블라인드 실측 신청]','성함: '+name,'연락처: '+tel,'지역: '+region];
+    if(product)lines.push('제품: '+product);
+    if(msg)lines.push('내용: '+msg);
+    const body=lines.join('\n');
+
+    const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+    const sep=isIOS?'&':'?';
+    const sent=document.getElementById('applySent');
+    sent.innerHTML='<b>'+region+'</b> 지역 담당 <b>'+mgrName+' '+mgrTel+'</b>에게 보낼 문자가 작성됩니다. 문자 앱에서 <b>전송</b> 버튼을 눌러 접수를 완료해 주세요.';
+    sent.style.display='block';
+    sent.scrollIntoView({behavior:'smooth',block:'center'});
+    location.href='sms:'+mgrTel+sep+'body='+encodeURIComponent(body);
+  });
 </script>
 </body>
 </html>
