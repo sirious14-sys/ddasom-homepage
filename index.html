@@ -200,7 +200,10 @@
   .field textarea{min-height:120px;resize:vertical;line-height:1.7}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .apply .btn-accent{width:100%;padding:18px;font-size:1.05rem;margin-top:6px;cursor:pointer;border:none}
-  .agree{display:flex;align-items:flex-start;gap:10px;font-size:.95rem;color:var(--ink-soft);margin:2px 0 24px;cursor:pointer}
+  .agree-box{background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:20px 22px;margin:2px 0 24px}
+  .agree-info{font-size:.86rem;color:var(--ink-soft);line-height:1.9;margin-bottom:14px}
+  .agree-info b{color:var(--ink);font-weight:700}
+  .agree{display:flex;align-items:flex-start;gap:10px;font-size:.95rem;color:var(--ink);font-weight:600;cursor:pointer}
   .agree input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--accent)}
   .apply-note{font-size:.88rem;color:var(--ink-soft);margin-top:16px;line-height:1.7}
   .apply-sent{
@@ -628,7 +631,14 @@
         <textarea id="af-msg" placeholder="예) 거실 통창 암막커튼 알아보고 있어요. 창 가로 약 3m입니다. 평일 오후에 방문 가능한 시간도 알려주세요."></textarea>
       </div>
 
-      <label class="agree"><input type="checkbox" id="af-agree"> 실측 상담을 위한 개인정보(성함·연락처·주소) 수집·이용에 동의합니다.<span class="req">*</span></label>
+      <div class="agree-box">
+        <p class="agree-info"><b>개인정보 수집·이용 안내</b><br>
+        · 수집 항목: 성함, 연락처, 주소(선택 입력)<br>
+        · 이용 목적: 실측 상담 및 방문 예약 안내<br>
+        · 보유 기간: 상담 완료 후 지체 없이 파기<br>
+        신청 내용은 별도 저장 없이 담당 실장에게 문자로 직접 전달됩니다.</p>
+        <label class="agree"><input type="checkbox" id="af-agree"> 위 개인정보 수집·이용에 동의합니다.<span class="req">*</span></label>
+      </div>
 
       <button type="submit" class="btn btn-accent">문자로 신청하기</button>
       <p class="apply-note">* 신청 버튼을 누르면 휴대폰 문자 앱이 열리고, 위 내용이 담당 실장 번호로 자동 작성됩니다. <b>전송 버튼만 눌러</b> 주시면 접수됩니다. 창 사진이 있으시면 문자에 함께 첨부해 보내주시면 더 정확합니다. · 실측과 견적은 무료입니다.</p>
