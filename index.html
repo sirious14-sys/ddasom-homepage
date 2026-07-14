@@ -200,6 +200,8 @@
   .field textarea{min-height:120px;resize:vertical;line-height:1.7}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .apply .btn-accent{width:100%;padding:18px;font-size:1.05rem;margin-top:6px;cursor:pointer;border:none}
+  .agree{display:flex;align-items:flex-start;gap:10px;font-size:.95rem;color:var(--ink-soft);margin:2px 0 24px;cursor:pointer}
+  .agree input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--accent)}
   .apply-note{font-size:.88rem;color:var(--ink-soft);margin-top:16px;line-height:1.7}
   .apply-sent{
     display:none;margin-top:18px;padding:16px 20px;border-radius:2px;
@@ -581,7 +583,35 @@
       </div>
 
       <div class="field">
-        <label for="af-product">문의 제품</label>
+        <label for="af-addr">상세 주소 <span style="font-weight:400;color:var(--ink-soft)">(선택)</span></label>
+        <input type="text" id="af-addr" placeholder="예) ○○동 ○○아파트 101동 1001호">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="af-place">실측 장소 <span style="font-weight:400;color:var(--ink-soft)">(선택)</span></label>
+          <select id="af-place">
+            <option value="">선택</option>
+            <option>아파트</option>
+            <option>주택 / 빌라</option>
+            <option>상가 / 사무실</option>
+            <option>관공서 / 기타</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="af-state">공간 상황 <span style="font-weight:400;color:var(--ink-soft)">(선택)</span></label>
+          <select id="af-state">
+            <option value="">선택</option>
+            <option>현재 공실 (비어 있음)</option>
+            <option>거주 중</option>
+            <option>입주 예정</option>
+            <option>층고 높음 / 큰 창</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="af-product">문의 제품 <span style="font-weight:400;color:var(--ink-soft)">(선택)</span></label>
         <select id="af-product">
           <option value="">선택 안 함 / 잘 모르겠어요</option>
           <option>커튼</option>
@@ -594,12 +624,14 @@
       </div>
 
       <div class="field">
-        <label for="af-msg">문의 내용</label>
-        <textarea id="af-msg" placeholder="예) 거실 통창 암막커튼 알아보고 있어요. 창 가로 약 3m입니다. 방문 가능한 요일도 알려주세요."></textarea>
+        <label for="af-msg">방문 시 요청사항 <span style="font-weight:400;color:var(--ink-soft)">(선택)</span></label>
+        <textarea id="af-msg" placeholder="예) 거실 통창 암막커튼 알아보고 있어요. 창 가로 약 3m입니다. 평일 오후에 방문 가능한 시간도 알려주세요."></textarea>
       </div>
 
+      <label class="agree"><input type="checkbox" id="af-agree"> 실측 상담을 위한 개인정보(성함·연락처·주소) 수집·이용에 동의합니다.<span class="req">*</span></label>
+
       <button type="submit" class="btn btn-accent">문자로 신청하기</button>
-      <p class="apply-note">* 신청 버튼을 누르면 휴대폰 문자 앱이 열리고, 위 내용이 담당 실장 번호로 자동 작성됩니다. <b>전송 버튼만 눌러</b> 주시면 접수됩니다. 창 사진이 있으시면 문자에 함께 첨부해 보내주시면 더 정확합니다.</p>
+      <p class="apply-note">* 신청 버튼을 누르면 휴대폰 문자 앱이 열리고, 위 내용이 담당 실장 번호로 자동 작성됩니다. <b>전송 버튼만 눌러</b> 주시면 접수됩니다. 창 사진이 있으시면 문자에 함께 첨부해 보내주시면 더 정확합니다. · 실측과 견적은 무료입니다.</p>
       <div class="apply-sent" id="applySent"></div>
     </form>
   </div>
@@ -745,14 +777,21 @@
     const regionSel=document.getElementById('af-region');
     const region=regionSel.value;
     const mgrTel=regionSel.selectedOptions[0].dataset.tel;
+    const addr=document.getElementById('af-addr').value.trim();
+    const place=document.getElementById('af-place').value;
+    const state=document.getElementById('af-state').value;
     const product=document.getElementById('af-product').value;
     const msg=document.getElementById('af-msg').value.trim();
     if(!name||!tel||!region){alert('성함, 연락처, 시공 지역을 입력해 주세요.');return;}
+    if(!document.getElementById('af-agree').checked){alert('개인정보 수집·이용에 동의해 주세요.');return;}
 
     const mgrName=mgrTel==='010-5495-9500'?'정실장':'이실장';
     const lines=['[따솜커튼블라인드 실측 신청]','성함: '+name,'연락처: '+tel,'지역: '+region];
+    if(addr)lines.push('주소: '+addr);
+    if(place)lines.push('실측 장소: '+place);
+    if(state)lines.push('공간 상황: '+state);
     if(product)lines.push('제품: '+product);
-    if(msg)lines.push('내용: '+msg);
+    if(msg)lines.push('요청사항: '+msg);
     const body=lines.join('\n');
 
     const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
