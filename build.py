@@ -66,28 +66,53 @@ def build_list(posts):
     index.write_text(html, encoding="utf-8")
 
 
+# 홈 "시공 갤러리" 룩북 — 필터형(공간·제품). 새 후기 추가 시 아래 목록에 한 줄 추가.
+#   (후기파일, 이미지경로(reviews/img/... 기준), 공간, 제품, 라벨)
+#   공간 ∈ {거실, 침실, 상가·사무실}  ·  제품 ∈ {커튼, 블라인드, 롤스크린}
+#   ※ index.html의 필터 칩(data-filter)과 태그 문자열이 정확히 일치해야 함.
+GALLERY_ITEMS = [
+    ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/01.jpg", "거실", "커튼", "거실 · 헤비쉬폰 커튼"),
+    ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/01.jpg", "거실", "커튼", "거실 · 베이지 2중커튼"),
+    ("2026-07-10-gyeongju-gampo-curtain.html", "gyeongju-gampo/01.jpg", "거실", "커튼", "거실 · 2중커튼"),
+    ("2026-06-04-pohang-jukdo-rollscreen.html", "pohang-jukdo/01.jpg", "거실", "롤스크린", "베란다 · 암막 롤스크린"),
+    ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/03.jpg", "침실", "커튼", "안방 · 2중커튼"),
+    ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/04.jpg", "침실", "커튼", "아이방 · 인디언핑크 커튼"),
+    ("2026-07-11-pohang-hansin-combi.html", "pohang-hansin/01.jpg", "침실", "블라인드", "안방 · 콤비블라인드"),
+    ("2026-07-13-uiseong-combi.html", "uiseong-gisuksa/01.jpg", "침실", "블라인드", "원룸 · 아이보리 콤비블라인드"),
+    ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/05.jpg", "침실", "블라인드", "놀이방 · 콤비블라인드"),
+    ("2026-07-09-yeongcheon-combi.html", "yeongcheon-sangga/01.jpg", "상가·사무실", "블라인드", "상가 통창 · 콤비블라인드"),
+    ("2026-07-08-cheongsong-rollscreen.html", "cheongsong-garden/01.jpg", "상가·사무실", "롤스크린", "음식점 홀 · 채광조절 롤스크린"),
+    ("2026-06-05-pohang-unislat.html", "pohang-unislat/01.jpg", "상가·사무실", "블라인드", "상가 매장 · 유니슬랫"),
+]
+
+
 def build_home_gallery(posts):
-    """홈 갤러리를 최신 후기 6개의 썸네일로 교체. 후기가 없으면 기본 일러스트 유지."""
-    withthumb = [p for p in posts if p["thumb"]][:6]
-    if not withthumb:
-        print("[skip] home gallery unchanged (no posts with photos yet)")
+    """홈 '시공 갤러리'를 GALLERY_ITEMS(공간·제품 태그)로 채운다."""
+    existing = {p["file"] for p in posts}
+    items = []
+    for f, img, space, product, label in GALLERY_ITEMS:
+        if f not in existing:
+            print(f"[warn] gallery item skipped, review missing: {f}")
+            continue
+        items.append(
+            f'      <a class="g-item" href="reviews/{f}" data-tags="{space} {product}">'
+            f'<img src="reviews/img/{img}" alt="{label} 시공 사진" loading="lazy">'
+            f'<span class="g-label">{label}</span></a>'
+        )
+    if not items:
+        print("[skip] home gallery unchanged (no items)")
         return
-    items = "\n".join(
-        f'      <a class="g-item" href="reviews/{p["file"]}">'
-        f'<img src="reviews/{p["thumb"]}" alt="{p["title"]}" loading="lazy">'
-        f'<span class="g-label">{p["title"]}</span></a>'
-        for p in withthumb
-    )
+    block = "\n".join(items) + '\n      <div class="gallery-empty">해당 조건의 시공 사진이 아직 없습니다.</div>'
     index = ROOT / "index.html"
     html = index.read_text(encoding="utf-8")
     html = re.sub(
         r"(<!-- GALLERY:START.*?-->).*?(<!-- GALLERY:END -->)",
-        lambda m: m.group(1) + "\n" + items + "\n" + m.group(2),
+        lambda m: m.group(1) + "\n" + block + "\n" + m.group(2),
         html,
         flags=re.S,
     )
     index.write_text(html, encoding="utf-8")
-    print(f"[ok] home gallery ({len(withthumb)} thumbnails)")
+    print(f"[ok] home gallery ({len(items)} items, filterable)")
 
 
 def build_sitemap(posts):

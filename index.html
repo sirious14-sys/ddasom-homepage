@@ -143,7 +143,18 @@
 
   /* ── Gallery ────────────────────────── */
   .gallery{background:var(--white)}
+  .gallery-filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:34px}
+  .chip{
+    font-family:inherit;font-size:.95rem;font-weight:600;color:var(--ink-soft);
+    background:var(--bg);border:1px solid var(--line);border-radius:99px;
+    padding:9px 20px;cursor:pointer;transition:all .2s;
+  }
+  .chip:hover{border-color:var(--accent);color:var(--ink)}
+  .chip.active{background:var(--dark);border-color:var(--dark);color:#fff}
+  .chip-div{width:1px;height:22px;background:var(--line);margin:0 4px}
+  .gallery-empty{display:none;grid-column:1/-1;text-align:center;padding:56px 0;color:var(--ink-soft)}
   .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .g-item.hide{display:none}
   .g-item{
     aspect-ratio:4/3;position:relative;overflow:hidden;border-radius:2px;
     display:flex;align-items:flex-end;
@@ -447,17 +458,34 @@
 <!-- ── Gallery ──────────────────────────── -->
 <section class="gallery" id="gallery">
   <div class="container">
-    <span class="kicker">SPACES</span>
-    <h2 class="section-title">최근 시공 사례</h2>
-    <p class="section-desc">전부 따솜이 직접 시공한 실제 현장입니다.<br class="bd">사진을 누르면 시공 이야기를 보실 수 있습니다.</p>
-    <div class="gallery-grid reveal">
+    <span class="kicker">LOOKBOOK</span>
+    <h2 class="section-title">시공 갤러리</h2>
+    <p class="section-desc">전부 따솜이 직접 시공한 실제 현장입니다. 공간과 제품으로 골라보세요.<br class="bd">마음에 드는 사진을 누르면 시공 이야기를 보실 수 있습니다.</p>
+    <div class="gallery-filters" id="galleryFilters">
+      <button class="chip active" data-filter="전체">전체</button>
+      <button class="chip" data-filter="거실">거실</button>
+      <button class="chip" data-filter="침실">침실</button>
+      <button class="chip" data-filter="상가·사무실">상가·사무실</button>
+      <span class="chip-div"></span>
+      <button class="chip" data-filter="커튼">커튼</button>
+      <button class="chip" data-filter="블라인드">블라인드</button>
+      <button class="chip" data-filter="롤스크린">롤스크린</button>
+    </div>
+    <div class="gallery-grid reveal" id="galleryGrid">
 <!-- GALLERY:START (후기 등록 시 build.py가 자동 교체) -->
-      <a class="g-item" href="reviews/2026-07-13-uiseong-combi.html"><img src="reviews/img/uiseong-gisuksa/01.jpg" alt="의성 기숙사 아이보리 암막 콤비블라인드 시공후기" loading="lazy"><span class="g-label">의성 기숙사 아이보리 암막 콤비블라인드 시공후기</span></a>
-      <a class="g-item" href="reviews/2026-07-11-pohang-hansin-combi.html"><img src="reviews/img/pohang-hansin/01.jpg" alt="포항 학산 한신더휴 아이보리 콤비블라인드·커튼레일 시공후기" loading="lazy"><span class="g-label">포항 학산 한신더휴 아이보리 콤비블라인드·커튼레일 시공후기</span></a>
-      <a class="g-item" href="reviews/2026-07-10-gyeongju-gampo-curtain.html"><img src="reviews/img/gyeongju-gampo/01.jpg" alt="경주 감포 푸르뫼사택 거실 2중커튼·안방 암막커튼 시공후기" loading="lazy"><span class="g-label">경주 감포 푸르뫼사택 거실 2중커튼·안방 암막커튼 시공후기</span></a>
-      <a class="g-item" href="reviews/2026-07-09-yeongcheon-combi.html"><img src="reviews/img/yeongcheon-sangga/01.jpg" alt="영천 상가 전면 통창 콤비블라인드 시공후기" loading="lazy"><span class="g-label">영천 상가 전면 통창 콤비블라인드 시공후기</span></a>
-      <a class="g-item" href="reviews/2026-07-08-cheongsong-rollscreen.html"><img src="reviews/img/cheongsong-garden/01.jpg" alt="청송 주왕산가든 대형 홀 채광조절 롤스크린 전체 교체 시공후기" loading="lazy"><span class="g-label">청송 주왕산가든 대형 홀 채광조절 롤스크린 전체 교체 시공후기</span></a>
-      <a class="g-item" href="reviews/2026-07-01-andong-jeongha-curtain.html"><img src="reviews/img/andong-jeongha/01.jpg" alt="안동 정하동 아파트 거실·안방 베이지 2중커튼 시공후기" loading="lazy"><span class="g-label">안동 정하동 아파트 거실·안방 베이지 2중커튼 시공후기</span></a>
+      <a class="g-item" href="reviews/2026-06-30-yeongju-gaheung-curtain.html" data-tags="거실 커튼"><img src="reviews/img/yeongju-gaheung/01.jpg" alt="거실 · 헤비쉬폰 커튼 시공 사진" loading="lazy"><span class="g-label">거실 · 헤비쉬폰 커튼</span></a>
+      <a class="g-item" href="reviews/2026-07-01-andong-jeongha-curtain.html" data-tags="거실 커튼"><img src="reviews/img/andong-jeongha/01.jpg" alt="거실 · 베이지 2중커튼 시공 사진" loading="lazy"><span class="g-label">거실 · 베이지 2중커튼</span></a>
+      <a class="g-item" href="reviews/2026-07-10-gyeongju-gampo-curtain.html" data-tags="거실 커튼"><img src="reviews/img/gyeongju-gampo/01.jpg" alt="거실 · 2중커튼 시공 사진" loading="lazy"><span class="g-label">거실 · 2중커튼</span></a>
+      <a class="g-item" href="reviews/2026-06-04-pohang-jukdo-rollscreen.html" data-tags="거실 롤스크린"><img src="reviews/img/pohang-jukdo/01.jpg" alt="베란다 · 암막 롤스크린 시공 사진" loading="lazy"><span class="g-label">베란다 · 암막 롤스크린</span></a>
+      <a class="g-item" href="reviews/2026-07-01-andong-jeongha-curtain.html" data-tags="침실 커튼"><img src="reviews/img/andong-jeongha/03.jpg" alt="안방 · 2중커튼 시공 사진" loading="lazy"><span class="g-label">안방 · 2중커튼</span></a>
+      <a class="g-item" href="reviews/2026-06-30-yeongju-gaheung-curtain.html" data-tags="침실 커튼"><img src="reviews/img/yeongju-gaheung/04.jpg" alt="아이방 · 인디언핑크 커튼 시공 사진" loading="lazy"><span class="g-label">아이방 · 인디언핑크 커튼</span></a>
+      <a class="g-item" href="reviews/2026-07-11-pohang-hansin-combi.html" data-tags="침실 블라인드"><img src="reviews/img/pohang-hansin/01.jpg" alt="안방 · 콤비블라인드 시공 사진" loading="lazy"><span class="g-label">안방 · 콤비블라인드</span></a>
+      <a class="g-item" href="reviews/2026-07-13-uiseong-combi.html" data-tags="침실 블라인드"><img src="reviews/img/uiseong-gisuksa/01.jpg" alt="원룸 · 아이보리 콤비블라인드 시공 사진" loading="lazy"><span class="g-label">원룸 · 아이보리 콤비블라인드</span></a>
+      <a class="g-item" href="reviews/2026-06-30-yeongju-gaheung-curtain.html" data-tags="침실 블라인드"><img src="reviews/img/yeongju-gaheung/05.jpg" alt="놀이방 · 콤비블라인드 시공 사진" loading="lazy"><span class="g-label">놀이방 · 콤비블라인드</span></a>
+      <a class="g-item" href="reviews/2026-07-09-yeongcheon-combi.html" data-tags="상가·사무실 블라인드"><img src="reviews/img/yeongcheon-sangga/01.jpg" alt="상가 통창 · 콤비블라인드 시공 사진" loading="lazy"><span class="g-label">상가 통창 · 콤비블라인드</span></a>
+      <a class="g-item" href="reviews/2026-07-08-cheongsong-rollscreen.html" data-tags="상가·사무실 롤스크린"><img src="reviews/img/cheongsong-garden/01.jpg" alt="음식점 홀 · 채광조절 롤스크린 시공 사진" loading="lazy"><span class="g-label">음식점 홀 · 채광조절 롤스크린</span></a>
+      <a class="g-item" href="reviews/2026-06-05-pohang-unislat.html" data-tags="상가·사무실 블라인드"><img src="reviews/img/pohang-unislat/01.jpg" alt="상가 매장 · 유니슬랫 시공 사진" loading="lazy"><span class="g-label">상가 매장 · 유니슬랫</span></a>
+      <div class="gallery-empty">해당 조건의 시공 사진이 아직 없습니다.</div>
 <!-- GALLERY:END -->
     </div>
     <div style="margin-top:44px">
@@ -685,6 +713,28 @@
   // 스크롤 리빌
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // 시공 갤러리 필터
+  const gFilters=document.getElementById('galleryFilters');
+  if(gFilters){
+    const grid=document.getElementById('galleryGrid');
+    const empty=grid.querySelector('.gallery-empty');
+    gFilters.addEventListener('click',e=>{
+      const btn=e.target.closest('.chip');
+      if(!btn)return;
+      gFilters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      const f=btn.dataset.filter;
+      let shown=0;
+      grid.querySelectorAll('.g-item').forEach(it=>{
+        const tags=(it.dataset.tags||'').split(' ');
+        const match=f==='전체'||tags.includes(f);
+        it.classList.toggle('hide',!match);
+        if(match)shown++;
+      });
+      if(empty)empty.style.display=shown?'none':'block';
+    });
+  }
 
   // 실측 신청 폼 → 담당 실장에게 보낼 문자 자동 작성
   const form=document.getElementById('applyForm');
