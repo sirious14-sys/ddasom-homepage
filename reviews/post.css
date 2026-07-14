@@ -8,7 +8,6 @@
 html{font-size:19px}
 body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.85;word-break:keep-all}
 p{text-wrap:pretty}
-@media(max-width:640px){br.bd{display:none}}
 h1,h2,h3,.logo{font-family:var(--sans);font-weight:750;letter-spacing:-.035em}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
@@ -43,8 +42,9 @@ header{position:sticky;top:0;z-index:100;background:rgba(247,244,238,.94);backdr
 .mobile-cta{display:none}
 @media (max-width:768px){
   .mobile-cta{display:flex;align-items:stretch;position:fixed;bottom:0;left:0;right:0;z-index:99;box-shadow:0 -6px 24px rgba(33,27,20,.18);padding-bottom:env(safe-area-inset-bottom)}
-  .mobile-cta a{flex:1 1 0;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:8px;height:58px;font-weight:700;font-size:1.02rem;white-space:nowrap;line-height:1}
-  .mobile-cta svg{width:18px;height:18px;flex:none;stroke:currentColor;stroke-width:1.8;fill:none}
+  .mobile-cta a{flex:1 1 0;box-sizing:border-box;height:58px;display:grid;grid-auto-flow:column;place-content:center;align-items:center;gap:8px;font-weight:700;font-size:1.02rem;white-space:nowrap;line-height:1}
+  .mobile-cta a span{display:block;line-height:1}
+  .mobile-cta svg{width:18px;height:18px;flex:none;display:block;stroke:currentColor;stroke-width:1.8;fill:none}
   .mobile-cta .m-tel{background:var(--accent);color:#fff}
   .mobile-cta .m-sms{background:var(--dark);color:#fff}
   footer{padding-bottom:104px}
