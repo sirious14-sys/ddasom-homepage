@@ -38,11 +38,15 @@ def parse_post(path: Path):
 def build_list(posts):
     index = REVIEWS / "index.html"
     html = index.read_text(encoding="utf-8")
+    region_order = []  # 등장 순서 유지용
     if not posts:
         cards = '<div class="empty-state">첫 시공후기를 준비 중입니다. 곧 만나보실 수 있어요 🪟</div>'
     else:
         items = []
         for p in posts:
+            region = p["title"].split()[0] if p["title"] else ""  # 제목 첫 단어 = 지역
+            if region and region not in region_order:
+                region_order.append(region)
             thumb = (
                 f'<span class="thumb"><img src="{p["thumb"]}" alt="{p["title"]}" loading="lazy"></span>'
                 if p["thumb"]
@@ -52,7 +56,7 @@ def build_list(posts):
             # 카드 설명도 문장 단위 줄바꿈 (모바일에선 br.bd 숨김)
             desc = re.sub(r"(?<=[가-힣])\. (?=.)", '.<br class="bd">', p["desc"])
             items.append(
-                f'<a class="review-card" href="{p["file"]}">{thumb}'
+                f'<a class="review-card" href="{p["file"]}" data-region="{region}">{thumb}'
                 f'<span class="body"><span class="date">{y}년 {int(mo)}월 {int(d)}일</span>'
                 f'<h2>{p["title"]}</h2><p>{desc}</p></span></a>'
             )
@@ -60,6 +64,20 @@ def build_list(posts):
     html = re.sub(
         r"(<!-- REVIEWS:START.*?-->).*?(<!-- REVIEWS:END -->)",
         lambda m: m.group(1) + "\n" + cards + "\n" + m.group(2),
+        html,
+        flags=re.S,
+    )
+    # 지역 필터 칩 (후기 많은 지역 순, 동수면 등장순)
+    counts = {}
+    for p in posts:
+        r = p["title"].split()[0] if p["title"] else ""
+        counts[r] = counts.get(r, 0) + 1
+    regions = sorted(region_order, key=lambda r: (-counts[r], region_order.index(r)))
+    chips = ['  <button class="chip active" data-filter="전체">전체</button>']
+    chips += [f'  <button class="chip" data-filter="{r}">{r}</button>' for r in regions]
+    html = re.sub(
+        r"(<!-- FILTERS:START.*?-->).*?(<!-- FILTERS:END -->)",
+        lambda m: m.group(1) + "\n" + "\n".join(chips) + "\n" + m.group(2),
         html,
         flags=re.S,
     )
