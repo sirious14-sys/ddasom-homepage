@@ -18,6 +18,18 @@ REVIEWS = ROOT / "reviews"
 
 BASE_URL = "https://ddasom.com"
 
+# 대구는 구/군으로 안 나누고 "대구" 하나로 묶는다 (경북은 시·군별 유지).
+# 후기 제목 첫 단어가 아래에 있으면 지역을 "대구"로 통일. (제목은 "대구 …"로 시작 권장)
+DAEGU_ALIAS = {"대구", "수성구", "달서구", "달성군", "군위군"}
+
+
+def region_of(title: str) -> str:
+    """후기 제목 첫 단어 = 지역. 단, 대구 구/군은 '대구'로 통일."""
+    if not title:
+        return ""
+    first = title.split()[0]
+    return "대구" if first in DAEGU_ALIAS else first
+
 
 def parse_post(path: Path):
     html = path.read_text(encoding="utf-8")
@@ -44,7 +56,7 @@ def build_list(posts):
     else:
         items = []
         for p in posts:
-            region = p["title"].split()[0] if p["title"] else ""  # 제목 첫 단어 = 지역
+            region = region_of(p["title"])
             if region and region not in region_order:
                 region_order.append(region)
             thumb = (
@@ -67,14 +79,17 @@ def build_list(posts):
         html,
         flags=re.S,
     )
-    # 지역 필터 칩 (후기 많은 지역 순, 동수면 등장순)
+    # 지역 필터 칩 — 가나다순 + 지역별 후기 개수 표시 (지역이 많아져도 한눈에)
     counts = {}
     for p in posts:
-        r = p["title"].split()[0] if p["title"] else ""
+        r = region_of(p["title"])
         counts[r] = counts.get(r, 0) + 1
-    regions = sorted(region_order, key=lambda r: (-counts[r], region_order.index(r)))
-    chips = ['  <button class="chip active" data-filter="전체">전체</button>']
-    chips += [f'  <button class="chip" data-filter="{r}">{r}</button>' for r in regions]
+    regions = sorted(counts)  # 가나다순
+    chips = [f'  <button class="chip active" data-filter="전체">전체 <span class="chip-n">{len(posts)}</span></button>']
+    chips += [
+        f'  <button class="chip" data-filter="{r}">{r} <span class="chip-n">{counts[r]}</span></button>'
+        for r in regions
+    ]
     html = re.sub(
         r"(<!-- FILTERS:START.*?-->).*?(<!-- FILTERS:END -->)",
         lambda m: m.group(1) + "\n" + "\n".join(chips) + "\n" + m.group(2),
