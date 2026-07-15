@@ -31,6 +31,44 @@ def region_of(title: str) -> str:
     return "대구" if first in DAEGU_ALIAS else first
 
 
+# 지역별 담당 실장 (정실장: 대구권+경북 서부, 이실장: 경북 동북부)
+JEONG_REGIONS = {"대구", "경산", "구미", "김천", "청도", "칠곡", "성주", "군위", "고령"}
+
+
+def manager_of(region: str):
+    """지역 → (실장명, 전화번호). 정실장 담당이 아니면 이실장."""
+    if region in JEONG_REGIONS:
+        return ("정실장", "010-5495-9500")
+    return ("이실장", "010-2825-7275")
+
+
+_MCTA_SVG = ('<svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5'
+             'L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>')
+
+
+def apply_cta(path, region):
+    """후기 페이지의 CTA를 그 지역 담당 실장 한 명으로 통일 ('포항 이실장 …')."""
+    if not region:
+        return
+    mgr, tel = manager_of(region)
+    label = f"{region} {mgr} {tel}"
+    html = path.read_text(encoding="utf-8")
+    # post-cta 안내박스: 전화 버튼(1개 이상) → 담당 실장 1개
+    html = re.sub(
+        r'(<div class="post-cta">.*?</p>)\s*(?:<a[^>]*class="btn btn-tel"[^>]*>.*?</a>\s*)+(</div>)',
+        lambda m: f'{m.group(1)}\n    <a href="tel:{tel}" class="btn btn-tel">{label}</a>\n  {m.group(2)}',
+        html, flags=re.S,
+    )
+    # 모바일 하단 바: 담당 실장 1개(전체폭)
+    html = re.sub(
+        r'<div class="mobile-cta">.*?</div>',
+        f'<div class="mobile-cta"><a href="tel:{tel}" class="m-tel">{_MCTA_SVG}'
+        f'<span>{region} {mgr} 전화</span></a></div>',
+        html, flags=re.S,
+    )
+    path.write_text(html, encoding="utf-8")
+
+
 def parse_post(path: Path):
     html = path.read_text(encoding="utf-8")
     m = re.match(r"(\d{4}-\d{2}-\d{2})-", path.name)
@@ -173,8 +211,11 @@ def main():
         key=lambda p: p["date"],
         reverse=True,
     )
+    # 각 후기 CTA를 그 지역 담당 실장으로 통일
+    for p in posts:
+        apply_cta(REVIEWS / p["file"], region_of(p["title"]))
     build_list(posts)
-    print(f"[ok] reviews/index.html ({len(posts)} posts)")
+    print(f"[ok] reviews/index.html ({len(posts)} posts, CTA=지역 담당 실장)")
     build_home_gallery(posts)
     build_sitemap(posts)
 
