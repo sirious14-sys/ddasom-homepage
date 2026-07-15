@@ -23,6 +23,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(247,244,238,.94);backdr
 .post{padding:64px 28px 90px}
 .post-date{font-size:.82rem;color:var(--accent);letter-spacing:.08em;margin-bottom:12px}
 .post h1{font-size:clamp(1.5rem,3.5vw,2rem);line-height:1.45;margin-bottom:14px}
+.post h2{font-size:1.32rem;line-height:1.4;margin:42px 0 14px}
 .post-tags{font-size:.85rem;color:var(--ink-soft);margin-bottom:44px}
 .post p{margin-bottom:24px;font-size:1rem}
 .post figure{margin:36px 0}
