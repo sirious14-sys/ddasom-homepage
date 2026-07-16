@@ -31,6 +31,20 @@ def region_of(title: str) -> str:
     return "대구" if first in DAEGU_ALIAS else first
 
 
+# 대구·경북 시·군 전체 — 여기 없는 지역(대전 등)은 목록 필터에서 "기타지역"으로 묶는다.
+# (제목·CTA에는 실제 지역명 유지: "대전 이실장 …")
+GB_REGIONS = {
+    "대구", "포항", "경주", "김천", "안동", "구미", "영주", "영천", "상주", "문경",
+    "경산", "군위", "의성", "청송", "영양", "영덕", "청도", "고령", "성주", "칠곡",
+    "예천", "봉화", "울진", "울릉",
+}
+
+
+def chip_region(region: str) -> str:
+    """목록 필터용 지역: 대구·경북 밖이면 '기타지역'."""
+    return region if region in GB_REGIONS else "기타지역"
+
+
 # 지역별 담당 실장 (정실장: 대구권+경북 서부, 이실장: 경북 동북부)
 JEONG_REGIONS = {"대구", "경산", "구미", "김천", "청도", "칠곡", "성주", "군위", "고령"}
 
@@ -94,7 +108,7 @@ def build_list(posts):
     else:
         items = []
         for p in posts:
-            region = region_of(p["title"])
+            region = chip_region(region_of(p["title"]))
             if region and region not in region_order:
                 region_order.append(region)
             thumb = (
@@ -120,9 +134,9 @@ def build_list(posts):
     # 지역 필터 칩 — 가나다순 + 지역별 후기 개수 표시 (지역이 많아져도 한눈에)
     counts = {}
     for p in posts:
-        r = region_of(p["title"])
+        r = chip_region(region_of(p["title"]))
         counts[r] = counts.get(r, 0) + 1
-    regions = sorted(counts)  # 가나다순
+    regions = sorted(counts, key=lambda r: (r == "기타지역", r))  # 가나다순, 기타지역은 맨 뒤
     chips = [f'  <button class="chip active" data-filter="전체">전체 <span class="chip-n">{len(posts)}</span></button>']
     chips += [
         f'  <button class="chip" data-filter="{r}">{r} <span class="chip-n">{counts[r]}</span></button>'
