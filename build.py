@@ -461,7 +461,7 @@ def build_home_areas(infos):
         print("[skip] index.html에 AREAS 마커 없음")
         return
     links = "\n".join(
-        f'      <a class="area-link" href="areas/{slug}.html">{region} 커튼·블라인드 시공 <span>{n}건</span></a>'
+        f'      <a class="area-link" href="areas/{slug}.html">{region} 출장 시공 <span>후기 {n}건</span></a>'
         for region, slug, n in infos
     )
     html = re.sub(
