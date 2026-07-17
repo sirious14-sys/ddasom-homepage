@@ -156,24 +156,50 @@ def build_list(posts):
 #   공간 ∈ {거실, 침실, 상가·사무실}  ·  제품 ∈ {커튼, 블라인드, 롤스크린}
 #   ※ index.html의 필터 칩(data-filter)과 태그 문자열이 정확히 일치해야 함.
 GALLERY_ITEMS = [
+    # 거실
+    ("2026-07-17-pohang-yangdeok-linen.html", "pohang-pungrim/01.jpg", "거실", "커튼", "거실 · ㄱ자 린넨커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/01.jpg", "거실", "커튼", "거실 · 헤비쉬폰 커튼"),
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/01.jpg", "거실", "커튼", "거실 · 베이지 2중커튼"),
     ("2026-07-10-gyeongju-gampo-curtain.html", "gyeongju-gampo/01.jpg", "거실", "커튼", "거실 · 2중커튼"),
+    ("2026-06-27-andong-okdong-double.html", "andong-okdong/01.jpg", "거실", "커튼", "거실 · 2중커튼"),
+    ("2026-06-24-gumi-okgye-curtain.html", "gumi-okgye/01.jpg", "거실", "커튼", "거실 · 헤비쉬폰 2중커튼"),
+    ("2026-06-24-pohang-jangseong-combi.html", "pohang-jangseong/01.jpg", "거실", "커튼", "거실 · 헤비쉬폰 커튼"),
+    ("2026-06-24-yeongcheon-geumho-sheer.html", "yeongcheon-geumho/01.jpg", "거실", "커튼", "주택 통창 · 헤비쉬폰 커튼"),
+    ("2026-06-08-andong-seodongmun-sheer.html", "andong-seodongmun/01.jpg", "거실", "커튼", "전면 통창 · 헤비쉬폰"),
+    ("2026-06-20-yeongdeok-jipum-blackout.html", "yeongdeok-jipum/01.jpg", "거실", "커튼", "거실 · 암막커튼"),
+    ("2026-07-16-daejeon-jukdong-combi.html", "daejeon-jukdong/01.jpg", "거실", "블라인드", "거실 · 우드룩 콤비블라인드"),
     ("2026-06-04-pohang-jukdo-rollscreen.html", "pohang-jukdo/01.jpg", "거실", "롤스크린", "베란다 · 암막 롤스크린"),
+    ("2026-07-17-pohang-yangdeok-linen.html", "pohang-pungrim/05.jpg", "거실", "롤스크린", "베란다 · 아이보리 롤스크린"),
+    # 침실
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/03.jpg", "침실", "커튼", "안방 · 2중커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/04.jpg", "침실", "커튼", "아이방 · 인디언핑크 커튼"),
+    ("2026-06-27-andong-okdong-double.html", "andong-okdong/03.jpg", "침실", "커튼", "안방 · 인디언핑크 암막"),
+    ("2026-06-21-yeongju-apt-blackout.html", "yeongju-apt/01.jpg", "침실", "커튼", "안방 · 진그레이 암막커튼"),
     ("2026-07-11-pohang-hansin-combi.html", "pohang-hansin/01.jpg", "침실", "블라인드", "안방 · 콤비블라인드"),
     ("2026-07-13-uiseong-combi.html", "uiseong-gisuksa/01.jpg", "침실", "블라인드", "원룸 · 아이보리 콤비블라인드"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/05.jpg", "침실", "블라인드", "놀이방 · 콤비블라인드"),
+    ("2026-07-01-gyeongju-hwangseong-combi.html", "gyeongju-hwangseong/01.jpg", "침실", "블라인드", "방 · 콤비블라인드"),
+    ("2026-06-24-pohang-jangseong-combi.html", "pohang-jangseong/04.jpg", "침실", "블라인드", "작은방 · 콤비블라인드"),
+    ("2026-07-16-daejeon-jukdong-combi.html", "daejeon-jukdong/03.jpg", "침실", "롤스크린", "안방 · 화이트 암막롤스크린"),
+    # 상가·사무실
     ("2026-07-09-yeongcheon-combi.html", "yeongcheon-sangga/01.jpg", "상가·사무실", "블라인드", "상가 통창 · 콤비블라인드"),
-    ("2026-07-08-cheongsong-rollscreen.html", "cheongsong-garden/01.jpg", "상가·사무실", "롤스크린", "음식점 홀 · 채광조절 롤스크린"),
     ("2026-06-05-pohang-unislat.html", "pohang-unislat/01.jpg", "상가·사무실", "블라인드", "상가 매장 · 유니슬랫"),
+    ("2026-06-21-gyeongsan-cafe-wood.html", "gyeongsan-cafe/01.jpg", "상가·사무실", "블라인드", "카페 · 우드블라인드"),
+    ("2026-06-07-pohang-daejam-combi.html", "pohang-daejam/01.jpg", "상가·사무실", "블라인드", "임대 공간 · 진그레이 콤비"),
+    ("2026-07-08-cheongsong-rollscreen.html", "cheongsong-garden/01.jpg", "상가·사무실", "롤스크린", "음식점 홀 · 채광조절 롤스크린"),
 ]
 
 
 def build_home_gallery(posts):
     """홈 '시공 갤러리'를 GALLERY_ITEMS(공간·제품 태그)로 채운다."""
     existing = {p["file"] for p in posts}
+    # 갤러리에 한 장도 안 들어간 후기가 있으면 크게 경고 (새 후기 넣고 갤러리 깜빡 방지)
+    featured = {f for f, *_ in GALLERY_ITEMS}
+    missing = [p["file"] for p in posts if p["file"] not in featured]
+    if missing:
+        print(f"[WARN] 갤러리에 안 들어간 후기 {len(missing)}건 → GALLERY_ITEMS에 추가하세요:")
+        for f in missing:
+            print(f"        - {f}")
     items = []
     for f, img, space, product, label in GALLERY_ITEMS:
         if f not in existing:
