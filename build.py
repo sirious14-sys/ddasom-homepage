@@ -446,6 +446,9 @@ def build_area_pages(posts):
                 .replace("__TEL__", tel)
                 .replace("__OGIMG__", ogimg)
                 .replace("__CARDS__", "\n".join(cards)))
+        # 대구·경북 밖 지역(대전 등)은 "전지역 출장" 과장 표현을 뺀다 (사례는 있되 기본 권역 아님)
+        if region not in GB_REGIONS:
+            html = html.replace(f"{region} 전지역", region)
         (area_dir / f"{slug}.html").write_text(html, encoding="utf-8")
         infos.append((region, slug, len(rposts)))
     infos.sort(key=lambda x: -x[2])  # 후기 많은 순
