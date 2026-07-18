@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>견적 계산기 (내부용)</title>
+<style>
+:root{--bg:#f7f4ee;--ink:#211b14;--soft:#7b7061;--line:#e2dacb;--accent:#a4713f;--accent2:#8a5c31;--white:#fff;--sans:-apple-system,'Pretendard','Noto Sans KR',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.6;font-size:17px;padding:20px 16px 60px}
+.wrap{max-width:430px;margin:0 auto}
+h1{font-size:21px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.sub{color:var(--soft);font-size:13px;margin-bottom:20px}
+.rows{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.row{display:flex;gap:8px;align-items:center}
+.row .no{width:34px;text-align:center;color:var(--soft);font-size:14px;font-weight:600}
+.row input{flex:1;border:1px solid var(--line);border-radius:11px;padding:14px;font-size:18px;font-family:var(--sans);background:var(--white);text-align:right}
+.row input:focus{outline:none;border-color:var(--accent)}
+.row .del{border:none;background:none;color:var(--soft);font-size:20px;padding:6px;cursor:pointer}
+.addbtn{width:100%;border:1px dashed var(--accent);background:#fbf6ef;color:var(--accent2);border-radius:11px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:22px}
+.result{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px}
+.result .big{font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--accent2);text-align:center;padding:6px 0 2px}
+.result .biglabel{text-align:center;color:var(--soft);font-size:13px;margin-bottom:14px}
+.line{display:flex;justify-content:space-between;font-size:14.5px;padding:5px 0;border-top:1px dashed var(--line);color:var(--soft)}
+.line b{color:var(--ink);font-weight:600}
+.line.total{border-top:1px solid var(--line);margin-top:4px;padding-top:10px}
+.profit{margin-top:14px;background:#f3efe6;border-radius:10px;padding:12px 14px;font-size:14.5px;text-align:center}
+.profit b{color:var(--accent2)}
+.warn{margin-top:16px;font-size:13px;color:var(--soft);line-height:1.7}
+.warn b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>따솜 견적 계산기</h1>
+  <div class="sub">내부용 · 온·오프 동일가 정책 (2026-07 확정)</div>
+
+  <div class="rows" id="rows"></div>
+  <button class="addbtn" onclick="addRow()">＋ 벌(품목) 추가</button>
+
+  <div class="result">
+    <div class="big" id="total">0원</div>
+    <div class="biglabel">손님께 제시할 총액 (천원 올림)</div>
+    <div class="line"><span>제품가 (원가+30%)</span><b id="r1">0원</b></div>
+    <div class="line"><span>견적·실측</span><b>40,000원</b></div>
+    <div class="line"><span>시공 출장</span><b>30,000원</b></div>
+    <div class="line"><span>시공비 (벌당 1만)</span><b id="r2">0원</b></div>
+    <div class="profit">이번 건에 남는 돈: <b id="profit">0원</b></div>
+  </div>
+
+  <p class="warn">
+  <b>이 금액 밑으로 할인 금지.</b><br>
+  깎아달라 하시면 할인 대신 덤으로 대응 (속커튼 서비스 등).<br>
+  견적비·출장비는 내부 계산용 — 손님께는 총액만 말씀드립니다.<br>
+  손님 안내 문구: "실측·견적은 무료이고, 온라인 가격 그대로 시공까지 해드려요."
+  </p>
+</div>
+
+<script>
+if(sessionStorage.getItem('dq')!=='1'){
+  const c=prompt('입장 코드');
+  if(c==='7275'||c==='9500'){sessionStorage.setItem('dq','1');}
+  else{document.body.innerHTML='';}
+}
+const rows=document.getElementById('rows');
+function addRow(){
+  const n=rows.children.length+1;
+  const d=document.createElement('div');d.className='row';
+  d.innerHTML='<span class="no">'+n+'벌</span><input type="tel" inputmode="numeric" placeholder="제품 원가 (원)">'+
+    '<button class="del" aria-label="삭제" onclick="this.parentNode.remove();renum();calc()">✕</button>';
+  d.querySelector('input').addEventListener('input',calc);
+  rows.appendChild(d);
+  d.querySelector('input').focus();
+}
+function renum(){[...rows.children].forEach((r,i)=>r.querySelector('.no').textContent=(i+1)+'벌');}
+function won(v){return v.toLocaleString('ko-KR')+'원';}
+function calc(){
+  const costs=[...rows.querySelectorAll('input')].map(i=>parseInt(i.value.replace(/\D/g,''))||0).filter(v=>v>0);
+  const cost=costs.reduce((a,b)=>a+b,0);
+  const n=costs.length;
+  const product=Math.round(cost*1.3);
+  const fee=n?70000+10000*n:0;
+  const total=n?Math.ceil((product+fee)/1000)*1000:0;
+  document.getElementById('r1').textContent=won(product);
+  document.getElementById('r2').textContent=won(10000*n);
+  document.getElementById('total').textContent=won(total);
+  document.getElementById('profit').textContent=won(total-cost);
+}
+addRow();
+</script>
+</body>
+</html>
