@@ -246,13 +246,13 @@ AREA_TMPL = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>__REGION__ 커튼·블라인드 시공 업체 | 따솜커튼블라인드 (무료 출장 실측)</title>
-<meta name="description" content="__REGION__ 커튼·블라인드 출장 시공은 따솜커튼블라인드. __REGION__ 전지역 무료 방문 실측부터 속커튼·암막커튼·콤비블라인드·롤스크린 맞춤 시공까지. __REGION__ 담당 __MGR__ __TEL__. 실제 시공후기 확인.">
+<title>__REGION__ 커튼·블라인드 시공 업체 | 따솜커튼블라인드 (출장 실측·시공)</title>
+<meta name="description" content="__REGION__ 커튼·블라인드 출장 시공은 따솜커튼블라인드. __REGION__ 전지역 방문 실측부터 속커튼·암막커튼·콤비블라인드·롤스크린 맞춤 시공까지. __REGION__ 담당 __MGR__ __TEL__. 실제 시공후기 확인.">
 <link rel="canonical" href="https://ddasom.com/areas/__SLUG__.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="따솜커튼블라인드">
 <meta property="og:title" content="__REGION__ 커튼·블라인드 시공 업체 | 따솜커튼블라인드">
-<meta property="og:description" content="__REGION__ 전지역 커튼·블라인드 무료 출장 실측·맞춤 시공. __REGION__ 담당 __MGR__ __TEL__.">
+<meta property="og:description" content="__REGION__ 전지역 커튼·블라인드 출장 실측·맞춤 시공. __REGION__ 담당 __MGR__ __TEL__.">
 <meta property="og:url" content="https://ddasom.com/areas/__SLUG__.html">
 <meta property="og:image" content="__OGIMG__">
 <script type="application/ld+json">
@@ -312,7 +312,7 @@ p.body{margin:0 0 9px}
   <div class="hero">
     <span class="tag">__REGION__ 전지역 출장 시공</span>
     <h1>__REGION__ 커튼·블라인드 시공,<br>따솜이 직접 방문합니다</h1>
-    <p>__REGION__ 아파트·주택·상가 어디든 무료 방문 실측부터 맞춤 제작·설치까지.<br>창에 직접 원단을 대보고 색을 고른 뒤 시공하니 실패가 없습니다.</p>
+    <p>__REGION__ 아파트·주택·상가 어디든 방문 실측부터 맞춤 제작·설치까지.<br>창에 직접 원단을 대보고 색을 고른 뒤 시공하니 실패가 없습니다.</p>
     <div class="mgr">
       <div><div class="who">__REGION__ 담당</div><div class="tel">__MGR__ __TEL__</div></div>
       <a class="call" href="tel:__TEL__">전화 상담</a>
@@ -325,7 +325,7 @@ p.body{margin:0 0 9px}
   <p class="body">방문 실측 → 원단·색 상담 → 맞춤 제작 → 설치까지 한 번에 끝냅니다.</p>
   <p class="body">별도 매장을 방문하실 필요 없이,<br>__REGION__ 담당 <b>__MGR__(__TEL__)</b>이 직접 찾아갑니다.</p>
   <p class="body">창 사이즈를 재고 어울리는 제품을 제안해 드립니다.</p>
-  <p class="body">실측과 견적은 <b>무료</b>입니다.</p>
+  <p class="body">온라인 판매가 그대로, 시공까지 그 가격으로 해드립니다.</p>
 
   <h2>__REGION__ 실제 시공 후기</h2>
   <div class="cards">
@@ -343,13 +343,13 @@ __CARDS__
   <h2>__REGION__ 커튼 자주 묻는 질문</h2>
   <div class="faq">
     <details open><summary>__REGION__도 출장 시공되나요?</summary><p>네, __REGION__ 전지역에 출장 시공합니다.<br>__REGION__ 담당 __MGR__(__TEL__)이 직접 방문합니다.</p></details>
-    <details><summary>실측·견적 비용이 드나요?</summary><p>__REGION__ 지역 방문 실측과 견적은 무료입니다.<br>창에 제품을 대보며 상담한 뒤 견적을 드립니다.</p></details>
+    <details><summary>견적은 어떻게 받나요?</summary><p>창 사진을 보내주시면 방문 전에 대략 견적을 먼저 알려드립니다.<br>방문 실측 후 최종 견적을 확정하고, 온라인 판매가 그대로 시공까지 진행합니다.</p></details>
     <details><summary>어떤 제품까지 시공하나요?</summary><p>속커튼·암막커튼·콤비블라인드·롤스크린까지,<br>우드·전동 블라인드도 맞춤 제작·시공합니다.</p></details>
     <details><summary>상담은 어떻게 하나요?</summary><p>전화나 문자로 __MGR__(__TEL__)에게 연락 주세요.<br><a href="../#apply" style="color:var(--accent2);font-weight:700">실측 신청 폼</a>에 성함·연락처·지역을 남기셔도 됩니다.</p></details>
   </div>
 
   <div class="cta-final">
-    <h2>__REGION__ 커튼·블라인드, 무료로 상담받으세요</h2>
+    <h2>__REGION__ 커튼·블라인드, 편하게 상담받으세요</h2>
     <p>창 사진만 있어도 대략 견적 안내가 가능합니다.<br>__REGION__ 담당 __MGR__이 도와드립니다.</p>
     <a href="tel:__TEL__">__MGR__ __TEL__ 전화</a>
   </div>
@@ -381,7 +381,7 @@ def _area_jsonld(region, slug, mgr, tel, ogimg):
                 "about": {"@type": "City", "name": region},
                 "isPartOf": {"@id": "https://ddasom.com/#website"},
                 "provider": {"@id": "https://ddasom.com/#business"},
-                "description": f"{region} 전지역 커튼·블라인드 무료 출장 실측 및 맞춤 시공. {region} 담당 {mgr} {tel}.",
+                "description": f"{region} 전지역 커튼·블라인드 출장 실측 및 맞춤 시공. {region} 담당 {mgr} {tel}.",
             },
             {
                 "@type": "BreadcrumbList",
@@ -396,15 +396,15 @@ def _area_jsonld(region, slug, mgr, tel, ogimg):
                 "serviceType": "커튼·블라인드 맞춤 제작 및 시공",
                 "provider": {"@id": "https://ddasom.com/#business"},
                 "areaServed": {"@type": "City", "name": region},
-                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW", "description": "방문 실측·견적 무료"},
+                "offers": {"@type": "Offer", "priceCurrency": "KRW", "description": "온라인 판매가 그대로 시공까지"},
             },
             {
                 "@type": "FAQPage",
                 "mainEntity": [
                     {"@type": "Question", "name": f"{region}에서 커튼·블라인드 시공을 맡길 수 있나요?",
-                     "acceptedAnswer": {"@type": "Answer", "text": f"네. 따솜커튼블라인드는 {region} 전지역에 출장 시공합니다. {region} 지역은 {mgr}({tel})이 담당해 무료 방문 실측부터 맞춤 제작·설치까지 직접 진행합니다."}},
-                    {"@type": "Question", "name": f"{region} 커튼 실측·견적 비용이 있나요?",
-                     "acceptedAnswer": {"@type": "Answer", "text": f"{region} 지역 방문 실측과 견적은 무료입니다. 창에 직접 원단과 제품을 대보며 색과 스타일을 상담한 뒤 견적을 드립니다."}},
+                     "acceptedAnswer": {"@type": "Answer", "text": f"네. 따솜커튼블라인드는 {region} 전지역에 출장 시공합니다. {region} 지역은 {mgr}({tel})이 담당해 방문 실측부터 맞춤 제작·설치까지 직접 진행합니다."}},
+                    {"@type": "Question", "name": f"{region} 커튼 견적은 어떻게 받나요?",
+                     "acceptedAnswer": {"@type": "Answer", "text": f"창 사진을 보내주시면 방문 전에 대략 견적을 먼저 알려드립니다. {region} 방문 실측 후 최종 견적을 확정하며, 온라인 판매가 그대로 시공까지 진행합니다."}},
                     {"@type": "Question", "name": f"{region}에서 어떤 제품을 시공하나요?",
                      "acceptedAnswer": {"@type": "Answer", "text": f"속커튼·암막커튼 등 커튼류와 콤비블라인드·롤스크린·우드블라인드·전동 블라인드까지 {region} 아파트·주택·상가에 맞춤 시공합니다."}},
                 ],
