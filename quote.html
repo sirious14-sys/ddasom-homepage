@@ -39,10 +39,15 @@ h1{font-size:21px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
   <div class="rows" id="rows"></div>
   <button class="addbtn" onclick="addRow()">＋ 벌(품목) 추가</button>
 
+  <div class="row" style="margin:-10px 0 22px">
+    <span class="no" style="width:auto;padding:0 4px;font-size:13px">부자재</span>
+    <input type="tel" inputmode="numeric" id="parts" placeholder="레일·봉 등 원가 합계 (원)">
+  </div>
+
   <div class="result">
     <div class="big" id="total">0원</div>
     <div class="biglabel">손님께 제시할 총액 (천원 올림)</div>
-    <div class="line"><span>제품가 (원가+30%)</span><b id="r1">0원</b></div>
+    <div class="line"><span>제품·부자재가 (원가+30%)</span><b id="r1">0원</b></div>
     <div class="line"><span>견적·실측</span><b>40,000원</b></div>
     <div class="line"><span>시공 출장</span><b>30,000원</b></div>
     <div class="line"><span>시공비 (벌당 1만)</span><b id="r2">0원</b></div>
@@ -77,7 +82,8 @@ function renum(){[...rows.children].forEach((r,i)=>r.querySelector('.no').textCo
 function won(v){return v.toLocaleString('ko-KR')+'원';}
 function calc(){
   const costs=[...rows.querySelectorAll('input')].map(i=>parseInt(i.value.replace(/\D/g,''))||0).filter(v=>v>0);
-  const cost=costs.reduce((a,b)=>a+b,0);
+  const parts=parseInt(document.getElementById('parts').value.replace(/\D/g,''))||0;
+  const cost=costs.reduce((a,b)=>a+b,0)+parts;
   const n=costs.length;
   const product=Math.round(cost*1.3);
   const fee=n?70000+10000*n:0;
@@ -87,6 +93,7 @@ function calc(){
   document.getElementById('total').textContent=won(total);
   document.getElementById('profit').textContent=won(total-cost);
 }
+document.getElementById('parts').addEventListener('input',calc);
 addRow();
 </script>
 </body>
