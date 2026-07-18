@@ -168,6 +168,7 @@ def build_list(posts):
 #   ※ index.html의 필터 칩(data-filter)과 태그 문자열이 정확히 일치해야 함.
 GALLERY_ITEMS = [
     # 거실
+    ("2026-07-18-uljin-villa.html", "uljin-villa/1.jpg", "거실", "커튼", "거실 · 헤비쉬폰 두배나비주름"),
     ("2026-07-17-pohang-yangdeok-linen.html", "pohang-pungrim/01.jpg", "거실", "커튼", "거실 · ㄱ자 린넨커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/01.jpg", "거실", "커튼", "거실 · 헤비쉬폰 커튼"),
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/01.jpg", "거실", "커튼", "거실 · 베이지 2중커튼"),
