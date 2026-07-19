@@ -271,6 +271,13 @@
   .chip.active{background:var(--dark);border-color:var(--dark);color:#fff}
   .chip-div{width:1px;height:22px;background:var(--line);margin:0 4px}
   .gallery-empty{display:none;grid-column:1/-1;text-align:center;padding:56px 0;color:var(--ink-soft)}
+  .gallery-pager{display:none;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:34px}
+  .gallery-pager button{
+    min-width:42px;height:42px;padding:0 12px;border:1px solid var(--line);background:var(--white);
+    border-radius:10px;font-size:.95rem;color:var(--ink-soft);cursor:pointer;transition:all .15s}
+  .gallery-pager button:hover:not(:disabled){border-color:var(--accent);color:var(--ink)}
+  .gallery-pager button.active{background:var(--dark);border-color:var(--dark);color:#fff}
+  .gallery-pager button:disabled{opacity:.4;cursor:default}
   .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
   .g-item.hide{display:none}
   .g-item{
@@ -638,6 +645,7 @@
       <div class="gallery-empty">해당 조건의 시공 사진이 아직 없습니다.</div>
 <!-- GALLERY:END -->
     </div>
+    <div class="gallery-pager" id="galleryPager"></div>
     <div style="margin-top:44px">
       <a href="reviews/" class="btn btn-accent">시공후기 전체 보기</a>
     </div>
@@ -931,26 +939,55 @@
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-  // 시공 갤러리 필터
+  // 시공 갤러리 필터 + 페이지네이션 (한 페이지 9개)
   const gFilters=document.getElementById('galleryFilters');
   if(gFilters){
     const grid=document.getElementById('galleryGrid');
     const empty=grid.querySelector('.gallery-empty');
+    const pager=document.getElementById('galleryPager');
+    const items=[...grid.querySelectorAll('.g-item')];
+    const PER=9;
+    let filter='전체', page=1;
+
+    function matches(){
+      return items.filter(it=>{
+        const tags=(it.dataset.tags||'').split(' ');
+        return filter==='전체'||tags.includes(filter);
+      });
+    }
+    function render(){
+      const list=matches();
+      const pages=Math.max(1,Math.ceil(list.length/PER));
+      if(page>pages)page=pages;
+      const start=(page-1)*PER, end=start+PER;
+      items.forEach(it=>it.classList.add('hide'));
+      list.slice(start,end).forEach(it=>it.classList.remove('hide'));
+      if(empty)empty.style.display=list.length?'none':'block';
+      // 페이지 버튼
+      pager.innerHTML='';
+      if(pages<=1){pager.style.display='none';return;}
+      pager.style.display='flex';
+      const mk=(label,to,opts={})=>{
+        const b=document.createElement('button');
+        b.textContent=label;
+        if(opts.active)b.classList.add('active');
+        if(opts.disabled)b.disabled=true;
+        else b.addEventListener('click',()=>{page=to;render();
+          document.getElementById('gallery').scrollIntoView({behavior:'smooth',block:'start'});});
+        pager.appendChild(b);
+      };
+      mk('‹',page-1,{disabled:page===1});
+      for(let i=1;i<=pages;i++)mk(String(i),i,{active:i===page});
+      mk('›',page+1,{disabled:page===pages});
+    }
     gFilters.addEventListener('click',e=>{
       const btn=e.target.closest('.chip');
       if(!btn)return;
       gFilters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
       btn.classList.add('active');
-      const f=btn.dataset.filter;
-      let shown=0;
-      grid.querySelectorAll('.g-item').forEach(it=>{
-        const tags=(it.dataset.tags||'').split(' ');
-        const match=f==='전체'||tags.includes(f);
-        it.classList.toggle('hide',!match);
-        if(match)shown++;
-      });
-      if(empty)empty.style.display=shown?'none':'block';
+      filter=btn.dataset.filter; page=1; render();
     });
+    render();
   }
 
   // 견적 요청 폼 → 담당 실장에게 보낼 문자 자동 작성
