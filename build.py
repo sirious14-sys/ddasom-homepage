@@ -201,6 +201,8 @@ GALLERY_ITEMS = [
     ("2026-07-08-cheongsong-rollscreen.html", "cheongsong-garden/01.jpg", "상가·사무실", "롤스크린", "음식점 홀 · 채광조절 롤스크린"),
     ("2026-07-19-gumi-nailshop.html", "gumi-nailshop/1.jpg", "상가·사무실", "블라인드", "네일샵 전면창 · 알루미늄 블라인드"),
     ("2026-07-19-gumi-nailshop.html", "gumi-nailshop/3.jpg", "상가·사무실", "커튼", "네일샵 아치 · 헤비쉬폰 커튼"),
+    ("2026-07-19-gyeongsan-skincare.html", "gyeongsan-skincare/1.jpg", "상가·사무실", "커튼", "피부관리샵 칸막이 · 헤비쉬폰 커튼"),
+    ("2026-07-19-gyeongsan-skincare.html", "gyeongsan-skincare/4.jpg", "상가·사무실", "커튼", "관리샵 베란다 · 헤비쉬폰 커튼"),
 ]
 
 
