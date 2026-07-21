@@ -1,4 +1,4 @@
 ===RESULT=== 
-14d4964 review: gumi nailshop 2026-07-19 (front alu blind + arch heavy-chiffon)
+9d63a9d review: gyeongsan skincare 2026-07-19 (heavy-chiffon partition curtain)
 --- status --- 
-?? _push_result.txt
+ M _push_result.txt

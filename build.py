@@ -46,7 +46,7 @@ def chip_region(region: str) -> str:
 
 
 # 지역별 담당 실장 (정실장: 대구권+경북 서부, 이실장: 경북 동북부)
-JEONG_REGIONS = {"대구", "경산", "구미", "김천", "청도", "칠곡", "성주", "군위", "고령"}
+JEONG_REGIONS = {"대구", "경산", "구미", "김천", "청도", "칠곡", "의성", "성주", "군위", "고령"}
 
 
 def manager_of(region: str):
@@ -182,6 +182,7 @@ GALLERY_ITEMS = [
     ("2026-07-16-daejeon-jukdong-combi.html", "daejeon-jukdong/01.jpg", "거실", "블라인드", "거실 · 우드룩 콤비블라인드"),
     ("2026-06-04-pohang-jukdo-rollscreen.html", "pohang-jukdo/01.jpg", "거실", "롤스크린", "베란다 · 암막 롤스크린"),
     ("2026-07-17-pohang-yangdeok-linen.html", "pohang-pungrim/05.jpg", "거실", "롤스크린", "베란다 · 아이보리 롤스크린"),
+    ("2026-07-21-uiseong-sunroom-rollscreen.html", "uiseong-sunroom-rollscreen/1.jpg", "거실", "롤스크린", "썬룸 · 화이트 암막롤스크린"),
     # 침실
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/03.jpg", "침실", "커튼", "안방 · 2중커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/04.jpg", "침실", "커튼", "아이방 · 인디언핑크 커튼"),
