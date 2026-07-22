@@ -1,4 +1,4 @@
 ===RESULT=== 
-9d63a9d review: gyeongsan skincare 2026-07-19 (heavy-chiffon partition curtain)
+74950d8 review: uiseong sunroom blackout rollscreen 2026-07-21
 --- status --- 
  M _push_result.txt
