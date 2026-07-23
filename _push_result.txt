@@ -1,4 +1,4 @@
 ===RESULT=== 
-74950d8 review: uiseong sunroom blackout rollscreen 2026-07-21
+0f5ec68 review: yeongju hwaseong blackout curtain 2026-07-22
 --- status --- 
  M _push_result.txt
