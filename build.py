@@ -184,7 +184,9 @@ GALLERY_ITEMS = [
     ("2026-07-17-pohang-yangdeok-linen.html", "pohang-pungrim/05.jpg", "거실", "롤스크린", "베란다 · 아이보리 롤스크린"),
     ("2026-07-21-uiseong-sunroom-rollscreen.html", "uiseong-sunroom-rollscreen/1.jpg", "거실", "롤스크린", "썬룸 · 화이트 암막롤스크린"),
     ("2026-07-22-yeongju-hwaseong-blackout-curtain.html", "yeongju-hwaseong-blackout-curtain/1.jpg", "거실", "커튼", "거실 · 그레이 암막커튼(콤비 위 이중)"),
+    ("2026-07-23-uiseong-jugong2-rollscreen.html", "uiseong-jugong2-rollscreen/2.jpg", "거실", "롤스크린", "베란다 · 연블루 채광 롤스크린"),
     # 침실
+    ("2026-07-26-pohang-hyoja-blackout-curtain.html", "pohang-hyoja-blackout-curtain/2.jpg", "침실", "커튼", "안방 · 백아이보리 속커튼+암막커튼"),
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/03.jpg", "침실", "커튼", "안방 · 2중커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/04.jpg", "침실", "커튼", "아이방 · 인디언핑크 커튼"),
     ("2026-06-27-andong-okdong-double.html", "andong-okdong/03.jpg", "침실", "커튼", "안방 · 인디언핑크 암막"),
