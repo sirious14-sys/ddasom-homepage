@@ -185,6 +185,7 @@ GALLERY_ITEMS = [
     ("2026-07-21-uiseong-sunroom-rollscreen.html", "uiseong-sunroom-rollscreen/1.jpg", "거실", "롤스크린", "썬룸 · 화이트 암막롤스크린"),
     ("2026-07-22-yeongju-hwaseong-blackout-curtain.html", "yeongju-hwaseong-blackout-curtain/1.jpg", "거실", "커튼", "거실 · 그레이 암막커튼(콤비 위 이중)"),
     ("2026-07-23-uiseong-jugong2-rollscreen.html", "uiseong-jugong2-rollscreen/2.jpg", "거실", "롤스크린", "베란다 · 연블루 채광 롤스크린"),
+    ("2026-07-23-pohang-xi-atherton-fullhouse.html", "pohang-xi-atherton-fullhouse/1.jpg", "거실", "커튼", "거실 · 화이트 쉬폰 두배나비주름"),
     # 침실
     ("2026-07-26-pohang-hyoja-blackout-curtain.html", "pohang-hyoja-blackout-curtain/2.jpg", "침실", "커튼", "안방 · 백아이보리 속커튼+암막커튼"),
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/03.jpg", "침실", "커튼", "안방 · 2중커튼"),
@@ -197,6 +198,9 @@ GALLERY_ITEMS = [
     ("2026-07-01-gyeongju-hwangseong-combi.html", "gyeongju-hwangseong/01.jpg", "침실", "블라인드", "방 · 콤비블라인드"),
     ("2026-06-24-pohang-jangseong-combi.html", "pohang-jangseong/04.jpg", "침실", "블라인드", "작은방 · 콤비블라인드"),
     ("2026-07-16-daejeon-jukdong-combi.html", "daejeon-jukdong/03.jpg", "침실", "롤스크린", "안방 · 화이트 암막롤스크린"),
+    ("2026-07-23-pohang-xi-atherton-fullhouse.html", "pohang-xi-atherton-fullhouse/2.jpg", "침실", "커튼", "안방 · 쉬폰 속커튼+100프로 암막"),
+    ("2026-07-23-pohang-xi-atherton-fullhouse.html", "pohang-xi-atherton-fullhouse/3.jpg", "침실", "블라인드", "방 · 미색 콤비블라인드"),
+    ("2026-07-23-pohang-xi-atherton-fullhouse.html", "pohang-xi-atherton-fullhouse/4.jpg", "침실", "롤스크린", "알파룸(컴퓨터방) · 블랙 암막롤스크린"),
     # 상가·사무실
     ("2026-07-09-yeongcheon-combi.html", "yeongcheon-sangga/01.jpg", "상가·사무실", "블라인드", "상가 통창 · 콤비블라인드"),
     ("2026-06-05-pohang-unislat.html", "pohang-unislat/01.jpg", "상가·사무실", "블라인드", "상가 매장 · 유니슬랫"),
