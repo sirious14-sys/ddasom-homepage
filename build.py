@@ -169,6 +169,7 @@ def build_list(posts):
 GALLERY_ITEMS = [
     # 거실
     ("2026-07-18-uljin-villa.html", "uljin-villa/1.jpg", "거실", "커튼", "거실 · 헤비쉬폰 두배나비주름"),
+    ("2026-07-31-pohang-hyoja-skview.html", "pohang-hyoja-skview/1.jpg", "거실", "커튼", "거실 · 인디언핑크 암막커튼"),
     ("2026-07-17-pohang-yangdeok-linen.html", "pohang-pungrim/01.jpg", "거실", "커튼", "거실 · ㄱ자 린넨커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/01.jpg", "거실", "커튼", "거실 · 헤비쉬폰 커튼"),
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/01.jpg", "거실", "커튼", "거실 · 베이지 2중커튼"),
@@ -189,6 +190,8 @@ GALLERY_ITEMS = [
     ("2026-07-27-gyeongju-xi-fullhouse.html", "gyeongju-xi-fullhouse/1.jpg", "거실", "블라인드", "거실 · 미색 암막 콤비블라인드"),
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/1.jpg", "거실", "커튼", "거실 · 쉬폰+베이지 암막 이중커튼"),
     # 침실
+    ("2026-07-31-pohang-hyoja-skview.html", "pohang-hyoja-skview/3.jpg", "침실", "커튼", "안방 · 인디언핑크 암막커튼"),
+    ("2026-07-31-pohang-hyoja-skview.html", "pohang-hyoja-skview/6.jpg", "침실", "커튼", "작은방 · 인디언핑크 암막커튼"),
     ("2026-07-26-pohang-hyoja-blackout-curtain.html", "pohang-hyoja-blackout-curtain/2.jpg", "침실", "커튼", "안방 · 백아이보리 속커튼+암막커튼"),
     ("2026-07-01-andong-jeongha-curtain.html", "andong-jeongha/03.jpg", "침실", "커튼", "안방 · 2중커튼"),
     ("2026-06-30-yeongju-gaheung-curtain.html", "yeongju-gaheung/04.jpg", "침실", "커튼", "아이방 · 인디언핑크 커튼"),
