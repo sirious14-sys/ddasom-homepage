@@ -164,7 +164,7 @@ def build_list(posts):
 
 # 홈 "시공 갤러리" 룩북 — 필터형(공간·제품). 새 후기 추가 시 아래 목록에 한 줄 추가.
 #   (후기파일, 이미지경로(reviews/img/... 기준), 공간, 제품, 라벨)
-#   공간 ∈ {거실, 침실, 상가·사무실}  ·  제품 ∈ {커튼, 블라인드, 롤스크린}
+#   공간 ∈ {거실, 침실, 상가·사무실}  ·  제품 ∈ {커튼, 블라인드, 롤스크린, 홀딩도어}
 #   ※ index.html의 필터 칩(data-filter)과 태그 문자열이 정확히 일치해야 함.
 GALLERY_ITEMS = [
     # 거실
@@ -229,6 +229,9 @@ GALLERY_ITEMS = [
     ("2026-07-19-gumi-nailshop.html", "gumi-nailshop/3.jpg", "상가·사무실", "커튼", "네일샵 아치 · 헤비쉬폰 커튼"),
     ("2026-07-19-gyeongsan-skincare.html", "gyeongsan-skincare/1.jpg", "상가·사무실", "커튼", "피부관리샵 칸막이 · 헤비쉬폰 커튼"),
     ("2026-07-19-gyeongsan-skincare.html", "gyeongsan-skincare/4.jpg", "상가·사무실", "커튼", "관리샵 베란다 · 헤비쉬폰 커튼"),
+    ("2017-05-31-uljin-restaurant-foldingdoor.html", "uljin-restaurant-foldingdoor/1.jpg", "상가·사무실", "홀딩도어", "식당 홀 칸막이 · 우드 홀딩도어(닫힘)"),
+    ("2017-05-31-uljin-restaurant-foldingdoor.html", "uljin-restaurant-foldingdoor/4.jpg", "상가·사무실", "홀딩도어", "식당 홀 칸막이 · 접어서 홀로 합친 상태"),
+    ("2017-05-31-uljin-restaurant-foldingdoor.html", "uljin-restaurant-foldingdoor/2.jpg", "상가·사무실", "홀딩도어", "중앙 양개 손잡이 · 화이트 프레임"),
 ]
 
 
