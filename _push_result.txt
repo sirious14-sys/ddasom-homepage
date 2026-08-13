@@ -1,15 +1,2 @@
 ===RESULT=== 
 [1] add/commit 
-[main 1280b10] site update
- 2 files changed, 17 insertions(+), 9 deletions(-)
- 
-[2] push  ← 여기서 실패하면 아래에 이유가 나옵니다 
-To https://github.com/sirious14-sys/ddasom-homepage.git
-   5012c0a..1280b10  main -> main
-PUSH_EXIT_CODE=0 
- 
-[3] local vs remote 
-1280b10 site update
-1280b10
-## main...origin/main
- M _push_result.txt
