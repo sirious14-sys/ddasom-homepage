@@ -232,6 +232,9 @@ GALLERY_ITEMS = [
     ("2017-05-31-uljin-restaurant-foldingdoor.html", "uljin-restaurant-foldingdoor/1.jpg", "상가·사무실", "홀딩도어", "식당 홀 칸막이 · 우드 홀딩도어(닫힘)"),
     ("2017-05-31-uljin-restaurant-foldingdoor.html", "uljin-restaurant-foldingdoor/4.jpg", "상가·사무실", "홀딩도어", "식당 홀 칸막이 · 접어서 홀로 합친 상태"),
     ("2017-05-31-uljin-restaurant-foldingdoor.html", "uljin-restaurant-foldingdoor/2.jpg", "상가·사무실", "홀딩도어", "중앙 양개 손잡이 · 화이트 프레임"),
+    ("2026-07-13-yeongcheon-clinic-curtain.html", "yeongcheon-clinic-curtain/1.jpg", "상가·사무실", "커튼", "병원 처치실 · 방염 칸막이 커튼"),
+    ("2026-07-13-yeongcheon-clinic-curtain.html", "yeongcheon-clinic-curtain/3.jpg", "상가·사무실", "커튼", "베드 곡선 레일 · 세이지그린 커튼"),
+    ("2026-07-13-yeongcheon-clinic-curtain.html", "yeongcheon-clinic-curtain/7.jpg", "상가·사무실", "롤스크린", "처치실 창가 · 아이보리 롤스크린"),
 ]
 
 
