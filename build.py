@@ -189,6 +189,8 @@ GALLERY_ITEMS = [
     ("2026-07-23-pohang-xi-atherton-fullhouse.html", "pohang-xi-atherton-fullhouse/1.jpg", "거실", "커튼", "거실 · 화이트 쉬폰 두배나비주름"),
     ("2026-07-27-gyeongju-xi-fullhouse.html", "gyeongju-xi-fullhouse/1.jpg", "거실", "블라인드", "거실 · 미색 암막 콤비블라인드"),
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/1.jpg", "거실", "커튼", "거실 · 쉬폰+베이지 암막 이중커튼"),
+    ("2017-07-02-gyeongsan-sangga-house.html", "gyeongsan-sangga-house/1.jpg", "거실", "블라인드", "거실 · 그레이 트리플쉐이드"),
+    ("2017-07-02-gyeongsan-sangga-house.html", "gyeongsan-sangga-house/4.jpg", "거실", "블라인드", "거실 · 트리플쉐이드 부분 조절"),
     # 침실
     ("2026-07-31-pohang-hyoja-skview.html", "pohang-hyoja-skview/3.jpg", "침실", "커튼", "안방 · 인디언핑크 암막커튼"),
     ("2026-07-31-pohang-hyoja-skview.html", "pohang-hyoja-skview/6.jpg", "침실", "커튼", "작은방 · 인디언핑크 암막커튼"),
@@ -211,6 +213,7 @@ GALLERY_ITEMS = [
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/3.jpg", "침실", "커튼", "안방 · 백아이보리 100프로 암막커튼"),
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/7.jpg", "침실", "블라인드", "작은방 · 베이지 콤비블라인드"),
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/9.jpg", "침실", "블라인드", "드레스룸 · 다크그레이 콤비블라인드"),
+    ("2017-07-02-gyeongsan-sangga-house.html", "gyeongsan-sangga-house/5.jpg", "침실", "블라인드", "안방 · 암막 콤비블라인드"),
     # 상가·사무실
     ("2026-05-30-yeongdeok-office-rollscreen.html", "yeongdeok-office-rollscreen/1.jpg", "상가·사무실", "롤스크린", "워크스테이션 · 화이트 암막 롤스크린"),
     ("2026-05-30-yeongdeok-office-rollscreen.html", "yeongdeok-office-rollscreen/6.jpg", "상가·사무실", "롤스크린", "라운지 · 바다 뷰 남긴 롤스크린"),
