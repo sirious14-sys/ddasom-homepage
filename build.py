@@ -262,10 +262,10 @@ def build_home_gallery(posts):
             f'<span class="g-label">{label}</span></a>'
         )
     if not items:
-        print("[skip] home gallery unchanged (no items)")
+        print("[skip] gallery unchanged (no items)")
         return
     block = "\n".join(items) + '\n      <div class="gallery-empty">해당 조건의 시공 사진이 아직 없습니다.</div>'
-    index = ROOT / "index.html"
+    index = ROOT / "gallery.html"
     html = index.read_text(encoding="utf-8")
     html = re.sub(
         r"(<!-- GALLERY:START.*?-->).*?(<!-- GALLERY:END -->)",
@@ -384,7 +384,7 @@ __CARDS__
     <details open><summary>__REGION__도 출장 시공되나요?</summary><p>네, __REGION__ 전지역에 출장 시공합니다.<br>__REGION__ 담당 __MGR__(__TEL__)이 직접 방문합니다.</p></details>
     <details><summary>견적은 어떻게 받나요?</summary><p>창 사진을 보내주시면 방문 전에 대략 견적을 먼저 알려드립니다.<br>방문 실측 후 최종 견적을 확정하고, 온라인 판매가 그대로 시공까지 진행합니다.</p></details>
     <details><summary>어떤 제품까지 시공하나요?</summary><p>속커튼·암막커튼·콤비블라인드·롤스크린까지,<br>우드·전동 블라인드도 맞춤 제작·시공합니다.</p></details>
-    <details><summary>상담은 어떻게 하나요?</summary><p>전화나 문자로 __MGR__(__TEL__)에게 연락 주세요.<br><a href="../#apply" style="color:var(--accent2);font-weight:700">실측 신청 폼</a>에 성함·연락처·지역을 남기셔도 됩니다.</p></details>
+    <details><summary>상담은 어떻게 하나요?</summary><p>전화나 문자로 __MGR__(__TEL__)에게 연락 주세요.<br><a href="../apply.html" style="color:var(--accent2);font-weight:700">실측 신청 폼</a>에 성함·연락처·지역을 남기셔도 됩니다.</p></details>
   </div>
 
   <div class="cta-final">
@@ -498,10 +498,10 @@ def build_area_pages(posts):
 
 def build_home_areas(infos):
     """홈 index.html의 AREAS:START~END 사이를 지역 페이지 링크로 채운다."""
-    index = ROOT / "index.html"
+    index = ROOT / "areas.html"
     html = index.read_text(encoding="utf-8")
     if "AREAS:START" not in html:
-        print("[skip] index.html에 AREAS 마커 없음")
+        print("[skip] areas.html에 AREAS 마커 없음")
         return
     links = "\n".join(
         f'      <a class="area-link" href="areas/{slug}.html">{region} 출장 시공 <span>후기 {n}건</span></a>'
@@ -521,7 +521,7 @@ def build_sitemap(posts, areas=()):
         print("[skip] BASE_URL not set - sitemap.xml not generated (set it after deploy)")
         return
     today = date.today().isoformat()
-    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/reviews/", today)]
+    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/services.html", today), (f"{BASE_URL}/gallery.html", today), (f"{BASE_URL}/areas.html", today), (f"{BASE_URL}/apply.html", today), (f"{BASE_URL}/reviews/", today)]
     urls += [(f"{BASE_URL}/areas/{slug}.html", today) for _r, slug, _n in areas]
     urls += [(f"{BASE_URL}/reviews/{p['file']}", p["date"]) for p in posts]
     body = "\n".join(
