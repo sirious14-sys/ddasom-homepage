@@ -521,7 +521,7 @@ def build_sitemap(posts, areas=()):
         print("[skip] BASE_URL not set - sitemap.xml not generated (set it after deploy)")
         return
     today = date.today().isoformat()
-    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/reviews/", today)]
+    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/reviews/", today)]
     urls += [(f"{BASE_URL}/areas/{slug}.html", today) for _r, slug, _n in areas]
     urls += [(f"{BASE_URL}/reviews/{p['file']}", p["date"]) for p in posts]
     body = "\n".join(

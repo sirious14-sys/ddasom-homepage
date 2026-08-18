@@ -192,6 +192,13 @@
   header.scrolled .nav-tel{border-color:var(--ink)}
   .nav-tel:hover{background:var(--accent);border-color:var(--accent);color:#fff}
   .menu-btn{display:none;background:none;border:none;font-size:1.4rem;color:currentColor;cursor:pointer}
+  .nav-b2b{
+    font-family:var(--sans);font-weight:800;letter-spacing:-.02em;font-size:1.02rem;
+    background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:2px;
+    padding:11px 18px;margin-left:10px;transition:background .2s;white-space:nowrap;
+  }
+  .nav-b2b:hover{background:var(--accent-deep,#8a5c31);border-color:var(--accent-deep,#8a5c31)}
+  .nav-b2b small{display:block;font-size:.62rem;font-weight:600;letter-spacing:.18em;opacity:.85;line-height:1;margin-bottom:3px}
 
   /* ── Hero ───────────────────────────── */
   .hero{
@@ -426,6 +433,7 @@
       border-bottom:1px solid var(--line);padding:8px 0;font-size:1.06rem;
     }
     .nav-links.open{display:flex}
+    .nav-b2b{display:none}
     .nav-links li{padding:13px 28px}
     .menu-btn{display:block}
     .nav-tel{display:none}
@@ -465,11 +473,13 @@
       <li><a href="#process">진행과정</a></li>
       <li><a href="#gallery">갤러리</a></li>
       <li><a href="reviews/">시공후기</a></li>
+      <li><a href="b2b.html">기업·기관 전용관</a></li>
       <li><a href="#areas">출장지역</a></li>
       <li><a href="#apply">견적요청</a></li>
       <li><a href="#contact">상담전화</a></li>
     </ul>
     <a href="#apply" class="nav-tel">견적 요청</a>
+    <a href="b2b.html" class="nav-b2b"><small>OFFICE · SCHOOL</small>기업·기관 전용관</a>
     <button class="menu-btn" id="menuBtn" aria-label="메뉴">☰</button>
   </div>
 </header>
