@@ -62,12 +62,12 @@
   .nav-tel:hover{background:var(--accent);border-color:var(--accent);color:#fff}
   .menu-btn{display:none;background:none;border:none;font-size:1.4rem;color:currentColor;cursor:pointer}
   .nav-b2b{
-    font-family:var(--sans);font-weight:800;letter-spacing:-.02em;font-size:1.02rem;
+    font-family:var(--sans);font-weight:800;letter-spacing:-.02em;font-size:1.2rem;
     background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:2px;
-    padding:11px 18px;margin-left:10px;transition:background .2s;white-space:nowrap;
+    padding:11px 24px;margin-left:10px;transition:background .2s;white-space:nowrap;
   }
   .nav-b2b:hover{background:var(--accent-deep,#8a5c31);border-color:var(--accent-deep,#8a5c31)}
-  .nav-b2b small{display:block;font-size:.62rem;font-weight:600;letter-spacing:.18em;opacity:.85;line-height:1;margin-bottom:3px}
+  
 
   /* ── Hero ───────────────────────────── */
   .hero{
