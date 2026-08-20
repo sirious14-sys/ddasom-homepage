@@ -85,8 +85,15 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1.32}
 .hero p{color:#5a5144;margin-top:12px;font-size:17.5px}
 .mgr{display:flex;align-items:center;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:16px}
 .mgr .who{font-size:15px;color:#5a5144}
-.mgr .tel{font-size:21px;font-weight:800;letter-spacing:-.02em}
-.mgr a.call{margin-left:auto;background:var(--accent);color:#fff;border-radius:11px;padding:12px 18px;font-weight:700;font-size:15px;white-space:nowrap}
+.mgr .tel{font-size:21px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.mgr a.call{margin-left:auto;background:var(--accent);color:#fff;border-radius:11px;padding:12px 18px;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0}
+/* 모바일: 번호가 한 줄에 들어가도록 버튼을 번호 아래 전체폭으로 */
+@media(max-width:560px){
+  .mgr{flex-wrap:wrap;gap:12px}
+  .mgr>div{flex:1 1 100%}
+  .mgr .tel{font-size:20px}
+  .mgr a.call{flex:1 1 100%;margin-left:0;text-align:center;padding:13px 0}
+}
 h2{font-size:27px;font-weight:800;letter-spacing:-.03em;margin:52px 0 16px}
 @media(max-width:720px){h2{font-size:21px}}
 h3{font-size:17px;font-weight:800;margin:22px 0 8px}
@@ -100,12 +107,12 @@ td.c,th.c{text-align:center}
 .promise b.t{display:block;font-size:18px;margin-bottom:6px;color:var(--accent2)}
 .promise p{font-size:16.5px;color:#3d362c;margin:0}
 .prod{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-@media(max-width:1000px){.prod{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1120px){.prod{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.prod{grid-template-columns:1fr}}
 .prod div{background:var(--bg2);border-radius:12px;padding:20px 20px}
 .prod b{font-size:17.5px}
 .prod ul{margin:6px 0 0;padding-left:18px}
-.prod li{font-size:15.5px;color:#4a4237;margin:5px 0}
+.prod li{font-size:15.5px;color:#4a4237;margin:9px 0;line-height:1.5}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-top:6px}
 .card{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:.15s}
 .card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(90,70,40,.1)}
@@ -204,21 +211,21 @@ td.c,th.c{text-align:center}
   <h2>시설 유형별로 이렇게 해드립니다</h2>
   <div class="prod">
     <div><b>사무실 · 오피스</b>
-      <ul><li>야간·주말 무상 시공</li>
-      <li>회의실 암막·채광 제안</li>
-      <li>11층 이상 방염 확인</li></ul></div>
+      <ul><li>야간·주말 시공<br>출근하면 끝나 있게</li>
+      <li>회의실 암막·채광 조절<br>임원실 우드까지 제안</li>
+      <li>11층 이상 건물은<br>방염 대상 먼저 확인</li></ul></div>
     <div><b>공장 · 산업시설</b>
-      <ul><li>조업 일정 맞춤 시공</li>
-      <li>내구성 위주 사양 제안</li>
-      <li>철거·폐기물 처리 포함</li></ul></div>
+      <ul><li>사무동·식당동·기숙사<br>조업 일정에 맞춰 시공</li>
+      <li>내구성 위주 사양으로<br>AS 부를 일을 줄입니다</li>
+      <li>기존 제품 철거와<br>폐기물 처리까지 포함</li></ul></div>
     <div><b>관공서 · 공공기관</b>
-      <ul><li>수의계약·입찰 대응</li>
-      <li>행정 서류 일체 제공</li>
-      <li>연내 시공 완료 대응</li></ul></div>
+      <ul><li>수의계약·입찰 대응<br>전자세금계산서 발행</li>
+      <li>규격서·검수조서 등<br>행정 서류 일체 제공</li>
+      <li>연말 예산 일정에 맞춘<br>연내 시공 완료</li></ul></div>
     <div><b>학교 · 교육기관</b>
-      <ul><li>방학 집중 시공</li>
-      <li>교실 암막·특별실 구분</li>
-      <li>방염 대상·서류 정리</li></ul></div>
+      <ul><li>수업에 지장 없는<br>방학 집중 시공</li>
+      <li>교실 암막·특별실·급식실<br>기숙사(방염) 구분 시공</li>
+      <li>방염 대상·서류를<br>견적 단계에서 정리</li></ul></div>
   </div>
 
   <h2>실제 시공 사례</h2>
