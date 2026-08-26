@@ -291,13 +291,13 @@ AREA_TMPL = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>__REGION__ 커튼·블라인드 시공 업체 | 따솜커튼블라인드 (출장 실측·시공)</title>
-<meta name="description" content="__REGION__ 커튼·블라인드 출장 시공은 따솜커튼블라인드. __REGION__ 전지역 방문 실측부터 속커튼·암막커튼·콤비블라인드·롤스크린 맞춤 시공까지. __REGION__ 담당 __MGR__ __TEL__. 실제 시공후기 확인.">
+<title>__REGION__ 커튼집·블라인드 전문점 | 출장 실측 시공 - 따솜커튼블라인드</title>
+<meta name="description" content="__REGION__ 커튼 시공 업체를 찾으신다면. __REGION__ 커튼집·블라인드 전문점 따솜커튼블라인드가 전지역 방문 실측부터 속커튼·암막커튼·콤비블라인드·롤스크린 설치까지 맡습니다. __REGION__ 담당 __MGR__ __TEL__. 실제 시공후기 확인.">
 <link rel="canonical" href="https://ddasom.com/areas/__SLUG__.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="따솜커튼블라인드">
-<meta property="og:title" content="__REGION__ 커튼·블라인드 시공 업체 | 따솜커튼블라인드">
-<meta property="og:description" content="__REGION__ 전지역 커튼·블라인드 출장 실측·맞춤 시공. __REGION__ 담당 __MGR__ __TEL__.">
+<meta property="og:title" content="__REGION__ 커튼집·블라인드 전문점 | 따솜커튼블라인드">
+<meta property="og:description" content="__REGION__ 커튼 시공·블라인드 설치, 전지역 출장 실측. __REGION__ 담당 __MGR__ __TEL__.">
 <meta property="og:url" content="https://ddasom.com/areas/__SLUG__.html">
 <meta property="og:image" content="__OGIMG__">
 <script type="application/ld+json">
@@ -364,9 +364,9 @@ p.body{margin:0 0 9px}
     </div>
   </div>
 
-  <h2>__REGION__에서 커튼·블라인드, 어디서 해야 할까요?</h2>
+  <h2>__REGION__ 커튼집을 찾고 계신가요?</h2>
   <p class="body">커튼·블라인드는 매장을 돌며 비교하기가 쉽지 않습니다.</p>
-  <p class="body">따솜커튼블라인드는 <b>__REGION__ 전지역 출장 전문</b>입니다.</p>
+  <p class="body">따솜커튼블라인드는 <b>__REGION__ 전지역 출장 전문</b>입니다.<br>__REGION__ 커튼 시공 업체를 알아보고 계시다면, 매장까지 오실 필요 없습니다.</p>
   <p class="body">방문 실측 → 원단·색 상담 → 맞춤 제작 → 설치까지 한 번에 끝냅니다.</p>
   <p class="body">별도 매장을 방문하실 필요 없이,<br>__REGION__ 담당 <b>__MGR__(__TEL__)</b>이 직접 찾아갑니다.</p>
   <p class="body">창 사이즈를 재고 어울리는 제품을 제안해 드립니다.</p>
@@ -385,9 +385,9 @@ __CARDS__
     <div><b>우드·전동 블라인드</b><p>카페·사무실·통창에 어울리는 고급 마감과 편의</p></div>
   </div>
 
-  <h2>__REGION__ 커튼 자주 묻는 질문</h2>
+  <h2>__REGION__ 커튼 시공 자주 묻는 질문</h2>
   <div class="faq">
-    <details open><summary>__REGION__도 출장 시공되나요?</summary><p>네, __REGION__ 전지역에 출장 시공합니다.<br>__REGION__ 담당 __MGR__(__TEL__)이 직접 방문합니다.</p></details>
+    <details open><summary>__REGION__도 출장 시공되나요?</summary><p>네, __REGION__ 전지역에 출장 시공합니다.<br>커튼 설치와 블라인드 설치 모두 __REGION__ 담당 __MGR__(__TEL__)이 직접 방문해 진행합니다.</p></details>
     <details><summary>견적은 어떻게 받나요?</summary><p>창 사진을 보내주시면 방문 전에 대략 견적을 먼저 알려드립니다.<br>방문 실측 후 최종 견적을 확정하고, 온라인 판매가 그대로 시공까지 진행합니다.</p></details>
     <details><summary>어떤 제품까지 시공하나요?</summary><p>속커튼·암막커튼·콤비블라인드·롤스크린까지,<br>우드·전동 블라인드도 맞춤 제작·시공합니다.</p></details>
     <details><summary>상담은 어떻게 하나요?</summary><p>전화나 문자로 __MGR__(__TEL__)에게 연락 주세요.<br><a href="../apply.html" style="color:var(--accent2);font-weight:700">실측 신청 폼</a>에 성함·연락처·지역을 남기셔도 됩니다.</p></details>
@@ -421,12 +421,12 @@ def _area_jsonld(region, slug, mgr, tel, ogimg):
                 "@type": "WebPage",
                 "@id": f"https://ddasom.com/areas/{slug}.html#webpage",
                 "url": f"https://ddasom.com/areas/{slug}.html",
-                "name": f"{region} 커튼·블라인드 시공 업체 | 따솜커튼블라인드",
+                "name": f"{region} 커튼집·블라인드 전문점 | 따솜커튼블라인드",
                 "inLanguage": "ko",
                 "about": {"@type": "City", "name": region},
                 "isPartOf": {"@id": "https://ddasom.com/#website"},
                 "provider": {"@id": "https://ddasom.com/#business"},
-                "description": f"{region} 전지역 커튼·블라인드 출장 실측 및 맞춤 시공. {region} 담당 {mgr} {tel}.",
+                "description": f"{region} 커튼 시공 업체·블라인드 설치. 전지역 출장 실측. {region} 담당 {mgr} {tel}.",
             },
             {
                 "@type": "BreadcrumbList",
