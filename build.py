@@ -20,7 +20,8 @@ BASE_URL = "https://ddasom.com"
 
 # 대구는 구/군으로 안 나누고 "대구" 하나로 묶는다 (경북은 시·군별 유지).
 # 후기 제목 첫 단어가 아래에 있으면 지역을 "대구"로 통일. (제목은 "대구 …"로 시작 권장)
-DAEGU_ALIAS = {"대구", "수성구", "달서구", "달성군", "군위군"}
+DAEGU_ALIAS = {"대구", "동대구", "수성구", "달서구", "달성군", "군위군",
+                "동구", "서구", "남구", "북구", "중구"}
 
 
 def region_of(title: str) -> str:
@@ -216,6 +217,9 @@ GALLERY_ITEMS = [
     ("2017-07-02-gyeongsan-sangga-house.html", "gyeongsan-sangga-house/5.jpg", "침실", "블라인드", "안방 · 암막 콤비블라인드"),
     # 상가·사무실
     ("2026-05-30-yeongdeok-office-rollscreen.html", "yeongdeok-office-rollscreen/1.jpg", "상가·사무실", "롤스크린", "워크스테이션 · 화이트 암막 롤스크린"),
+    ("2026-07-22-dongdaegu-cafe-wood-blind.html", "dongdaegu-cafe-wood-blind/1.jpg", "상가·사무실", "블라인드", "카페 홀 · 통창 우드블라인드"),
+    ("2026-07-22-dongdaegu-cafe-wood-blind.html", "dongdaegu-cafe-wood-blind/2.jpg", "상가·사무실", "블라인드", "카페 창가 좌석 · 우드블라인드"),
+    ("2026-07-22-dongdaegu-cafe-wood-blind.html", "dongdaegu-cafe-wood-blind/9.jpg", "상가·사무실", "블라인드", "카페 카운터 · 우드블라인드"),
     ("2026-05-30-yeongdeok-office-rollscreen.html", "yeongdeok-office-rollscreen/6.jpg", "상가·사무실", "롤스크린", "라운지 · 바다 뷰 남긴 롤스크린"),
     ("2026-05-30-yeongdeok-office-rollscreen.html", "yeongdeok-office-rollscreen/3.jpg", "상가·사무실", "롤스크린", "창가 복도 · 아치창 롤스크린"),
     ("2026-08-03-yeongju-office-rollscreen.html", "yeongju-office-rollscreen/1.jpg", "상가·사무실", "롤스크린", "사무실 창가 · 아이보리 암막 롤스크린"),
