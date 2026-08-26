@@ -8,6 +8,7 @@ reviews/YYYY-MM-DD-*.html 후기 페이지들을 읽어
 사용법:  python build.py
 새 후기를 올리는 절차는 reviews/_template.html 참고.
 """
+import json
 import re
 import sys
 from datetime import date
@@ -540,6 +541,154 @@ def build_sitemap(posts, areas=()):
     print(f"[ok] sitemap.xml ({len(urls)} urls)")
 
 
+
+# ─────────────────────────────────────────────────────────────
+# 후기 페이지 보강 — 색인과 공유에 필요한 것을 자동으로 채운다.
+#
+#   1) 지연 로딩   첫 사진만 빼고 loading="lazy"
+#                  첫 사진은 화면에 바로 보이는 자리라 lazy 를 걸면 오히려 늦어진다.
+#   2) canonical · og   카톡·블로그에 링크를 나눌 때 미리보기 사진이 뜨게
+#   3) 구조화 데이터    Article + BreadcrumbList (+ 자주 묻는 질문이 있으면 FAQPage)
+#                  지역 페이지가 이미 쓰는 #business · #website 를 그대로 참조한다.
+#
+# 여러 번 돌려도 결과가 같다. 넣은 자리에 표식을 남겨 통째로 갈아끼운다.
+# ─────────────────────────────────────────────────────────────
+시작표 = "<!-- AUTO:review-meta -->"
+끝표 = "<!-- /AUTO:review-meta -->"
+
+
+def 첫사진(html):
+    m = re.search(r'<img[^>]+src="(img/[^"]+)"', html)
+    return m.group(1) if m else ""
+
+
+def 사진들(html):
+    return re.findall(r"<img[^>]*>", html)
+
+
+def 질문답(html):
+    """<p><strong>Q. 질문</strong><br>답변</p> 를 뽑는다."""
+    나온것 = []
+    for m in re.finditer(
+            r"<p>\s*<strong>\s*Q\.\s*(.*?)</strong>\s*<br>\s*(.*?)</p>", html, re.S):
+        q = re.sub(r"<[^>]+>", "", m.group(1)).strip()
+        a = re.sub(r"<[^>]+>", "", m.group(2)).strip()
+        if q and a:
+            나온것.append((q, a))
+    return 나온것
+
+
+def 시공일(html, 파일명):
+    m = re.search(r"(\d{4})-(\d{2})-(\d{2})-", 파일명)
+    return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else ""
+
+
+def 지연로딩(html):
+    """첫 사진을 뺀 나머지에 lazy 를 건다. 이미 있으면 그대로 둔다."""
+    n = 0
+    def one(m):
+        nonlocal n
+        태그 = m.group(0)
+        n += 1
+        if n == 1:
+            # 첫 사진은 즉시 받는다. 대신 우선순위를 올려 준다.
+            if "fetchpriority" not in 태그:
+                태그 = 태그[:-1].rstrip() + ' fetchpriority="high">'
+            return 태그
+        if "loading=" in 태그:
+            return 태그
+        return 태그[:-1].rstrip() + ' loading="lazy" decoding="async">'
+    return re.sub(r"<img[^>]*>", one, html)
+
+
+def 머리보강(html, 파일명):
+    제목 = re.search(r"<title>(.*?)</title>", html, re.S)
+    제목 = 제목.group(1).strip() if 제목 else 파일명
+    설명 = re.search(r'<meta name="description" content="(.*?)"', html, re.S)
+    설명 = 설명.group(1).strip() if 설명 else ""
+    사진 = 첫사진(html)
+    주소 = f"{BASE_URL}/reviews/{파일명}"
+    이미지주소 = f"{BASE_URL}/reviews/{사진}" if 사진 else f"{BASE_URL}/promo-img/og.jpg"
+    날짜 = 시공일(html, 파일명)
+    h1 = re.search(r"<h1>(.*?)</h1>", html, re.S)
+    헤드라인 = re.sub(r"<[^>]+>", " ", h1.group(1)).strip() if h1 else 제목
+
+    그래프 = [
+        {
+            "@type": "Article",
+            "@id": 주소 + "#article",
+            "headline": 헤드라인[:110],
+            "description": 설명,
+            "image": [이미지주소],
+            "datePublished": 날짜,
+            "dateModified": 날짜,
+            "inLanguage": "ko",
+            "mainEntityOfPage": {"@type": "WebPage", "@id": 주소},
+            "author": {"@id": f"{BASE_URL}/#business"},
+            "publisher": {"@id": f"{BASE_URL}/#business"},
+            "isPartOf": {"@id": f"{BASE_URL}/#website"},
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "따솜커튼블라인드",
+                 "item": f"{BASE_URL}/"},
+                {"@type": "ListItem", "position": 2, "name": "시공후기",
+                 "item": f"{BASE_URL}/reviews/"},
+                {"@type": "ListItem", "position": 3, "name": 헤드라인[:80], "item": 주소},
+            ],
+        },
+    ]
+    qa = 질문답(html)
+    if len(qa) >= 2:
+        그래프.append({
+            "@type": "FAQPage",
+            "@id": 주소 + "#faq",
+            "mainEntity": [
+                {"@type": "Question", "name": q,
+                 "acceptedAnswer": {"@type": "Answer", "text": a}}
+                for q, a in qa
+            ],
+        })
+
+    덩어리 = (
+        f'{시작표}\n'
+        f'<link rel="canonical" href="{주소}">\n'
+        f'<meta property="og:type" content="article">\n'
+        f'<meta property="og:site_name" content="따솜커튼블라인드">\n'
+        f'<meta property="og:title" content="{제목}">\n'
+        f'<meta property="og:description" content="{설명}">\n'
+        f'<meta property="og:url" content="{주소}">\n'
+        f'<meta property="og:image" content="{이미지주소}">\n'
+        f'<meta name="twitter:card" content="summary_large_image">\n'
+        f'<script type="application/ld+json">'
+        + json.dumps({"@context": "https://schema.org", "@graph": 그래프},
+                     ensure_ascii=False, separators=(",", ":"))
+        + f'</script>\n{끝표}'
+    )
+
+    # 이미 넣은 게 있으면 통째로 갈아끼운다
+    if 시작표 in html:
+        return re.sub(re.escape(시작표) + r".*?" + re.escape(끝표), 덩어리, html, flags=re.S), len(qa)
+    return html.replace("</head>", 덩어리 + "\n</head>", 1), len(qa)
+
+
+def enrich_reviews(확인만=False):
+    바뀜, faq수 = [], 0
+    for f in sorted(REVIEWS.glob("2*.html")):
+        원본 = f.read_text(encoding="utf-8")
+        새것, qa = 머리보강(원본, f.name)
+        새것 = 지연로딩(새것)
+        if qa >= 2:
+            faq수 += 1
+        if 새것 != 원본:
+            if not 확인만:
+                f.write_text(새것, encoding="utf-8")
+            바뀜.append((f.name, qa))
+    print(f"[ok] 후기 보강 {len(바뀜)}편 (구조화 데이터·og·지연 로딩) · FAQ {faq수}편")
+    return 바뀜
+
+
 def main():
     posts = sorted(
         (parse_post(p) for p in REVIEWS.glob("2*.html")),
@@ -549,6 +698,7 @@ def main():
     # 각 후기 CTA를 그 지역 담당 실장으로 통일
     for p in posts:
         apply_cta(REVIEWS / p["file"], region_of(p["title"]))
+    enrich_reviews()
     build_list(posts)
     print(f"[ok] reviews/index.html ({len(posts)} posts, CTA=지역 담당 실장)")
     build_home_gallery(posts)
