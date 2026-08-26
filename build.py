@@ -527,7 +527,7 @@ def build_sitemap(posts, areas=()):
         print("[skip] BASE_URL not set - sitemap.xml not generated (set it after deploy)")
         return
     today = date.today().isoformat()
-    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/services.html", today), (f"{BASE_URL}/gallery.html", today), (f"{BASE_URL}/areas.html", today), (f"{BASE_URL}/apply.html", today), (f"{BASE_URL}/reviews/", today)]
+    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/services.html", today), (f"{BASE_URL}/gallery.html", today), (f"{BASE_URL}/areas.html", today), (f"{BASE_URL}/apply.html", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy.html", today)]
     urls += [(f"{BASE_URL}/areas/{slug}.html", today) for _r, slug, _n in areas]
     urls += [(f"{BASE_URL}/reviews/{p['file']}", p["date"]) for p in posts]
     body = "\n".join(
@@ -720,6 +720,71 @@ def enrich_reviews(확인만=False):
     return 바뀜
 
 
+
+# ─────────────────────────────────────────────────────────────
+# 접속 분석 · 개인정보처리방침 링크
+#
+# CLARITY_ID 가 비어 있으면 아무것도 넣지 않는다.
+# clarity.microsoft.com 에서 프로젝트를 만들면 받는 10자 안팎의 아이디를 넣으면
+# 그때부터 모든 페이지에 붙는다.
+#
+# 분석 도구를 켜는 순간 방문 기록을 모으게 되므로 privacy.html 안내가 같이 가야 한다.
+# 그래서 이 함수가 푸터의 개인정보처리방침 링크도 함께 챙긴다.
+# ─────────────────────────────────────────────────────────────
+CLARITY_ID = ""      # ← 여기에 Clarity 프로젝트 ID 를 넣으세요
+
+_A_시작, _A_끝 = "<!-- AUTO:site-tail -->", "<!-- /AUTO:site-tail -->"
+
+
+def _clarity_snippet():
+    if not CLARITY_ID.strip():
+        return ""
+    return (
+        '<script type="text/javascript">'
+        '(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};'
+        't=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;'
+        'y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);'
+        '})(window,document,"clarity","script","%s");</script>' % CLARITY_ID.strip()
+    )
+
+
+def enrich_site_tail():
+    """모든 공개 페이지에 분석 스크립트와 개인정보처리방침 링크를 넣는다.
+
+    푸터 생김새가 페이지마다 달라서(홈은 크고, 후기는 한 줄, 지역 페이지는 아예 없음)
+    푸터 안을 건드리지 않고 본문 끝에 한 줄을 붙이는 쪽으로 통일한다.
+    여러 번 돌려도 결과가 같다.
+    """
+    링크 = ('<div class="auto-policy" style="text-align:center;padding:18px 16px 26px;'
+            'font-size:13px;opacity:.7">'
+            '<a href="%sprivacy.html">개인정보처리방침</a></div>')
+    분석 = _clarity_snippet()
+    바뀜 = 0
+    for f in sorted(ROOT.rglob("*.html")):
+        if "_to_delete" in f.parts or f.name == "_template.html":
+            continue
+        t = f.read_text(encoding="utf-8", errors="replace")
+        if "noindex" in t.lower():
+            continue                       # 내부용 페이지는 건드리지 않는다
+        if f.name == "privacy.html":
+            continue                       # 자기 자신을 링크할 이유가 없다
+        깊이 = "../" * (len(f.relative_to(ROOT).parts) - 1)
+        조각 = [_A_시작, 링크 % 깊이]
+        if 분석:
+            조각.append(분석)
+        조각.append(_A_끝)
+        덩어리 = "\n".join(조각)
+        if _A_시작 in t:
+            새것 = re.sub(re.escape(_A_시작) + r".*?" + re.escape(_A_끝), 덩어리, t, flags=re.S)
+        else:
+            새것 = t.replace("</body>", 덩어리 + "\n</body>", 1)
+        if 새것 != t:
+            f.write_text(새것, encoding="utf-8")
+            바뀜 += 1
+    켬 = "켜짐" if 분석 else "꺼짐(CLARITY_ID 비어 있음)"
+    print(f"[ok] 방침 링크·분석 스크립트 {바뀜}장 (분석: {켬})")
+
+
 def main():
     posts = sorted(
         (parse_post(p) for p in REVIEWS.glob("2*.html")),
@@ -735,6 +800,7 @@ def main():
     build_home_gallery(posts)
     areas = build_area_pages(posts)
     build_home_areas(areas)
+    enrich_site_tail()
     build_sitemap(posts, areas)
 
 
