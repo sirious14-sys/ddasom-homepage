@@ -607,6 +607,91 @@ def build_rss(posts, 개수=20):
     print(f"[ok] rss.xml ({len(최신)} items)")
 
 
+def build_webp(품질=82):
+    """사진 옆에 같은 이름의 .webp 를 만든다. 원본 JPG 는 지우지 않는다.
+
+    커튼을 알아보는 사람은 대부분 집이나 가게에서 폰으로 본다.
+    사진이 무거우면 다 뜨기 전에 나간다.
+
+    원본을 남기는 이유는 두 가지다.
+      - webp 를 못 읽는 옛 브라우저가 아직 있다 (<picture> 로 JPG 를 대안으로 준다)
+      - 되돌리려면 <picture> 만 벗기면 된다. 사진을 다시 만들 필요가 없다
+
+    이미 만든 것은 건너뛴다. 원본이 더 새로우면 다시 만든다.
+    """
+    try:
+        from PIL import Image
+    except ImportError:
+        print("[skip] Pillow 가 없어 webp 를 못 만든다 (pip install Pillow)")
+        return
+    만듦 = 건너뜀 = 0
+    원본합 = 결과합 = 0
+    for j in sorted(ROOT.rglob("*.jpg")):
+        if "_to_delete" in j.parts:
+            continue
+        w = j.with_suffix(".webp")
+        원본합 += j.stat().st_size
+        if w.exists() and w.stat().st_mtime >= j.stat().st_mtime:
+            결과합 += w.stat().st_size
+            건너뜀 += 1
+            continue
+        with Image.open(j) as im:
+            im.convert("RGB").save(w, "WEBP", quality=품질, method=4)
+        결과합 += w.stat().st_size
+        만듦 += 1
+    if 만듦 or 건너뜀:
+        준것 = (1 - 결과합 / 원본합) * 100 if 원본합 else 0
+        print(f"[ok] webp {만듦}장 생성 · {건너뜀}장 그대로 "
+              f"({원본합/1048576:.1f}MB → {결과합/1048576:.1f}MB, {준것:.0f}% 감소)")
+
+
+_그림 = re.compile(r"(<picture>.*?</picture>)|(<img[^>]*>)", re.S)
+
+
+def build_picture():
+    """<img src="…jpg"> 를 <picture> 로 감싸 webp 를 먼저 주게 한다.
+
+    webp 를 읽는 브라우저는 webp 를, 못 읽는 브라우저는 그대로 JPG 를 받는다.
+    화면에 보이는 것은 달라지지 않는다.
+
+    이미 감싼 것은 건드리지 않는다(멱등). webp 파일이 실제로 있는 것만 감싼다 —
+    없는 주소를 가리키면 사진이 통째로 안 뜬다.
+    """
+    감쌈 = 0
+    for f in sorted(ROOT.rglob("*.html")):
+        if "_to_delete" in f.parts or f.name == "_template.html":
+            continue
+        t = f.read_text(encoding="utf-8", errors="replace")
+        놓친것 = [0]
+
+        def one(m):
+            if m.group(1):
+                return m.group(1)          # 이미 감싼 것
+            태그 = m.group(2)
+            s = re.search(r'src="([^"]+\.jpg)"', 태그, re.I)
+            if not s:
+                return 태그
+            주소 = s.group(1)
+            if 주소.startswith(("http://", "https://", "//")):
+                return 태그                # 남의 서버 사진은 우리가 못 바꾼다
+            실제 = (f.parent / 주소).resolve()
+            if not 실제.with_suffix(".webp").exists():
+                놓친것[0] += 1
+                return 태그
+            웹 = 주소.rsplit(".", 1)[0] + ".webp"
+            return (f'<picture><source srcset="{웹}" type="image/webp">'
+                    f'{태그}</picture>')
+
+        새것 = _그림.sub(one, t)
+        if 새것 != t:
+            f.write_text(새것, encoding="utf-8")
+            감쌈 += 1
+        if 놓친것[0]:
+            print(f"   [주의] {f.name}: webp 가 없어 그대로 둔 사진 {놓친것[0]}장")
+    if 감쌈:
+        print(f"[ok] <picture> 적용 {감쌈}장")
+
+
 _RSS표 = '<!-- AUTO:rss-link -->'
 
 
@@ -916,6 +1001,10 @@ def main():
     areas = build_area_pages(posts)
     build_home_areas(areas)
     enrich_site_tail()
+    # 사진은 맨 나중에 감싼다. build_list·build_home_gallery 가 목록을 통째로 다시 쓰기 때문에
+    # 먼저 감싸면 그 자리에서 <picture> 가 지워진다.
+    build_webp()
+    build_picture()
     build_sitemap(posts, areas)
     build_rss(posts)
     build_rss_link()
