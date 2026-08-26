@@ -24,11 +24,22 @@
 <body>
 
 <header>
-  <div class="container nav">
-    <a href="../" class="logo">따솜 <em>커튼·블라인드</em></a>
-    <a href="./" class="back-link">← 시공후기 목록</a>
+  <div class="nav-inner nav">
+    <a href="../index.html" class="logo">따솜커튼블라인드<small>DDASOM CURTAIN & BLIND</small></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#about">소개</a></li>
+      <li><a href="../services.html">서비스</a></li>
+      <li><a href="../gallery.html">갤러리</a></li>
+      <li><a href="./">시공후기</a></li>
+      <li class="b2b-li"><a href="../b2b.html">기업·기관 전용관</a></li>
+      <li><a href="../areas.html">출장지역</a></li>
+      <li><a href="../apply.html">견적요청</a></li>
+    </ul>
+    <a href="../b2b.html" class="nav-b2b">기업·기관 전용관</a>
+    <button class="menu-btn" id="menuBtn" aria-label="메뉴">☰</button>
   </div>
 </header>
+<script>(function(){var b=document.getElementById("menuBtn"),l=document.getElementById("navLinks");if(b&&l)b.addEventListener("click",function(){l.classList.toggle("open")});})();</script>
 
 <main class="container post">
   <p class="post-date">2026년 7월 27일 시공</p>
