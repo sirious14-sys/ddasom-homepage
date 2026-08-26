@@ -579,8 +579,37 @@ def 질문답(html):
 
 
 def 시공일(html, 파일명):
+    """파일명 앞의 날짜 = 시공한 날."""
     m = re.search(r"(\d{4})-(\d{2})-(\d{2})-", 파일명)
     return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else ""
+
+
+_발행일캐시 = {}
+
+
+def 발행일(파일명):
+    """글이 실제로 올라간 날. git 의 최초 커밋 날짜를 쓴다.
+
+    시공일을 datePublished 로 쓰면 안 된다. 2017년에 한 시공을 2026년에 올린 글도 있어서,
+    그대로 넣으면 구글에 "9년 전에 발행된 글"이라고 알리는 꼴이 된다.
+    git 을 못 읽으면 시공일로 물러선다.
+    """
+    if 파일명 in _발행일캐시:
+        return _발행일캐시[파일명]
+    날 = ""
+    try:
+        import subprocess
+        r = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--follow",
+             "--format=%ad", "--date=short", "-1", "--", f"reviews/{파일명}"],
+            cwd=str(ROOT), capture_output=True, text=True, timeout=20)
+        날 = r.stdout.strip().splitlines()[0].strip() if r.stdout.strip() else ""
+    except Exception:
+        날 = ""
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", 날 or ""):
+        날 = 시공일("", 파일명)
+    _발행일캐시[파일명] = 날
+    return 날
 
 
 def 지연로딩(html):
@@ -609,7 +638,8 @@ def 머리보강(html, 파일명):
     사진 = 첫사진(html)
     주소 = f"{BASE_URL}/reviews/{파일명}"
     이미지주소 = f"{BASE_URL}/reviews/{사진}" if 사진 else f"{BASE_URL}/promo-img/og.jpg"
-    날짜 = 시공일(html, 파일명)
+    시공 = 시공일(html, 파일명)
+    날짜 = 발행일(파일명) or 시공
     h1 = re.search(r"<h1>(.*?)</h1>", html, re.S)
     헤드라인 = re.sub(r"<[^>]+>", " ", h1.group(1)).strip() if h1 else 제목
 
