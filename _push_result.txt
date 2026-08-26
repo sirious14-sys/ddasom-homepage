@@ -1,16 +1,2 @@
 ===RESULT=== 
 [1] add/commit 
-warning: in the working copy of 'b2b.html', LF will be replaced by CRLF the next time Git touches it
-[main 1faf8c4] site update
- 1 file changed, 13 insertions(+), 13 deletions(-)
- 
-[2] push  ← 여기서 실패하면 아래에 이유가 나옵니다 
-To https://github.com/sirious14-sys/ddasom-homepage.git
-   4f26419..1faf8c4  main -> main
-PUSH_EXIT_CODE=0 
- 
-[3] local vs remote 
-1faf8c4 site update
-1faf8c4
-## main...origin/main
- M _push_result.txt
