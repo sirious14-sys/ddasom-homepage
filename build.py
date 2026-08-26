@@ -731,7 +731,7 @@ def enrich_reviews(확인만=False):
 # 분석 도구를 켜는 순간 방문 기록을 모으게 되므로 privacy.html 안내가 같이 가야 한다.
 # 그래서 이 함수가 푸터의 개인정보처리방침 링크도 함께 챙긴다.
 # ─────────────────────────────────────────────────────────────
-CLARITY_ID = ""      # ← 여기에 Clarity 프로젝트 ID 를 넣으세요
+CLARITY_ID = "y88nlkwv9e"      # clarity.microsoft.com 프로젝트 ID
 
 _A_시작, _A_끝 = "<!-- AUTO:site-tail -->", "<!-- /AUTO:site-tail -->"
 
@@ -766,10 +766,11 @@ def enrich_site_tail():
         t = f.read_text(encoding="utf-8", errors="replace")
         if "noindex" in t.lower():
             continue                       # 내부용 페이지는 건드리지 않는다
-        if f.name == "privacy.html":
-            continue                       # 자기 자신을 링크할 이유가 없다
+        자기링크빼기 = (f.name == "privacy.html")   # 방침 페이지가 자기를 링크할 이유는 없다
         깊이 = "../" * (len(f.relative_to(ROOT).parts) - 1)
-        조각 = [_A_시작, 링크 % 깊이]
+        조각 = [_A_시작]
+        if not 자기링크빼기:
+            조각.append(링크 % 깊이)
         if 분석:
             조각.append(분석)
         조각.append(_A_끝)
