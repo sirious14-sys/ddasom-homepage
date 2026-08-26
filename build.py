@@ -542,6 +542,120 @@ def build_sitemap(posts, areas=()):
     print(f"[ok] sitemap.xml ({len(urls)} urls)")
 
 
+def _rfc822(날짜):
+    """RSS 는 날짜 형식이 따로 있다. 사이트맵의 2026-08-26 형식을 못 알아듣는다.
+
+    글에는 시각이 없으니 그날 오전 9시(한국시간)로 둔다.
+    시각이 다 같으면 수집기가 순서를 못 정하므로 순서는 pubDate 가 아니라 나열 순서로 정해진다.
+    """
+    try:
+        y, m, d = (int(x) for x in 날짜.split("-"))
+    except Exception:
+        return ""
+    요일 = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")[date(y, m, d).weekday()]
+    달 = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")[m - 1]
+    return f"{요일}, {d:02d} {달} {y} 09:00:00 +0900"
+
+
+def _xml탈출(s):
+    return (s.replace("&", "&amp;").replace("<", "&lt;")
+             .replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def build_rss(posts, 개수=20):
+    """최신 시공후기 RSS.
+
+    네이버는 사이트맵보다 RSS 를 자주 읽는다. 새 후기가 검색에 잡히는 속도가 달라진다.
+
+    정렬은 시공일이 아니라 **발행일**이다. 2017년에 한 시공을 2026년에 올린 글이 있어서,
+    시공일로 정렬하면 방금 올린 글이 목록 맨 아래로 가 버린다. 그러면 RSS 를 쓰는 의미가 없다.
+    """
+    if not BASE_URL:
+        print("[skip] BASE_URL not set - rss.xml not generated")
+        return
+    # 발행일이 같은 글이 여러 개면 파일명(=시공일) 역순으로 갈라 준다.
+    최신 = sorted(posts, key=lambda p: (발행일(p["file"]), p["file"]), reverse=True)[:개수]
+    항목 = []
+    for p in 최신:
+        주소 = f"{BASE_URL}/reviews/{p['file']}"
+        조각 = [
+            f"    <title>{_xml탈출(p['title'])}</title>",
+            f"    <link>{주소}</link>",
+            f"    <guid isPermaLink=\"true\">{주소}</guid>",
+            f"    <description>{_xml탈출(p['desc'])}</description>",
+        ]
+        날 = _rfc822(발행일(p["file"]))
+        if 날:
+            조각.append(f"    <pubDate>{날}</pubDate>")
+        if p.get("thumb"):
+            조각.append(f'    <enclosure url="{BASE_URL}/reviews/{p["thumb"]}" type="image/jpeg"/>')
+        항목.append("  <item>\n" + "\n".join(조각) + "\n  </item>")
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+        "<channel>\n"
+        "  <title>따솜커튼블라인드 시공후기</title>\n"
+        f"  <link>{BASE_URL}/reviews/</link>\n"
+        "  <description>대구·경북 커튼·블라인드 방문 실측 시공 사례입니다.</description>\n"
+        "  <language>ko</language>\n"
+        f'  <atom:link href="{BASE_URL}/rss.xml" rel="self" type="application/rss+xml"/>\n'
+        + "\n".join(항목) + "\n</channel>\n</rss>\n"
+    )
+    (ROOT / "rss.xml").write_text(xml, encoding="utf-8")
+    print(f"[ok] rss.xml ({len(최신)} items)")
+
+
+_RSS표 = '<!-- AUTO:rss-link -->'
+
+
+def build_rss_link():
+    """홈과 후기 목록 <head> 에 RSS 위치를 알려 주는 줄을 넣는다.
+
+    수집기와 피드 리더가 주소를 모르면 rss.xml 이 있어도 못 찾는다.
+    후기 개별 글에는 넣지 않는다 — 목록이 있는 자리에만 있으면 된다.
+    """
+    if not BASE_URL:
+        return
+    줄 = (f'{_RSS표}<link rel="alternate" type="application/rss+xml" '
+          f'title="따솜커튼블라인드 시공후기" href="{BASE_URL}/rss.xml">')
+    바뀜 = 0
+    for 상대 in ("index.html", "reviews/index.html"):
+        f = ROOT / 상대
+        if not f.exists():
+            continue
+        t = f.read_text(encoding="utf-8")
+        새것 = (re.sub(re.escape(_RSS표) + r'<link[^>]*>', 줄, t)
+                if _RSS표 in t else t.replace("</head>", 줄 + "\n</head>", 1))
+        if 새것 != t:
+            f.write_text(새것, encoding="utf-8")
+            바뀜 += 1
+    if 바뀜:
+        print(f"[ok] RSS 자동발견 링크 {바뀜}장")
+
+
+def build_robots():
+    """네이버 봇(Yeti)을 따로 적어 준다.
+
+    `User-agent: *` 에 이미 포함되므로 지금도 수집은 된다(실제로 색인돼 있다).
+    명시해 두면 네이버 웹마스터의 robots.txt 검증에서 분명하게 잡힌다.
+    """
+    if not BASE_URL:
+        return
+    t = ("User-agent: *\n"
+         "Allow: /\n\n"
+         "User-agent: Yeti\n"
+         "Allow: /\n\n"
+         "User-agent: Googlebot\n"
+         "Allow: /\n\n"
+         f"Sitemap: {BASE_URL}/sitemap.xml\n")
+    옛 = ROOT / "robots.txt"
+    if not 옛.exists() or 옛.read_text(encoding="utf-8") != t:
+        옛.write_text(t, encoding="utf-8")
+        print("[ok] robots.txt (Yeti·Googlebot 명시)")
+
+
 
 # ─────────────────────────────────────────────────────────────
 # 후기 페이지 보강 — 색인과 공유에 필요한 것을 자동으로 채운다.
@@ -803,6 +917,9 @@ def main():
     build_home_areas(areas)
     enrich_site_tail()
     build_sitemap(posts, areas)
+    build_rss(posts)
+    build_rss_link()
+    build_robots()
 
 
 if __name__ == "__main__":
