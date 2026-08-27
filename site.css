@@ -332,6 +332,8 @@
 
 /* ── 페이지형 공통 (2026-08 분리) ── */
 body.subpage header{background:rgba(247,244,238,.96);color:var(--ink);border-bottom:1px solid var(--line)}
+/* 서브페이지 본문 배경 통일: 흰 섹션도 베이지(--bg)로 — 페이지 전환 시 배경 안 바뀌게 (2026-08-27) */
+body.subpage .services,body.subpage .gallery,body.subpage .apply,body.subpage .quicklinks{background:var(--bg)}
 body.subpage .nav-tel{border-color:var(--ink)}
 .page-top{padding:122px 0 0;font-size:.88rem;color:var(--ink-soft)}
 .page-top a{color:var(--accent-deep,#8a5c31)}

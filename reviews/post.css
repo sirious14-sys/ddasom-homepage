@@ -17,7 +17,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(247,244,238,.96);backdr
 /* 본 사이트와 동일한 상단 메뉴 (헤더는 1140 래퍼, 본문 container는 760 유지) */
 .nav-inner{max-width:1140px;margin:0 auto;padding:0 28px}
 .nav{display:flex;align-items:center;justify-content:space-between;height:92px}
-.logo{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;line-height:1.1;white-space:nowrap}
+.logo{font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
 .logo small{display:block;font-weight:400;font-size:.68rem;letter-spacing:.35em;opacity:.75;margin-top:2px}
 .logo em{font-style:normal;color:var(--accent)}
 .nav-links{display:flex;gap:26px;list-style:none;font-size:1.02rem;font-weight:600;align-items:center}
