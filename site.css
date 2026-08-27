@@ -14,7 +14,8 @@
     --serif:var(--sans);
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth;font-size:19px}
+  /* scrollbar-gutter: 짧은 페이지(출장지역 등)에 스크롤바가 없어 화면이 7px 밀리던 문제 방지 (2026-08-27) */
+  html{scroll-behavior:smooth;font-size:19px;scrollbar-gutter:stable}
   body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.75;word-break:keep-all;font-size:1rem}
   h1,h2,h3{font-family:var(--sans);font-weight:750;letter-spacing:-.035em}
   img{max-width:100%;display:block}
