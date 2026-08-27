@@ -336,9 +336,12 @@ body.subpage header{background:rgba(247,244,238,.96);color:var(--ink);border-bot
 /* 서브페이지 본문 배경 통일: 흰 섹션도 베이지(--bg)로 — 페이지 전환 시 배경 안 바뀌게 (2026-08-27) */
 body.subpage .services,body.subpage .gallery,body.subpage .apply,body.subpage .quicklinks{background:var(--bg)}
 body.subpage .nav-tel{border-color:var(--ink)}
-.page-top{padding:122px 0 0;font-size:.88rem;color:var(--ink-soft)}
+/* 서브페이지 첫 섹션 상단 여백 통일 — 페이지마다 제목 높이가 달라 튀던 것 방지 (2026-08-27) */
+body.subpage > section:first-of-type{padding-top:80px}
+/* 좌우 28px 유지 필수 — 0으로 두면 .container 패딩을 덮어써 빵부스러기가 본문보다 28px 왼쪽으로 밀림 */
+.page-top{padding:122px 28px 0;font-size:.88rem;color:var(--ink-soft)}
 .page-top a{color:var(--accent-deep,#8a5c31)}
-@media(max-width:640px){.page-top{padding:104px 0 0}}
+@media(max-width:640px){.page-top{padding:104px 28px 0}}
 .nav-tel{display:none}
 @media(max-width:1200px){.nav-b2b{display:none}}
 .nav-b2b small{letter-spacing:.12em}
