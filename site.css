@@ -121,7 +121,7 @@
   .about-list p{font-size:.95rem;color:var(--ink-soft)}
 
   /* ── Services ───────────────────────── */
-  .services{background:var(--white)}
+  .services{background:var(--bg)}
   .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
   .card{background:var(--white);padding:44px 32px;transition:background .3s}
   .card:hover{background:var(--bg)}
@@ -137,7 +137,7 @@
   .step p{font-size:.95rem;color:var(--ink-soft)}
 
   /* ── Gallery ────────────────────────── */
-  .gallery{background:var(--white)}
+  .gallery{background:var(--bg)}
   .gallery-filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:34px}
   .chip{
     font-family:inherit;font-size:.95rem;font-weight:600;color:var(--ink-soft);
@@ -187,7 +187,7 @@
   .review .who{font-size:.88rem;color:var(--ink-soft);letter-spacing:.02em}
 
   /* ── Apply (견적 요청 폼) ─────────────── */
-  .apply{background:var(--white)}
+  .apply{background:var(--bg)}
   .apply-desc{color:var(--ink-soft);max-width:640px;margin-bottom:44px;font-size:1.08rem}
   .apply-form{max-width:760px}
   .field{margin-bottom:26px}
@@ -333,8 +333,8 @@
 
 /* ── 페이지형 공통 (2026-08 분리) ── */
 body.subpage header{background:rgba(247,244,238,.96);color:var(--ink);border-bottom:1px solid var(--line)}
-/* 서브페이지 본문 배경 통일: 흰 섹션도 베이지(--bg)로 — 페이지 전환 시 배경 안 바뀌게 (2026-08-27) */
-body.subpage .services,body.subpage .gallery,body.subpage .apply,body.subpage .quicklinks{background:var(--bg)}
+/* 배경 규칙(2026-08-27): 전 페이지 바탕은 --bg(#f7f4ee) 하나로 통일.
+   흰색은 카드에만, 어두운색은 상담 섹션·푸터에만. 섹션에 --white/--bg-2 배경 추가 금지. */
 body.subpage .nav-tel{border-color:var(--ink)}
 /* 서브페이지 첫 섹션 상단 여백 통일 — 페이지마다 제목 높이가 달라 튀던 것 방지 (2026-08-27) */
 body.subpage > section:first-of-type{padding-top:80px}
@@ -345,7 +345,7 @@ body.subpage > section:first-of-type{padding-top:80px}
 .nav-tel{display:none}
 @media(max-width:1200px){.nav-b2b{display:none}}
 .nav-b2b small{letter-spacing:.12em}
-.quicklinks{padding:76px 0;background:#fff}
+.quicklinks{padding:76px 0;background:var(--bg)}
 .ql-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:26px}
 .ql-grid a{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 20px;transition:.15s;display:block}
 .ql-grid a:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(90,70,40,.09)}
