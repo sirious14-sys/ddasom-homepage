@@ -217,6 +217,9 @@ GALLERY_ITEMS = [
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/7.jpg", "침실", "블라인드", "작은방 · 베이지 콤비블라인드"),
     ("2026-07-28-pohang-chogok-trinien.html", "pohang-chogok-trinien/9.jpg", "침실", "블라인드", "드레스룸 · 다크그레이 콤비블라인드"),
     ("2017-07-02-gyeongsan-sangga-house.html", "gyeongsan-sangga-house/5.jpg", "침실", "블라인드", "안방 · 암막 콤비블라인드"),
+    ("2026-08-21-yecheon-house-blackout-curtain.html", "yecheon-house-blackout-curtain/1.jpg", "침실", "커튼", "단독주택 방 · 밝은 회색 암막커튼(블라인드 위 이중)"),
+    ("2026-08-21-yecheon-house-blackout-curtain.html", "yecheon-house-blackout-curtain/8.jpg", "침실", "커튼", "두 면 창 · 같은 원단으로 맞춘 암막커튼"),
+    ("2026-08-21-yecheon-house-blackout-curtain.html", "yecheon-house-blackout-curtain/4.jpg", "침실", "커튼", "밝은 회색 암막 원단 근접"),
     # 상가·사무실
     ("2026-05-30-yeongdeok-office-rollscreen.html", "yeongdeok-office-rollscreen/1.jpg", "상가·사무실", "롤스크린", "워크스테이션 · 화이트 암막 롤스크린"),
     ("2026-07-22-dongdaegu-cafe-wood-blind.html", "dongdaegu-cafe-wood-blind/1.jpg", "상가·사무실", "블라인드", "카페 홀 · 통창 우드블라인드"),
