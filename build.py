@@ -244,6 +244,9 @@ GALLERY_ITEMS = [
     ("2026-07-13-yeongcheon-clinic-curtain.html", "yeongcheon-clinic-curtain/1.jpg", "상가·사무실", "커튼", "병원 처치실 · 방염 칸막이 커튼"),
     ("2026-07-13-yeongcheon-clinic-curtain.html", "yeongcheon-clinic-curtain/3.jpg", "상가·사무실", "커튼", "베드 곡선 레일 · 세이지그린 커튼"),
     ("2026-07-13-yeongcheon-clinic-curtain.html", "yeongcheon-clinic-curtain/7.jpg", "상가·사무실", "롤스크린", "처치실 창가 · 아이보리 롤스크린"),
+    ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/1.jpg", "상가·사무실", "블라인드", "사무실 전관 · 그레이 암막 블라인드"),
+    ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/8.jpg", "상가·사무실", "블라인드", "회의실 큰 창 · 그레이 암막 블라인드"),
+    ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/6.jpg", "상가·사무실", "블라인드", "사무실 창 정면 · 하단 바 창틀선 맞춤"),
 ]
 
 
