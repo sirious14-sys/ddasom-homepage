@@ -253,6 +253,9 @@ GALLERY_ITEMS = [
     ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/1.jpg", "상가·사무실", "블라인드", "사무실 전관 · 그레이 암막 블라인드"),
     ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/8.jpg", "상가·사무실", "블라인드", "회의실 큰 창 · 그레이 암막 블라인드"),
     ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/6.jpg", "상가·사무실", "블라인드", "사무실 창 정면 · 하단 바 창틀선 맞춤"),
+    ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/2.jpg", "상가·사무실", "롤스크린", "식당 홀 · 화이트 방염 채광 롤스크린"),
+    ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/6.jpg", "상가·사무실", "롤스크린", "창 정면 · 아래 난간대는 남긴 길이"),
+    ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/7.jpg", "상가·사무실", "롤스크린", "세 면 창 · 한 줄로 이어진 라인"),
 ]
 
 
