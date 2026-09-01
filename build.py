@@ -256,6 +256,10 @@ GALLERY_ITEMS = [
     ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/2.jpg", "상가·사무실", "롤스크린", "식당 홀 · 화이트 방염 채광 롤스크린"),
     ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/6.jpg", "상가·사무실", "롤스크린", "창 정면 · 아래 난간대는 남긴 길이"),
     ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/7.jpg", "상가·사무실", "롤스크린", "세 면 창 · 한 줄로 이어진 라인"),
+    ("2026-08-11-gyeongju-airbnb-blackout-curtain.html", "gyeongju-airbnb-blackout-curtain/2.jpg", "침실", "커튼", "숙소 객실 · 천장 레일 암막커튼(벽 전체)"),
+    ("2026-08-11-gyeongju-airbnb-blackout-curtain.html", "gyeongju-airbnb-blackout-curtain/4.jpg", "침실", "커튼", "코너까지 이어진 암막커튼"),
+    ("2026-08-11-gyeongju-airbnb-blackout-curtain.html", "gyeongju-airbnb-blackout-curtain/10.jpg", "침실", "롤스크린", "작은방 · 화이트 암막 롤스크린"),
+    ("2026-08-11-gyeongju-airbnb-blackout-curtain.html", "gyeongju-airbnb-blackout-curtain/11.jpg", "거실", "커튼", "숙소 거실 · 화이트 쉬폰커튼"),
 ]
 
 
