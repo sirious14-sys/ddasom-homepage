@@ -8,6 +8,7 @@ reviews/YYYY-MM-DD-*.html 후기 페이지들을 읽어
 사용법:  python build.py
 새 후기를 올리는 절차는 reviews/_template.html 참고.
 """
+import hashlib
 import json
 import re
 import sys
@@ -899,6 +900,10 @@ def 머리보강(html, 파일명):
 
     덩어리 = (
         f'{시작표}\n'
+        # max-image-preview:large — 없으면 Discover 에 큰 그림이 안 실리고
+        # 일반 검색의 그림 미리보기도 작아진다(구글 Discover 문서).
+        # 시공후기는 편당 사진 5장이 걸린 글이라 이 한 줄이 제일 크게 작용한다.
+        f'<meta name="robots" content="max-image-preview:large">\n'
         f'<link rel="canonical" href="{주소}">\n'
         f'<meta property="og:type" content="article">\n'
         f'<meta property="og:site_name" content="따솜커튼블라인드">\n'
@@ -1001,6 +1006,149 @@ def enrich_site_tail():
     print(f"[ok] 방침 링크·분석 스크립트 {바뀜}장 (분석: {켬})")
 
 
+
+# ── 아래 둘은 2026-09-02 신설 ─────────────────────────────
+#   근거: SEO·GEO 외부조사 208건 (AI컴퍼니 `정보수집\SEO\종합_외부조사_20260902.md`)
+
+_R_시작 = "<!-- AUTO:robots -->"
+_R_끝 = "<!-- /AUTO:robots -->"
+
+
+def 로봇메타():
+    """모든 공개 페이지에 max-image-preview:large 를 넣는다.
+
+    없으면 구글 Discover 에 큰 그림이 안 실리고 일반 검색의 그림 미리보기도 작아진다.
+    커튼·블라인드는 눈으로 고르는 물건이라 그림이 곧 유입이다.
+
+    이미 robots 메타가 있는 페이지(noindex 내부용)는 건드리지 않는다 —
+    한 페이지에 robots 메타가 둘이면 구글이 합쳐 읽긴 하지만 지저분하다.
+    여러 번 돌려도 결과가 같다.
+    """
+    덩어리 = (_R_시작 + '\n<meta name="robots" content="max-image-preview:large">\n' + _R_끝)
+    바뀜 = 건너뜀 = 0
+    for f in sorted(ROOT.rglob("*.html")):
+        if "_to_delete" in f.parts or f.name == "_template.html":
+            continue
+        t = f.read_text(encoding="utf-8", errors="replace")
+        if _R_시작 in t:
+            새것 = re.sub(re.escape(_R_시작) + r".*?" + re.escape(_R_끝), 덩어리, t, flags=re.S)
+        else:
+            # 후기는 머리보강() 이 이미 넣는다. 남의 자리를 두 번 채우지 않는다.
+            if 'name="robots"' in t:
+                건너뜀 += 1
+                continue
+            if "</head>" not in t:
+                continue
+            새것 = t.replace("</head>", 덩어리 + "\n</head>", 1)
+        if 새것 != t:
+            f.write_text(새것, encoding="utf-8")
+            바뀜 += 1
+    print(f"[ok] robots 메타(max-image-preview) {바뀜}장 · 이미 있어 건너뜀 {건너뜀}장")
+
+
+_L_시작 = "<!-- AUTO:related -->"
+_L_끝 = "<!-- /AUTO:related -->"
+
+# 제목에서 뽑을 제품 낱말. 겹치는 게 많을수록 비슷한 시공이다.
+_제품말 = ["암막", "콤비", "롤스크린", "우드", "버티컬", "쉬폰", "속커튼", "커튼",
+           "블라인드", "전동", "로만쉐이드", "허니콤", "방염", "채광", "린넨", "이중"]
+
+
+def _제품(제목):
+    return {w for w in _제품말 if w in 제목}
+
+
+def 관련후기(posts):
+    """후기 본문 끝(연락처 앞)에 비슷한 시공 4편을 건다.
+
+    왜 여기인가 — 다 읽은 사람에게 **비슷한 시공을 보여준 뒤** 연락처로 간다.
+    증거를 먼저 주고 그 다음에 청하는 순서다.
+
+    고르는 기준
+        같은 지역          +10   "포항 사람은 포항 시공을 본다"
+        겹치는 제품 낱말   +3 씩
+        최근 것            +0~2  (오래된 후기만 걸리지 않게)
+    자기 자신은 뺀다. 4편이 안 되면 있는 만큼만 건다.
+
+    지금까지 후기끼리 본문 링크가 **0개**였다(2026-09-02 실측 44편 전부).
+    목록 페이지 하나에만 매달려 있어서 크롤러가 한 장씩 훑어 내려가야 했다.
+    """
+    if len(posts) < 2:
+        return
+    최신 = posts[0]["date"]
+    바뀜 = 0
+    for 나 in posts:
+        내지역 = region_of(나["title"])
+        내제품 = _제품(나["title"])
+        점수 = []
+        for 남 in posts:
+            if 남["file"] == 나["file"]:
+                continue
+            s = 0
+            if region_of(남["title"]) == 내지역:
+                s += 10
+            s += 3 * len(내제품 & _제품(남["title"]))
+            s += 2 if 남["date"] >= 최신[:4] + "-07" else 0
+            점수.append((s, 남["date"], 남))
+        # 점수 높은 것 먼저, 점수가 같으면 최근 것 먼저
+        점수.sort(key=lambda x: (x[0], x[1]), reverse=True)
+        고른것 = [x[2] for x in 점수[:4]]
+        if not 고른것:
+            continue
+
+        줄 = []
+        for q in 고른것:
+            y, mo, d = q["date"].split("-")
+            썸 = (f'<span class="rel-thumb"><img src="{q["thumb"]}" alt="{q["title"]}" '
+                  f'loading="lazy" decoding="async"></span>') if q["thumb"] else '<span class="rel-thumb"></span>'
+            줄.append(
+                f'<li><a href="{q["file"]}">{썸}'
+                f'<span class="rel-txt"><strong>{q["title"]}</strong>'
+                f'<em>{y}.{mo}.{d} 시공</em></span></a></li>')
+        덩어리 = (_L_시작 +
+                 '\n<section class="related">\n  <h2>비슷한 시공</h2>\n  <ul class="rel-list">\n    '
+                 + "\n    ".join(줄) +
+                 '\n  </ul>\n</section>\n' + _L_끝)
+
+        f = REVIEWS / 나["file"]
+        t = f.read_text(encoding="utf-8")
+        if _L_시작 in t:
+            새것 = re.sub(re.escape(_L_시작) + r".*?" + re.escape(_L_끝), 덩어리, t, flags=re.S)
+        elif '<div class="post-cta">' in t:
+            새것 = t.replace('<div class="post-cta">', 덩어리 + '\n\n  <div class="post-cta">', 1)
+        elif "</main>" in t:
+            새것 = t.replace("</main>", 덩어리 + "\n</main>", 1)
+        else:
+            continue
+        if 새것 != t:
+            f.write_text(새것, encoding="utf-8")
+            바뀜 += 1
+    print(f"[ok] 비슷한 시공 링크 {바뀜}장 (편당 최대 4편)")
+
+
+
+def css버전():
+    """post.css 내용에서 버전을 뽑아 후기 46편의 ?v= 를 맞춘다.
+
+    예전에는 `post.css?v=260830` 이 파일마다 손으로 박혀 있었다.
+    CSS 를 고쳐도 이 숫자를 안 바꾸면 브라우저가 옛 CSS 를 계속 쓴다 —
+    **고친 사람은 고쳤다고 믿고, 방문자는 옛 화면을 본다.**
+    내용이 바뀌면 숫자가 저절로 바뀌게 한다.
+    """
+    css = REVIEWS / "post.css"
+    if not css.exists():
+        return
+    v = hashlib.md5(css.read_bytes()).hexdigest()[:8]
+    바뀜 = 0
+    for f in sorted(REVIEWS.glob("*.html")):
+        t = f.read_text(encoding="utf-8")
+        새것 = re.sub(r"post\.css\?v=[0-9a-z]+", f"post.css?v={v}", t)
+        if 새것 != t:
+            f.write_text(새것, encoding="utf-8")
+            바뀜 += 1
+    print(f"[ok] post.css 버전 {v} — {바뀜}장")
+
+
 def main():
     posts = sorted(
         (parse_post(p) for p in REVIEWS.glob("2*.html")),
@@ -1016,7 +1164,10 @@ def main():
     build_home_gallery(posts)
     areas = build_area_pages(posts)
     build_home_areas(areas)
+    관련후기(posts)      # 사진 감싸기 전에 — build_picture 가 <img> 를 <picture> 로 바꾼다
     enrich_site_tail()
+    로봇메타()            # 후기 말고 나머지 페이지들
+    css버전()             # CSS 고쳤으면 ?v= 를 저절로 바꾼다
     # 사진은 맨 나중에 감싼다. build_list·build_home_gallery 가 목록을 통째로 다시 쓰기 때문에
     # 먼저 감싸면 그 자리에서 <picture> 가 지워진다.
     build_webp()
