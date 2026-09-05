@@ -162,6 +162,11 @@ def 페이지(d):
   <div class="note">%(schednote)s</div>
 
   <h2>사전점검일에 적어 오실 것</h2>
+  <p class="body">사전점검은 법으로 정해져 있습니다.</p>
+  <p class="body">주택법 제48조의2에 따라 시공사는 입주지정기간이 시작되기 45일 전까지, 이틀 이상 사전점검을 열어야 합니다.</p>
+  <p class="body">실제로는 입주 두세 달 전에 하는 경우가 많습니다.</p>
+  <p class="body">그날이 잔금 전에 세대 안에 들어가실 수 있는 거의 유일한 날입니다.</p>
+  <p class="body">줄자를 꼭 챙겨 가십시오.</p>
   <ul class="chk">
     %(chk)s
   </ul>
