@@ -220,7 +220,8 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     for d in 단지들:
         html = 페이지(d)
-        나쁜말 = [w for w in ("개략", "카카오톡", "카톡", "무료 견적", "실측 무료", "견적은 무료") if w in html]
+        나쁜말 = [w for w in ("개략", "카카오톡", "카톡", "무료") if w in html]
+        # 「무료」는 통째로 잡는다 — 「무료 방문 실측」처럼 목록에 없는 표현이 샌 적이 있다(2026-09-06)
         if 나쁜말:
             raise SystemExit("금지어: %s (%s)" % (나쁜말, d["file"]))
         제어 = sum(1 for c in html if ord(c) < 32 and c not in "\n\r\t")
