@@ -62,6 +62,57 @@ def 담기(dist: Path):
     return 빠진것
 
 
+INDEXNOW_KEY = "5874d855cbfb4be788976bdf69162102"   # ddasom.com 루트의 확인 파일과 같은 값
+
+
+def 색인알림(dist):
+    """올린 뒤 검색엔진에 "이 주소 바뀌었다"를 바로 알린다 (IndexNow).
+
+    안 부르면 구글·빙이 며칠 뒤에나 온다. 배포는 성공했는데 검색 결과만
+    옛날 것으로 남는다. 빙·네이버 등이 IndexNow 를 받는다.
+
+    보낼 주소 = 지난번 알린 뒤에 내용이 바뀐 HTML. `.indexnow_last` 에 시각을 적어둔다.
+    실패해도 배포를 실패로 만들지 않는다 — 올린 것은 이미 올라갔다.
+    """
+    import json
+    import time
+    import urllib.request
+
+    기록 = ROOT / ".indexnow_last"
+    지난번 = float(기록.read_text().strip()) if 기록.exists() else 0.0
+    주소 = []
+    for f in sorted(dist.rglob("*.html")):
+        if f.stat().st_mtime <= 지난번:
+            continue
+        rel = f.relative_to(dist).as_posix()
+        rel = "" if rel == "index.html" else rel[:-len("index.html")] if rel.endswith("/index.html") else rel
+        주소.append("https://ddasom.com/" + rel)
+    if not 주소:
+        print("   [색인] 바뀐 페이지가 없다 — 알리지 않는다")
+        return
+    몸통 = json.dumps({
+        "host": "ddasom.com",
+        "key": INDEXNOW_KEY,
+        "keyLocation": "https://ddasom.com/%s.txt" % INDEXNOW_KEY,
+        "urlList": 주소[:10000],
+    }).encode()
+    요청 = urllib.request.Request(
+        "https://api.indexnow.org/IndexNow", data=몸통,
+        headers={"Content-Type": "application/json; charset=utf-8"})
+    try:
+        with urllib.request.urlopen(요청, timeout=20) as r:
+            코드 = r.status
+    except Exception as e:
+        print("   [색인] 알림 실패: %s" % e)
+        print("          사이트는 올라갔다. 나중에 다시 배포하면 재시도한다.")
+        return
+    if 코드 in (200, 202):
+        기록.write_text(str(time.time()))
+        print("   [색인] %d개 주소 알림 완료 (HTTP %d)" % (len(주소), 코드))
+    else:
+        print("   [색인] 거절됨 HTTP %d — 키 파일을 확인해라" % 코드)
+
+
 def main():
     실행 = "--실행" in sys.argv
     dist = Path(os.environ.get("TEMP", "/tmp")) / "ddasom_dist"
@@ -92,6 +143,7 @@ def main():
         print("   [실패] 업로드가 안 됐다 — 사이트는 그대로다")
         return r.returncode
     print("   올라갔다 → https://ddasom.com/")
+    색인알림(dist)
     return 0
 
 

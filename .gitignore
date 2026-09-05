@@ -4,3 +4,4 @@ _push_result.txt
 # 배포 산출물·토큰
 .cloudflare_token
 .wrangler/
+.indexnow_last
