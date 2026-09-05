@@ -25,7 +25,7 @@ PROJECT = "ddasom"
 # (예전에는 폴더째 올려서 build.py·_push.bat 이 그대로 공개돼 있었다)
 올릴것 = [
     "index.html", "services.html", "gallery.html", "areas.html", "apply.html",
-    "quote.html", "privacy.html", "b2b.html", "b2b-bangyeom.html", "b2b-office.html", "b2b-school.html",
+    "quote.html", "privacy.html", "b2b.html", "b2b-bangyeom.html", "b2b-office.html", "b2b-school.html", "b2b-clinic.html",
     "404.html", "site.css", "robots.txt", "sitemap.xml", "rss.xml", "llms.txt",
     "CNAME", "5874d855cbfb4be788976bdf69162102.txt",   # 네이버 사이트 확인 파일
     "reviews", "areas", "promo-img",
