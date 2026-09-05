@@ -300,6 +300,31 @@ def build_home_gallery(posts):
     print(f"[ok] home gallery ({len(items)} items, filterable)")
 
 
+# ── 입주 예정 단지 (ipju/<file>) ─────────────────────────────────
+# 커튼은 입주할 때 산다. 입주 두세 달 전에 단지명 페이지를 깔아두면 검색을 선점한다.
+# 페이지 본문은 입주장페이지_생성.py 가 만든다. 여기서는 지역 페이지에서 거는 링크만 관리한다.
+# 입주가 끝난 단지는 이 표에서 지운다(지난 일정을 걸어두면 오히려 감점).
+IPJU = {
+    "영주": ("영주자이시그니처", "2026년 11월", "yeongju-xi-signature.html"),
+    "포항": ("포항자이디오션", "2026년 10월", "pohang-xi-dioceon.html"),
+    "안동": ("위파크안동호반", "2027년 1월", "wepark-andong-hoban.html"),
+}
+
+
+def _ipju_block(region):
+    if region not in IPJU:
+        return ""
+    danji, when, file = IPJU[region]
+    return (
+        "\n  <h2>입주 예정 단지</h2>\n"
+        f'  <p class="body">{danji}가 {when}에 입주합니다.</p>\n'
+        '  <p class="body">실측이 언제 몰리는지, 사전점검일에 무엇을 적어 오시면 되는지 '
+        "날짜로 정리해 두었습니다.</p>\n"
+        f'  <p class="body"><a href="../ipju/{file}" '
+        f'style="color:var(--accent2);font-weight:700">{danji} 커튼 입주 일정 보기 →</a></p>\n'
+    )
+
+
 # ── 지역 페이지 (areas/<slug>.html) ──────────────────────────────
 # 후기가 1건 이상 있는 지역만 생성한다(빈 페이지 = 검색 감점). 새 후기가
 # 쌓이면 build.py 실행만으로 해당 지역 페이지가 자동 생성·갱신된다.
@@ -381,6 +406,7 @@ p.body{margin:0 0 9px}
     </div>
   </div>
 
+__IPJU__
   <h2>__REGION__ 커튼집을 찾고 계신가요?</h2>
   <p class="body">커튼·블라인드는 매장을 돌며 비교하기가 쉽지 않습니다.</p>
   <p class="body">따솜커튼블라인드는 <b>__REGION__ 전지역 출장 전문</b>입니다.<br>__REGION__ 커튼 시공 업체를 알아보고 계시다면, 매장까지 오실 필요 없습니다.</p>
@@ -508,7 +534,8 @@ def build_area_pages(posts):
                 .replace("__MGR__", mgr)
                 .replace("__TEL__", tel)
                 .replace("__OGIMG__", ogimg)
-                .replace("__CARDS__", "\n".join(cards)))
+                .replace("__CARDS__", "\n".join(cards))
+                .replace("__IPJU__", _ipju_block(region)))
         # 대구·경북 밖 지역(대전 등)은 "전지역 출장" 과장 표현을 뺀다 (사례는 있되 기본 권역 아님)
         if region not in GB_REGIONS:
             html = html.replace(f"{region} 전지역", region)
@@ -546,6 +573,7 @@ def build_sitemap(posts, areas=()):
     today = date.today().isoformat()
     urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/b2b-bangyeom.html", today), (f"{BASE_URL}/b2b-office.html", today), (f"{BASE_URL}/b2b-school.html", today), (f"{BASE_URL}/b2b-clinic.html", today), (f"{BASE_URL}/b2b-shop.html", today), (f"{BASE_URL}/services.html", today), (f"{BASE_URL}/gallery.html", today), (f"{BASE_URL}/areas.html", today), (f"{BASE_URL}/apply.html", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy.html", today)]
     urls += [(f"{BASE_URL}/areas/{slug}.html", today) for _r, slug, _n in areas]
+    urls += [(f"{BASE_URL}/ipju/{file}", today) for _d, _w, file in IPJU.values()]
     urls += [(f"{BASE_URL}/reviews/{p['file']}", p["date"]) for p in posts]
     body = "\n".join(
         f"  <url><loc>{loc}</loc><lastmod>{mod}</lastmod></url>" for loc, mod in urls
