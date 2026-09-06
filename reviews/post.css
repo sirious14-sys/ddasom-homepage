@@ -112,3 +112,9 @@ footer a{text-decoration:underline}
 .rel-txt strong{font-size:.92rem;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
 .rel-txt em{font-style:normal;font-size:.74rem;color:var(--accent);letter-spacing:.05em}
 @media(max-width:640px){.rel-list{grid-template-columns:1fr}}
+
+/* 그 지역 입주 예정 단지로 보내는 줄 (2026-09-06) */
+.rel-ipju{margin:14px 0 0;padding:12px 14px;background:#fbf3ea;border:1px solid #ecdcc7;
+  border-radius:10px;font-size:15px;line-height:1.6}
+.rel-ipju a{color:#8a5c31;font-weight:700;text-decoration:none}
+.rel-ipju a:hover{text-decoration:underline}

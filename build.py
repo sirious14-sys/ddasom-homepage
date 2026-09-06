@@ -1133,10 +1133,21 @@ def 관련후기(posts):
                 f'<li><a href="{q["file"]}">{썸}'
                 f'<span class="rel-txt"><strong>{q["title"]}</strong>'
                 f'<em>{y}.{mo}.{d} 시공</em></span></a></li>')
+        # 그 지역에 입주 예정 단지가 있으면 한 줄 더 건다.
+        # 왜 — 새로 만든 ipju/ 페이지가 지역 페이지 하나에서만 연결돼 있어
+        # 구글이 못 찾고 있다(2026-09-06 URL 검사: "아직 알려지지 않은 URL").
+        # 후기는 이미 색인된 페이지라 여기서 걸어주면 크롤러가 따라 들어간다.
+        # 읽는 사람에게도 맞다 — 그 지역 시공을 보고 있는 사람이 그 지역 입주 예정자다.
+        입주줄 = ""
+        if 내지역 in IPJU:
+            단지, 시기, 파일 = IPJU[내지역]
+            입주줄 = (f'\n  <p class="rel-ipju"><a href="../ipju/{파일}">'
+                     f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
+
         덩어리 = (_L_시작 +
                  '\n<section class="related">\n  <h2>비슷한 시공</h2>\n  <ul class="rel-list">\n    '
                  + "\n    ".join(줄) +
-                 '\n  </ul>\n</section>\n' + _L_끝)
+                 '\n  </ul>' + 입주줄 + '\n</section>\n' + _L_끝)
 
         f = REVIEWS / 나["file"]
         t = f.read_text(encoding="utf-8")
