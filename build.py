@@ -311,6 +311,22 @@ IPJU = {
 }
 
 
+# ── 티스토리 비교 노트 (지역별 1편) ──────────────────────────
+# 왜 외부 도메인으로 링크를 내보내나 — 티스토리 61편이 구글에 0편 색인이다(2026-09-06 확인).
+# 원인은 들어오는 링크가 0개라 구글봇이 한 번도 온 적이 없다는 것("최근 크롤링: 해당사항 없음").
+# 홈페이지는 이미 색인돼 있으니(29장) 여기서 걸어주면 크롤러가 그 길로 따라 들어간다.
+# ★우리가 직접 쓴 글만 건다. 다른 브랜드 이름이 남아 있는 글은 정리가 끝날 때까지 뺀다.
+# 읽는 사람에게도 맞다 — 그 지역 시공을 다 본 사람이 "그래서 뭘 골라야 하나"를 묻는다.
+_T = "https://gunggwol19.tistory.com/entry/"
+NOTES = {
+    "포항": ("암막롤스크린 vs 암막커튼, 안방엔 뭐가 맞을까", _T + "%EC%95%94%EB%A7%89%EB%A1%A4%EC%8A%A4%ED%81%AC%EB%A6%B0-vs-%EC%95%94%EB%A7%89%EC%BB%A4%ED%8A%BC-%EC%95%88%EB%B0%A9%EC%97%94-%EB%AD%90%EA%B0%80-%EB%A7%9E%EC%9D%84%EA%B9%8C-%ED%8F%AC%ED%95%AD-%ED%9A%A8%EC%9E%90%EB%8F%99-%EA%B5%90%EC%B2%B4-%ED%9B%84%EA%B8%B0"),
+    "영주": ("얇은 커튼 vs 암막커튼, 블라인드 단독 vs 이중", _T + "%EC%96%87%EC%9D%80-%EC%BB%A4%ED%8A%BC-vs-%EC%95%94%EB%A7%89%EC%BB%A4%ED%8A%BC-%EB%B8%94%EB%9D%BC%EC%9D%B8%EB%93%9C-%EB%8B%A8%EB%8F%85-vs-%EC%9D%B4%EC%A4%91-%E2%80%94-%EC%98%81%EC%A3%BC-%ED%99%94%EC%84%B1%EB%A6%AC%EB%B2%84%EB%B9%8C-%EA%B1%B0%EC%8B%A4-%EB%B9%84%EA%B5%90"),
+    "의성": ("채광 롤스크린 vs 암막 롤스크린, 베란다는 왜 채광일까", _T + "%EC%B1%84%EA%B4%91-%EB%A1%A4%EC%8A%A4%ED%81%AC%EB%A6%B0-vs-%EC%95%94%EB%A7%89-%EB%A1%A4%EC%8A%A4%ED%81%AC%EB%A6%B0-%E2%80%94-%EC%9D%98%EC%84%B1-%EC%A3%BC%EA%B3%B52%EB%8B%A8%EC%A7%80-%EB%B2%A0%EB%9E%80%EB%8B%A4%EB%8A%94-%EC%99%9C-%EC%B1%84%EA%B4%91%EC%9D%BC%EA%B9%8C"),
+    "경주": ("콤비블라인드 vs 롤스크린 vs 암막커튼, 집 전체를 통일한다면", _T + "%EC%BD%A4%EB%B9%84%EB%B8%94%EB%9D%BC%EC%9D%B8%EB%93%9C-vs-%EB%A1%A4%EC%8A%A4%ED%81%AC%EB%A6%B0-vs-%EC%95%94%EB%A7%89%EC%BB%A4%ED%8A%BC-%EC%A7%91-%EC%A0%84%EC%B2%B4%EB%A5%BC-%ED%95%98%EB%82%98%EB%A1%9C-%ED%86%B5%EC%9D%BC%ED%95%9C%EB%8B%A4%EB%A9%B4-%EB%AD%90%EA%B0%80-%EB%A7%9E%EC%9D%84%EA%B9%8C-%EA%B2%BD%EC%A3%BC-%EC%9E%90%EC%9D%B4%EC%95%84%ED%8C%8C%ED%8A%B8-%EB%B9%84%EA%B5%90"),
+    "예천": ("매장 창에 롤스크린 vs 콤비블라인드 vs 버티컬", _T + "%EB%A7%A4%EC%9E%A5-%EC%B0%BD%EC%97%90-%EB%A1%A4%EC%8A%A4%ED%81%AC%EB%A6%B0-vs-%EC%BD%A4%EB%B9%84%EB%B8%94%EB%9D%BC%EC%9D%B8%EB%93%9C-vs-%EB%B2%84%ED%8B%B0%EC%BB%AC-%EB%AD%90%EA%B0%80-%EB%A7%9E%EC%9D%84%EA%B9%8C-%EC%98%88%EC%B2%9C-%ED%8E%B8%EC%9D%98%EC%A0%90-%EC%8B%9C%EA%B3%B5-%EB%B9%84%EA%B5%90"),
+}
+
+
 def _ipju_block(region):
     if region not in IPJU:
         return ""
@@ -1142,12 +1158,19 @@ def 관련후기(posts):
         if 내지역 in IPJU:
             단지, 시기, 파일 = IPJU[내지역]
             입주줄 = (f'\n  <p class="rel-ipju"><a href="../ipju/{파일}">'
-                     f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
+                     f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
+        # 그 지역 비교 노트 한 줄. 위 IPJU 주석과 같은 이유로 건다.
+        노트줄 = ""
+        if 내지역 in NOTES:
+            제목, 주소 = NOTES[내지역]
+            노트줄 = (f'\n  <p class="rel-note"><a href="{주소}" '
+                     f'target="_blank" rel="noopener">{제목} →</a></p>')
+
 
         덩어리 = (_L_시작 +
                  '\n<section class="related">\n  <h2>비슷한 시공</h2>\n  <ul class="rel-list">\n    '
                  + "\n    ".join(줄) +
-                 '\n  </ul>' + 입주줄 + '\n</section>\n' + _L_끝)
+                 '\n  </ul>' + 입주줄 + 노트줄 + '\n</section>\n' + _L_끝)
 
         f = REVIEWS / 나["file"]
         t = f.read_text(encoding="utf-8")
