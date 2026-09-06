@@ -197,7 +197,7 @@ def 페이지(d):
     <a href="tel:%(tel)s">%(mgr)s %(tel)s 전화</a>
   </div>
 
-  <p class="foot">따솜커튼블라인드 · 대구·경북 전지역 커튼·블라인드 출장 시공<br>
+  <p class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
   <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../areas/%(area)s.html" style="color:var(--accent2)">%(city)s 커튼·블라인드</a> · <a href="../quote.html" style="color:var(--accent2)">가격 안내</a></p>
 </div>
 
