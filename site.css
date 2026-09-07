@@ -26,6 +26,8 @@
     display:block;font-size:.85rem;letter-spacing:.32em;font-weight:700;
     color:var(--accent);margin-bottom:18px;text-transform:uppercase;
   }
+  .kicker .nb{white-space:nowrap}
+  @media(max-width:560px){.hero .kicker{letter-spacing:.16em;font-size:.8rem}}
   .section-title{font-size:clamp(1.7rem,3.2vw,2.45rem);line-height:1.35;margin-bottom:22px}
   .section-desc{color:var(--ink-soft);max-width:640px;margin-bottom:56px;font-size:1.08rem}
 
