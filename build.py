@@ -351,12 +351,12 @@ AREA_TMPL = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>__REGION__ 커튼집·블라인드 전문점 | 출장 실측 시공 - 따솜커튼블라인드</title>
 <meta name="description" content="__REGION__ 커튼 시공 업체를 찾으신다면. __REGION__ 커튼집·블라인드 전문점 따솜커튼블라인드가 전지역 방문 실측부터 속커튼·암막커튼·콤비블라인드·롤스크린 설치까지 맡습니다. __REGION__ 담당 __MGR__ __TEL__. 실제 시공후기 확인.">
-<link rel="canonical" href="https://ddasom.com/areas/__SLUG__.html">
+<link rel="canonical" href="https://ddasom.com/areas/__SLUG__">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="따솜커튼블라인드">
 <meta property="og:title" content="__REGION__ 커튼집·블라인드 전문점 | 따솜커튼블라인드">
 <meta property="og:description" content="__REGION__ 커튼 시공·블라인드 설치, 전지역 출장 실측. __REGION__ 담당 __MGR__ __TEL__.">
-<meta property="og:url" content="https://ddasom.com/areas/__SLUG__.html">
+<meta property="og:url" content="https://ddasom.com/areas/__SLUG__">
 <meta property="og:image" content="__OGIMG__">
 <script type="application/ld+json">
 __JSONLD__
@@ -587,10 +587,10 @@ def build_sitemap(posts, areas=()):
         print("[skip] BASE_URL not set - sitemap.xml not generated (set it after deploy)")
         return
     today = date.today().isoformat()
-    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b.html", today), (f"{BASE_URL}/b2b-bangyeom.html", today), (f"{BASE_URL}/b2b-office.html", today), (f"{BASE_URL}/b2b-school.html", today), (f"{BASE_URL}/b2b-clinic.html", today), (f"{BASE_URL}/b2b-shop.html", today), (f"{BASE_URL}/services.html", today), (f"{BASE_URL}/gallery.html", today), (f"{BASE_URL}/areas.html", today), (f"{BASE_URL}/apply.html", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy.html", today)]
-    urls += [(f"{BASE_URL}/areas/{slug}.html", today) for _r, slug, _n in areas]
-    urls += [(f"{BASE_URL}/ipju/{file}", today) for _d, _w, file in IPJU.values()]
-    urls += [(f"{BASE_URL}/reviews/{p['file']}", p["date"]) for p in posts]
+    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b", today), (f"{BASE_URL}/b2b-bangyeom", today), (f"{BASE_URL}/b2b-office", today), (f"{BASE_URL}/b2b-school", today), (f"{BASE_URL}/b2b-clinic", today), (f"{BASE_URL}/b2b-shop", today), (f"{BASE_URL}/services", today), (f"{BASE_URL}/gallery", today), (f"{BASE_URL}/areas", today), (f"{BASE_URL}/apply", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy", today)]
+    urls += [(f"{BASE_URL}/areas/{slug}", today) for _r, slug, _n in areas]
+    urls += [(f"{BASE_URL}/ipju/{file.removesuffix('.html')}", today) for _d, _w, file in IPJU.values()]
+    urls += [(f"{BASE_URL}/reviews/{p['file'].removesuffix('.html')}", p["date"]) for p in posts]
     body = "\n".join(
         f"  <url><loc>{loc}</loc><lastmod>{mod}</lastmod></url>" for loc, mod in urls
     )
@@ -897,7 +897,7 @@ def 머리보강(html, 파일명):
     설명 = re.search(r'<meta name="description" content="(.*?)"', html, re.S)
     설명 = 설명.group(1).strip() if 설명 else ""
     사진 = 첫사진(html)
-    주소 = f"{BASE_URL}/reviews/{파일명}"
+    주소 = f"{BASE_URL}/reviews/{파일명}".removesuffix(".html")
     이미지주소 = f"{BASE_URL}/reviews/{사진}" if 사진 else f"{BASE_URL}/promo-img/og.jpg"
     시공 = 시공일(html, 파일명)
     날짜 = 발행일(파일명) or 시공
@@ -1158,7 +1158,8 @@ def 관련후기(posts):
         if 내지역 in IPJU:
             단지, 시기, 파일 = IPJU[내지역]
             입주줄 = (f'\n  <p class="rel-ipju"><a href="../ipju/{파일}">'
-                     f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
+                     f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
+
         # 그 지역 비교 노트 한 줄. 위 IPJU 주석과 같은 이유로 건다.
         노트줄 = ""
         if 내지역 in NOTES:
