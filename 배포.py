@@ -28,7 +28,7 @@ PROJECT = "ddasom"
     "quote.html", "estimate.html", "privacy.html", "b2b.html", "b2b-bangyeom.html", "b2b-office.html", "b2b-school.html", "b2b-clinic.html", "b2b-shop.html",
     "404.html", "site.css", "robots.txt", "sitemap.xml", "rss.xml", "llms.txt",
     "CNAME", "5874d855cbfb4be788976bdf69162102.txt",   # 네이버 사이트 확인 파일
-    "reviews", "areas", "ipju", "promo-img",
+    "reviews", "areas", "ipju", "promo-img", "guides",
 ]
 
 TOKEN_후보 = [

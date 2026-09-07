@@ -590,6 +590,10 @@ def build_sitemap(posts, areas=()):
     urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b", today), (f"{BASE_URL}/b2b-bangyeom", today), (f"{BASE_URL}/b2b-office", today), (f"{BASE_URL}/b2b-school", today), (f"{BASE_URL}/b2b-clinic", today), (f"{BASE_URL}/b2b-shop", today), (f"{BASE_URL}/services", today), (f"{BASE_URL}/gallery", today), (f"{BASE_URL}/areas", today), (f"{BASE_URL}/apply", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy", today)]
     urls += [(f"{BASE_URL}/areas/{slug}", today) for _r, slug, _n in areas]
     urls += [(f"{BASE_URL}/ipju/{file.removesuffix('.html')}", today) for _d, _w, file in IPJU.values()]
+    # guides/ 정보글 — 파일을 두면 자동으로 사이트맵에 들어간다.
+    guides = sorted(p.stem for p in (ROOT / "guides").glob("*.html") if p.stem != "index")
+    urls += [(f"{BASE_URL}/guides/", today)]
+    urls += [(f"{BASE_URL}/guides/{slug}", today) for slug in guides]
     urls += [(f"{BASE_URL}/reviews/{p['file'].removesuffix('.html')}", p["date"]) for p in posts]
     body = "\n".join(
         f"  <url><loc>{loc}</loc><lastmod>{mod}</lastmod></url>" for loc, mod in urls
