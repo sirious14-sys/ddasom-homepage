@@ -514,7 +514,7 @@ __CARDS__
     <h2>다른 지역 시공</h2>
     <p class="area-more-list">__OTHERAREAS__</p>
     <p class="area-more-list"><a href="../areas">출장 지역 전체 보기</a> · <a href="../services">커튼·블라인드 종류와 진행 과정</a> · <a href="../b2b">기업·기관 시공</a> · <a href="../b2b-hotel">호텔·모텔 방음커튼</a></p>
-    <p class="area-more-list"><a href="../gallery">시공 사진 모아보기</a> · <a href="../guides/curtain-vs-blind">커튼과 블라인드 중 무엇을 고를까</a> · <a href="../guides/blackout-light-leak">암막커튼 빛샘은 어디서 오나</a> · <a href="../guides/curtain-washing">커튼 세탁, 집에서 해도 되는 것</a></p>
+    <p class="area-more-list"><a href="../gallery">시공 사진 모아보기</a> · <a href="../guides/curtain-vs-blind">커튼과 블라인드 중 무엇을 고를까</a> · <a href="../guides/blackout-light-leak">암막커튼 빛샘은 어디서 오나</a> · <a href="../guides/curtain-washing">커튼 세탁, 집에서 해도 되는 것</a> · <a href="../guides/jeonse-curtain">전세집 커튼, 벽을 못 뚫을 때</a></p>
   </nav>
 </main>
 
