@@ -413,6 +413,15 @@ p.body{margin:0 0 9px}
 .faq summary::after{content:"+";float:right;color:var(--accent);font-weight:800}
 .faq details[open] summary::after{content:"−"}
 .faq p{padding:0 16px 16px;color:var(--soft);font-size:15px}
+.sitebar{background:var(--white);border-bottom:1px solid var(--line)}
+.sitebar-in{max-width:820px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:16px}
+.sitebar-brand{font-weight:800;letter-spacing:-.03em;font-size:15px;white-space:nowrap}
+.sitebar-nav{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none}
+.sitebar-nav::-webkit-scrollbar{display:none}
+.sitebar-nav a{font-size:14px;color:var(--soft);white-space:nowrap;padding:4px 0}
+.sitebar-nav a:hover{color:var(--ink)}
+.sitebar-cta{color:var(--accent2);font-weight:700}
+@media(max-width:640px){.sitebar-in{padding:9px 16px;gap:12px}.sitebar-brand{font-size:14px}}
 .area-more{margin:34px 0 0;padding-top:22px;border-top:1px solid var(--line)}
 .area-more h2{font-size:17px;margin:0 0 10px}
 .area-more-list{font-size:15px;color:var(--soft);line-height:2}
@@ -429,6 +438,20 @@ p.body{margin:0 0 9px}
 </style>
 </head>
 <body>
+<header class="sitebar">
+  <div class="sitebar-in">
+    <a class="sitebar-brand" href="../">따솜커튼블라인드</a>
+    <nav class="sitebar-nav" aria-label="주요 메뉴">
+      <a href="../services">서비스</a>
+      <a href="../gallery">갤러리</a>
+      <a href="../reviews/">시공후기</a>
+      <a href="../guides/">커튼 가이드</a>
+      <a href="../b2b">기업·기관</a>
+      <a href="../areas">출장지역</a>
+      <a class="sitebar-cta" href="../apply">견적요청</a>
+    </nav>
+  </div>
+</header>
 <main class="wrap">
   <nav class="crumb" aria-label="현재 위치"><a href="../">따솜커튼블라인드</a> › <a href="../areas">출장지역</a> › __REGION__ 커튼·블라인드 시공</nav>
 
@@ -491,11 +514,12 @@ __CARDS__
     <h2>다른 지역 시공</h2>
     <p class="area-more-list">__OTHERAREAS__</p>
     <p class="area-more-list"><a href="../areas">출장 지역 전체 보기</a> · <a href="../services">커튼·블라인드 종류와 진행 과정</a> · <a href="../b2b">기업·기관 시공</a> · <a href="../b2b-hotel">호텔·모텔 방음커튼</a></p>
+    <p class="area-more-list"><a href="../gallery">시공 사진 모아보기</a> · <a href="../guides/curtain-vs-blind">커튼과 블라인드 중 무엇을 고를까</a> · <a href="../guides/blackout-light-leak">암막커튼 빛샘은 어디서 오나</a> · <a href="../guides/curtain-washing">커튼 세탁, 집에서 해도 되는 것</a></p>
   </nav>
-
-  <p class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
-  <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../reviews/" style="color:var(--accent2)">전체 시공후기</a></p>
 </main>
+
+<footer class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
+  <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../reviews/" style="color:var(--accent2)">전체 시공후기</a></footer>
 
 <div class="mbar">
   <a href="tel:__TEL__">전화</a>

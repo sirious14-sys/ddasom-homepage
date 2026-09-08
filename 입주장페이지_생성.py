@@ -56,7 +56,9 @@ def 후기카드(area, n):
 
 
 def 페이지(d):
-    url = "https://ddasom.com/ipju/%s" % d["file"]
+    # ddasom.com 은 /x.html 을 308 로 /x 에 넘긴다. canonical·og:url·JSON-LD 가
+    # .html 을 가리키면 「리디렉션이 포함된 페이지」로 색인이 막힌다(2026-09-08 실측).
+    url = "https://ddasom.com/ipju/%s" % d["file"].removesuffix(".html")
     def 맨글(x):
         """JSON-LD에는 태그 없는 순수 문장만 넣는다. 따옴표는 json이 이스케이프한다."""
         return " ".join(re.sub(r"<[^>]+>", " ", x.replace("<br>", " ")).split())
@@ -106,7 +108,7 @@ def 페이지(d):
       "@type": "BreadcrumbList",
       "itemListElement": [
         {"@type":"ListItem","position":1,"name":"따솜커튼블라인드","item":"https://ddasom.com/"},
-        {"@type":"ListItem","position":2,"name":"%(city)s 커튼·블라인드 시공","item":"https://ddasom.com/areas/%(area)s.html"},
+        {"@type":"ListItem","position":2,"name":"%(city)s 커튼·블라인드 시공","item":"https://ddasom.com/areas/%(area)s"},
         {"@type":"ListItem","position":3,"name":"%(danji)s 커튼·블라인드","item":"%(url)s"}
       ]
     },
@@ -131,6 +133,20 @@ def 페이지(d):
 <meta name="robots" content="max-image-preview:large">
 </head>
 <body>
+<header class="sitebar">
+  <div class="sitebar-in">
+    <a class="sitebar-brand" href="../">따솜커튼블라인드</a>
+    <nav class="sitebar-nav" aria-label="주요 메뉴">
+      <a href="../services">서비스</a>
+      <a href="../gallery">갤러리</a>
+      <a href="../reviews/">시공후기</a>
+      <a href="../guides/">커튼 가이드</a>
+      <a href="../b2b">기업·기관</a>
+      <a href="../areas">출장지역</a>
+      <a class="sitebar-cta" href="../apply">견적요청</a>
+    </nav>
+  </div>
+</header>
 <main class="wrap">
   <nav class="crumb" aria-label="현재 위치"><a href="../">따솜커튼블라인드</a> › <a href="../areas/%(area)s">%(city)s</a> › %(danji)s</nav>
 
@@ -196,10 +212,10 @@ def 페이지(d):
     <p>창 사진만 있어도 대략적인 견적 안내가 가능합니다.<br>%(city)s 담당 %(mgr)s이 직접 방문합니다.</p>
     <a href="tel:%(tel)s">%(mgr)s %(tel)s 전화</a>
   </div>
-
-  <p class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
-  <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../areas/%(area)s" style="color:var(--accent2)">%(city)s 커튼·블라인드</a> · <a href="../apply" style="color:var(--accent2)">견적 요청</a></p>
 </main>
+
+<footer class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
+  <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../areas/%(area)s" style="color:var(--accent2)">%(city)s 커튼·블라인드</a> · <a href="../apply" style="color:var(--accent2)">견적 요청</a></footer>
 
 <div class="mbar">
   <a href="tel:%(tel)s">전화</a>
