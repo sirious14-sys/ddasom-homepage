@@ -349,12 +349,12 @@ AREA_TMPL = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>__REGION__ 커튼집·블라인드 전문점 | 출장 실측 시공 - 따솜커튼블라인드</title>
-<meta name="description" content="__REGION__ 커튼 시공 업체를 찾으신다면. __REGION__ 커튼집·블라인드 전문점 따솜커튼블라인드가 전지역 방문 실측부터 속커튼·암막커튼·콤비블라인드·롤스크린 설치까지 맡습니다. __REGION__ 담당 __MGR__ __TEL__. 실제 시공후기 확인.">
+<title>__REGION__ 커튼·블라인드 출장 시공 | __DONGS__ - 따솜커튼블라인드</title>
+<meta name="description" content="__DONGSD__ 실제로 시공한 집들입니다. 창 사진을 보내주시면 방문 전에 대략적인 견적을 먼저 알려드리고, 방문 실측 후 확정합니다. 속커튼·암막커튼·콤비블라인드·롤스크린·우드블라인드. __REGION__ 담당 __MGR__ __TEL__.">
 <link rel="canonical" href="https://ddasom.com/areas/__SLUG__">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="따솜커튼블라인드">
-<meta property="og:title" content="__REGION__ 커튼집·블라인드 전문점 | 따솜커튼블라인드">
+<meta property="og:title" content="__REGION__ 커튼·블라인드 출장 시공 | __DONGS__">
 <meta property="og:description" content="__REGION__ 커튼 시공·블라인드 설치, 전지역 출장 실측. __REGION__ 담당 __MGR__ __TEL__.">
 <meta property="og:url" content="https://ddasom.com/areas/__SLUG__">
 <meta property="og:image" content="__OGIMG__">
@@ -543,8 +543,33 @@ def build_area_pages(posts):
                 f'<span class="cap"><b>{p["title"]}</b><span>{desc}</span></span></a>'
             )
         ogimg = f'{BASE_URL}/reviews/{rposts[0]["thumb"]}' if rposts[0]["thumb"] else ""
+        # 제목에 쓸 실제 동네 이름 (후기 제목에서 뽑는다). 없으면 일반 문구로.
+        # 동/읍/면/리로 끝나지만 지명이 아닌 말들 — 이게 없으면 「아이보리」가 동네가 된다.
+        _NOT_DONG = {
+            "아이보리", "마무리", "처리", "유리", "관리", "정리", "거리", "우리", "소리",
+            "자동", "전동", "이동", "활동", "운동", "공동", "작동", "감동", "반자동", "수동", "진동", "가동",
+            "전면", "후면", "측면", "정면", "양면", "벽면", "표면", "단면", "세면", "도면", "지면",
+        }
+        _dongs = []
+        for p in rposts:
+            for tok in re.findall(r"[가-힣]+(?:동|읍|면|리)(?=\s|$)", p["title"]):
+                if len(tok) < 2 or tok in _NOT_DONG or tok == region:
+                    continue
+                if tok not in _dongs:
+                    _dongs.append(tok)
+        _dongs = _dongs[:3]
+        if _dongs:
+            dongs_t = "·".join(_dongs) + " 시공후기"
+            dongs_d = region + " " + "·".join(_dongs) + " 등에서"
+        else:
+            # 후기 수가 적을 때 숫자를 쓰면 약점만 드러난다. 하는 일을 쓴다.
+            dongs_t = "방문 실측부터 설치까지"
+            dongs_d = region + "에서"
+
         html = (AREA_TMPL
                 .replace("__JSONLD__", _area_jsonld(region, slug, mgr, tel, ogimg))
+                .replace("__DONGS__", dongs_t)
+                .replace("__DONGSD__", dongs_d)
                 .replace("__REGION__", region)
                 .replace("__SLUG__", slug)
                 .replace("__MGR__", mgr)
