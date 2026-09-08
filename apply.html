@@ -20,6 +20,14 @@
 <!-- AUTO:robots -->
 <meta name="robots" content="max-image-preview:large">
 <!-- /AUTO:robots -->
+<style>
+.sent-actions{display:flex;gap:10px;margin:14px 0 12px;flex-wrap:wrap}
+.sent-actions .btn{flex:1 1 150px;text-align:center;padding:13px 18px;cursor:pointer;border:1px solid #cdddc2}
+.sent-body{width:100%;min-height:190px;padding:14px;border:1px solid #cdddc2;border-radius:2px;
+  background:#fff;color:#33402c;font:inherit;font-size:.92rem;line-height:1.7;resize:vertical}
+.sent-help{margin-top:10px;font-size:.9rem;line-height:1.8}
+.sent-tel{font-weight:800;font-size:1.08rem;color:#2f4a26;letter-spacing:-.01em}
+</style>
 </head>
 <body class="subpage">
 
@@ -304,14 +312,58 @@
     if(msg)lines.push('요청사항: '+msg);
     const body=lines.join('\n');
 
+    // 문자 앱이 있는 기기인지 본다. PC 는 sms: 를 눌러도 아무 일이 안 일어난다.
+    const isMobile=/Android|iPhone|iPad|iPod|Windows Phone|Mobile/i.test(navigator.userAgent);
     const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
     const sep=isIOS?'&':'?';
+
+    // 제출을 눌렀다는 사실 자체를 남긴다 (지금까지 시도 기록이 없어 원인을 볼 수 없었다)
+    try{ if(window.clarity){ clarity('event','quote_submit');
+      clarity('set','quote_region',region); clarity('set','quote_device',isMobile?'mobile':'pc'); } }catch(err){}
+
     const sent=document.getElementById('applySent');
-    sent.innerHTML='<b>'+region+'</b> 지역 담당 <b>'+mgrName+' '+mgrTel+'</b>에게 보낼 문자가 작성됩니다. 문자 앱에서 <b>전송</b> 버튼을 눌러 접수를 완료해 주세요.';
+    const 머리=isMobile
+      ? '문자 앱이 열립니다. <b>전송</b> 버튼을 눌러 주시면 접수됩니다.<br>앱이 열리지 않으면 아래 내용을 복사해 보내주세요.'
+      : '이 컴퓨터에서는 문자 앱이 열리지 않습니다.<br>아래 내용을 복사해서 문자로 보내주시거나, 전화 주시면 바로 상담해 드립니다.';
+    sent.innerHTML=
+      '<b>'+region+'</b> 지역 담당 <b>'+mgrName+'</b>에게 보낼 내용입니다.<br>'+머리+
+      '<div class="sent-actions">'+
+        '<button type="button" class="btn btn-sms" id="applyCopy">내용 복사</button>'+
+        '<a class="btn btn-accent" href="tel:'+mgrTel+'">'+mgrName+'에게 전화</a>'+
+      '</div>'+
+      '<textarea class="sent-body" id="applyBody" readonly></textarea>'+
+      '<p class="sent-help">받는 번호 <span class="sent-tel">'+mgrTel+'</span><br>'+
+      '창 사진을 함께 보내주시면 더 정확한 견적이 나옵니다.</p>';
+    document.getElementById('applyBody').value=body;
     sent.style.display='block';
+
+    document.getElementById('applyCopy').addEventListener('click',function(){
+      const ta=document.getElementById('applyBody');
+      const 끝냄=()=>{ this.textContent='복사했습니다'; try{ if(window.clarity)clarity('event','quote_copy'); }catch(err){} };
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(ta.value).then(끝냄,()=>{ta.select();document.execCommand('copy');끝냄();});
+      }else{ ta.select(); document.execCommand('copy'); 끝냄(); }
+    });
+
     sent.scrollIntoView({behavior:'smooth',block:'center'});
-    location.href='sms:'+mgrTel+sep+'body='+encodeURIComponent(body);
+    if(isMobile){ location.href='sms:'+mgrTel+sep+'body='+encodeURIComponent(body); }
   });
+
+  // PC 에서는 「문자 앱이 열린다」는 안내가 사실과 다르다. 화면 문구를 바꿔 둔다.
+  if(!/Android|iPhone|iPad|iPod|Windows Phone|Mobile/i.test(navigator.userAgent)){
+    const 버튼=form.querySelector('button[type=submit]');
+    if(버튼)버튼.textContent='견적 요청 내용 만들기';
+    const 안내=document.querySelector('.apply-note');
+    if(안내)안내.innerHTML=
+      '컴퓨터에서는 문자 앱이 열리지 않습니다.<br class="bd">'+
+      '버튼을 누르면 담당 실장에게 보낼 내용이 아래에 만들어집니다.<br class="bd">'+
+      '<b>복사해서 문자로 보내시거나</b> 표시된 번호로 전화 주시면 됩니다.<br class="bd">'+
+      '창 사진이 있으시면 함께 보내주시면 더 정확합니다.';
+    const 설명=document.querySelector('.apply-desc');
+    if(설명)설명.innerHTML=
+      '아래 내용을 남겨주시면 지역 담당 실장이 확인 후 견적을 안내드립니다.<br class="bd">'+
+      '버튼을 누르면 담당 실장에게 보낼 내용이 만들어집니다.';
+  }
 </script>
 <!-- AUTO:site-tail -->
 <div class="auto-policy" style="text-align:center;padding:18px 16px 26px;font-size:13px;opacity:.7"><a href="privacy.html">개인정보처리방침</a></div>
