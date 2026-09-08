@@ -38,7 +38,7 @@ ul.chk li b{display:block;font-size:14px;color:var(--soft);font-weight:500;margi
 </style>"""
 
 TAIL = """<!-- AUTO:site-tail -->
-<div class="auto-policy" style="text-align:center;padding:18px 16px 26px;font-size:13px;opacity:.7"><a href="../privacy.html">개인정보처리방침</a></div>
+<div class="auto-policy" style="text-align:center;padding:18px 16px 26px;font-size:13px;opacity:.7"><a href="../privacy">개인정보처리방침</a></div>
 <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","y88nlkwv9e");</script>
 <!-- /AUTO:site-tail -->"""
 
@@ -131,8 +131,8 @@ def 페이지(d):
 <meta name="robots" content="max-image-preview:large">
 </head>
 <body>
-<div class="wrap">
-  <div class="crumb"><a href="../">따솜커튼블라인드</a> › <a href="../areas/%(area)s.html">%(city)s</a> › %(danji)s</div>
+<main class="wrap">
+  <nav class="crumb" aria-label="현재 위치"><a href="../">따솜커튼블라인드</a> › <a href="../areas/%(area)s">%(city)s</a> › %(danji)s</nav>
 
   <div class="hero">
     <span class="tag">%(movein)s 입주 · %(city)s</span>
@@ -198,8 +198,8 @@ def 페이지(d):
   </div>
 
   <p class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
-  <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../areas/%(area)s.html" style="color:var(--accent2)">%(city)s 커튼·블라인드</a> · <a href="../quote.html" style="color:var(--accent2)">가격 안내</a></p>
-</div>
+  <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../areas/%(area)s" style="color:var(--accent2)">%(city)s 커튼·블라인드</a> · <a href="../apply" style="color:var(--accent2)">견적 요청</a></p>
+</main>
 
 <div class="mbar">
   <a href="tel:%(tel)s">전화</a>

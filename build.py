@@ -60,6 +60,22 @@ def manager_of(region: str):
     return ("이실장", "010-2825-7275")
 
 
+def 링크(경로):
+    """내부 주소에서 .html 을 뗀다.
+
+    ddasom.com(Cloudflare Pages)은 /services.html 을 308 로 /services 에 넘긴다.
+    링크가 .html 을 가리키면 사람도 크롤러도 매번 한 번씩 튕겨서 간다.
+    실측 2026-09-08 — 사이트 안 링크 1,200개가 전부 그랬다.
+    """
+    if not 경로 or not 경로.endswith(".html"):
+        return 경로
+    몸 = 경로[:-5]
+    if 몸.rsplit("/", 1)[-1] == "index":
+        앞 = 몸[:-len("index")]
+        return 앞 if 앞 else "./"
+    return 몸
+
+
 # 지역 페이지(areas/*.html)용 영문 슬러그 — URL은 영문 규칙.
 REGION_SLUG = {
     "대구": "daegu", "포항": "pohang", "경주": "gyeongju", "안동": "andong",
@@ -135,7 +151,7 @@ def build_list(posts):
             # 카드 설명도 문장 단위 줄바꿈 (모바일에선 br.bd 숨김)
             desc = re.sub(r"(?<=[가-힣])\. (?=.)", '.<br class="bd">', p["desc"])
             items.append(
-                f'<a class="review-card" href="{p["file"]}" data-region="{region}">{thumb}'
+                f'<a class="review-card" href="{링크(p["file"])}" data-region="{region}">{thumb}'
                 f'<span class="body"><span class="date">{y}년 {int(mo)}월 {int(d)}일</span>'
                 f'<h2>{p["title"]}</h2><p>{desc}</p></span></a>'
             )
@@ -280,7 +296,7 @@ def build_home_gallery(posts):
             print(f"[warn] gallery item skipped, review missing: {f}")
             continue
         items.append(
-            f'      <a class="g-item" href="reviews/{f}" data-tags="{space} {product}">'
+            f'      <a class="g-item" href="reviews/{링크(f)}" data-tags="{space} {product}">'
             f'<img src="reviews/img/{img}" alt="{label} 시공 사진" loading="lazy">'
             f'<span class="g-label">{label}</span></a>'
         )
@@ -336,7 +352,7 @@ def _ipju_block(region):
         f'  <p class="body">{danji}가 {when}에 입주합니다.</p>\n'
         '  <p class="body">실측이 언제 몰리는지, 사전점검일에 무엇을 적어 오시면 되는지 '
         "날짜로 정리해 두었습니다.</p>\n"
-        f'  <p class="body"><a href="../ipju/{file}" '
+        f'  <p class="body"><a href="../ipju/{링크(file)}" '
         f'style="color:var(--accent2);font-weight:700">{danji} 커튼 입주 일정 보기 →</a></p>\n'
     )
 
@@ -397,6 +413,10 @@ p.body{margin:0 0 9px}
 .faq summary::after{content:"+";float:right;color:var(--accent);font-weight:800}
 .faq details[open] summary::after{content:"−"}
 .faq p{padding:0 16px 16px;color:var(--soft);font-size:15px}
+.area-more{margin:34px 0 0;padding-top:22px;border-top:1px solid var(--line)}
+.area-more h2{font-size:17px;margin:0 0 10px}
+.area-more-list{font-size:15px;color:var(--soft);line-height:2}
+.area-more-list a{color:var(--accent2);font-weight:600}
 .cta-final{background:var(--dark);color:#f3ece1;border-radius:16px;padding:28px 24px;margin:40px 0 10px;text-align:center}
 .cta-final h2{color:#fff;margin:0 0 8px}
 .cta-final p{color:#d8cbb6;font-size:15px;margin-bottom:18px}
@@ -409,8 +429,8 @@ p.body{margin:0 0 9px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="crumb"><a href="../">따솜커튼블라인드</a> › __REGION__ 커튼·블라인드 시공</div>
+<main class="wrap">
+  <nav class="crumb" aria-label="현재 위치"><a href="../">따솜커튼블라인드</a> › <a href="../areas">출장지역</a> › __REGION__ 커튼·블라인드 시공</nav>
 
   <div class="hero">
     <span class="tag">__REGION__ 전지역 출장 시공</span>
@@ -444,12 +464,21 @@ __CARDS__
     <div><b>우드·전동 블라인드</b><p>카페·사무실·통창에 어울리는 고급 마감과 편의</p></div>
   </div>
 
+  <h2>__REGION__ 호텔·모텔·펜션 객실 방음커튼</h2>
+  <p class="body">객실은 집과 문제가 다릅니다.</p>
+  <p class="body">옆방과 복도 소리, 그리고 새벽에 들어오는 빛이 손님 후기를 좌우합니다.</p>
+  <p class="body">따솜커튼블라인드는 __REGION__ 숙박업소 객실에 <b>방음커튼과 객실 암막커튼</b>을 시공합니다.</p>
+  <p class="body">두꺼운 암막 원단을 주름 넉넉히 잡아 소리를 먹이고, 창 옆·위로 새는 틈까지 덮습니다.</p>
+  <p class="body">객실 수가 많으면 같은 사양으로 반복 제작해 한 번에 끝냅니다.</p>
+  <p class="body"><a href="../b2b-hotel" style="color:var(--accent2);font-weight:700">호텔·모텔 방음커튼 시공 자세히 보기</a></p>
+
   <h2>__REGION__ 커튼 시공 자주 묻는 질문</h2>
   <div class="faq">
     <details open><summary>__REGION__도 출장 시공되나요?</summary><p>네, __REGION__ 전지역에 출장 시공합니다.<br>커튼 설치와 블라인드 설치 모두 __REGION__ 담당 __MGR__(__TEL__)이 직접 방문해 진행합니다.</p></details>
     <details><summary>견적은 어떻게 받나요?</summary><p>창 사진을 보내주시면 방문 전에 대략 견적을 먼저 알려드립니다.<br>방문 실측 후 최종 견적을 확정하고, 온라인 판매가 그대로 시공까지 진행합니다.</p></details>
     <details><summary>어떤 제품까지 시공하나요?</summary><p>속커튼·암막커튼·콤비블라인드·롤스크린까지,<br>우드·전동 블라인드도 맞춤 제작·시공합니다.</p></details>
-    <details><summary>상담은 어떻게 하나요?</summary><p>전화나 문자로 __MGR__(__TEL__)에게 연락 주세요.<br><a href="../apply.html" style="color:var(--accent2);font-weight:700">실측 신청 폼</a>에 성함·연락처·지역을 남기셔도 됩니다.</p></details>
+    <details><summary>__REGION__ 호텔·모텔 객실 방음커튼도 되나요?</summary><p>네, 숙박업소 객실 시공도 합니다.<br>두꺼운 암막 원단으로 소리와 빛을 함께 잡고, 객실 수가 많으면 같은 사양으로 반복 제작합니다.<br><a href="../b2b-hotel" style="color:var(--accent2);font-weight:700">호텔·모텔 방음커튼 안내</a></p></details>
+    <details><summary>상담은 어떻게 하나요?</summary><p>전화나 문자로 __MGR__(__TEL__)에게 연락 주세요.<br><a href="../apply" style="color:var(--accent2);font-weight:700">실측 신청 폼</a>에 성함·연락처·지역을 남기셔도 됩니다.</p></details>
   </div>
 
   <div class="cta-final">
@@ -458,9 +487,15 @@ __CARDS__
     <a href="tel:__TEL__">__MGR__ __TEL__ 전화</a>
   </div>
 
+  <nav class="area-more" aria-label="다른 지역">
+    <h2>다른 지역 시공</h2>
+    <p class="area-more-list">__OTHERAREAS__</p>
+    <p class="area-more-list"><a href="../areas">출장 지역 전체 보기</a> · <a href="../services">커튼·블라인드 종류와 진행 과정</a> · <a href="../b2b">기업·기관 시공</a> · <a href="../b2b-hotel">호텔·모텔 방음커튼</a></p>
+  </nav>
+
   <p class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
   <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../reviews/" style="color:var(--accent2)">전체 시공후기</a></p>
-</div>
+</main>
 
 <div class="mbar">
   <a href="tel:__TEL__">전화</a>
@@ -509,6 +544,8 @@ def _area_jsonld(region, slug, mgr, tel, ogimg):
                      "acceptedAnswer": {"@type": "Answer", "text": f"네. 따솜커튼블라인드는 {region} 전지역에 출장 시공합니다. {region} 지역은 {mgr}({tel})이 담당해 방문 실측부터 맞춤 제작·설치까지 직접 진행합니다."}},
                     {"@type": "Question", "name": f"{region} 커튼 견적은 어떻게 받나요?",
                      "acceptedAnswer": {"@type": "Answer", "text": f"창 사진을 보내주시면 방문 전에 대략 견적을 먼저 알려드립니다. {region} 방문 실측 후 최종 견적을 확정하며, 온라인 판매가 그대로 시공까지 진행합니다."}},
+                    {"@type": "Question", "name": f"{region} 호텔·모텔 객실 방음커튼도 시공하나요?",
+                     "acceptedAnswer": {"@type": "Answer", "text": f"네. {region} 호텔·모텔·펜션 객실에 방음커튼과 객실 암막커튼을 시공합니다. 두꺼운 암막 원단을 주름 넉넉히 잡아 옆방·복도 소리와 새벽 빛을 함께 줄이고, 객실 수가 많으면 같은 사양으로 반복 제작합니다."}},
                     {"@type": "Question", "name": f"{region}에서 어떤 제품을 시공하나요?",
                      "acceptedAnswer": {"@type": "Answer", "text": f"속커튼·암막커튼 등 커튼류와 콤비블라인드·롤스크린·우드블라인드·전동 블라인드까지 {region} 아파트·주택·상가에 맞춤 시공합니다."}},
                 ],
@@ -530,6 +567,9 @@ def build_area_pages(posts):
         if r in REGION_SLUG:
             by_region.setdefault(r, []).append(p)
     infos = []
+    # 다른 지역 링크를 만들려면 전체 지역을 먼저 알아야 한다 — 한 번 훑고 시작한다.
+    전체지역 = [(r, REGION_SLUG[r], len(ps)) for r, ps in by_region.items()]
+    전체지역.sort(key=lambda x: -x[2])
     for region, rposts in by_region.items():
         slug = REGION_SLUG[region]
         mgr, tel = manager_of(region)
@@ -539,7 +579,7 @@ def build_area_pages(posts):
                      if p["thumb"] else "")
             desc = p["desc"][:46] + ("…" if len(p["desc"]) > 46 else "")
             cards.append(
-                f'    <a class="card" href="../reviews/{p["file"]}">{thumb}'
+                f'    <a class="card" href="../reviews/{링크(p["file"])}">{thumb}'
                 f'<span class="cap"><b>{p["title"]}</b><span>{desc}</span></span></a>'
             )
         ogimg = f'{BASE_URL}/reviews/{rposts[0]["thumb"]}' if rposts[0]["thumb"] else ""
@@ -576,7 +616,10 @@ def build_area_pages(posts):
                 .replace("__TEL__", tel)
                 .replace("__OGIMG__", ogimg)
                 .replace("__CARDS__", "\n".join(cards))
-                .replace("__IPJU__", _ipju_block(region)))
+                .replace("__IPJU__", _ipju_block(region))
+                .replace("__OTHERAREAS__", " · ".join(
+                    f'<a href="{s2}">{r2} 커튼·블라인드</a>'
+                    for r2, s2, _n in 전체지역 if s2 != slug)))
         # 대구·경북 밖 지역(대전 등)은 "전지역 출장" 과장 표현을 뺀다 (사례는 있되 기본 권역 아님)
         if region not in GB_REGIONS:
             html = html.replace(f"{region} 전지역", region)
@@ -595,7 +638,7 @@ def build_home_areas(infos):
         print("[skip] areas.html에 AREAS 마커 없음")
         return
     links = "\n".join(
-        f'      <a class="area-link" href="areas/{slug}.html">{region} 출장 시공 <span>후기 {n}건</span></a>'
+        f'      <a class="area-link" href="areas/{slug}">{region} 출장 시공 <span>후기 {n}건</span></a>'
         for region, slug, n in infos
     )
     html = re.sub(
@@ -612,7 +655,7 @@ def build_sitemap(posts, areas=()):
         print("[skip] BASE_URL not set - sitemap.xml not generated (set it after deploy)")
         return
     today = date.today().isoformat()
-    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b", today), (f"{BASE_URL}/b2b-bangyeom", today), (f"{BASE_URL}/b2b-office", today), (f"{BASE_URL}/b2b-school", today), (f"{BASE_URL}/b2b-clinic", today), (f"{BASE_URL}/b2b-shop", today), (f"{BASE_URL}/partner", today), (f"{BASE_URL}/services", today), (f"{BASE_URL}/gallery", today), (f"{BASE_URL}/areas", today), (f"{BASE_URL}/apply", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy", today)]
+    urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b", today), (f"{BASE_URL}/b2b-bangyeom", today), (f"{BASE_URL}/b2b-office", today), (f"{BASE_URL}/b2b-school", today), (f"{BASE_URL}/b2b-clinic", today), (f"{BASE_URL}/b2b-shop", today), (f"{BASE_URL}/b2b-hotel", today), (f"{BASE_URL}/partner", today), (f"{BASE_URL}/services", today), (f"{BASE_URL}/gallery", today), (f"{BASE_URL}/areas", today), (f"{BASE_URL}/apply", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy", today)]
     urls += [(f"{BASE_URL}/areas/{slug}", today) for _r, slug, _n in areas]
     urls += [(f"{BASE_URL}/ipju/{file.removesuffix('.html')}", today) for _d, _w, file in IPJU.values()]
     # guides/ 정보글 — 파일을 두면 자동으로 사이트맵에 들어간다.
@@ -1050,7 +1093,7 @@ def enrich_site_tail():
     """
     링크 = ('<div class="auto-policy" style="text-align:center;padding:18px 16px 26px;'
             'font-size:13px;opacity:.7">'
-            '<a href="%sprivacy.html">개인정보처리방침</a></div>')
+            '<a href="%sprivacy">개인정보처리방침</a></div>')
     분석 = _clarity_snippet()
     바뀜 = 0
     for f in sorted(ROOT.rglob("*.html")):
@@ -1175,7 +1218,7 @@ def 관련후기(posts):
             썸 = (f'<span class="rel-thumb"><img src="{q["thumb"]}" alt="{q["title"]}" '
                   f'loading="lazy" decoding="async"></span>') if q["thumb"] else '<span class="rel-thumb"></span>'
             줄.append(
-                f'<li><a href="{q["file"]}">{썸}'
+                f'<li><a href="{링크(q["file"])}">{썸}'
                 f'<span class="rel-txt"><strong>{q["title"]}</strong>'
                 f'<em>{y}.{mo}.{d} 시공</em></span></a></li>')
         # 그 지역에 입주 예정 단지가 있으면 한 줄 더 건다.
@@ -1186,7 +1229,7 @@ def 관련후기(posts):
         입주줄 = ""
         if 내지역 in IPJU:
             단지, 시기, 파일 = IPJU[내지역]
-            입주줄 = (f'\n  <p class="rel-ipju"><a href="../ipju/{파일}">'
+            입주줄 = (f'\n  <p class="rel-ipju"><a href="../ipju/{링크(파일)}">'
                      f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
 
         # 그 지역 비교 노트 한 줄. 위 IPJU 주석과 같은 이유로 건다.
