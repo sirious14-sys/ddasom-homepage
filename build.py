@@ -270,6 +270,12 @@ GALLERY_ITEMS = [
     ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/1.jpg", "상가·사무실", "블라인드", "사무실 전관 · 그레이 암막 블라인드"),
     ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/8.jpg", "상가·사무실", "블라인드", "회의실 큰 창 · 그레이 암막 블라인드"),
     ("2026-08-27-andong-yongsang-office-blackout.html", "andong-yongsang-office-blackout/6.jpg", "상가·사무실", "블라인드", "사무실 창 정면 · 하단 바 창틀선 맞춤"),
+    ("2026-09-08-daegu-dongseongno-hotel-soundproof.html", "daegu-dongseongno-hotel-soundproof/4.jpg", "상가·사무실", "커튼", "호텔 객실 · 베이지 3중겹 방음커튼"),
+    ("2026-09-08-daegu-dongseongno-hotel-soundproof.html", "daegu-dongseongno-hotel-soundproof/7.jpg", "상가·사무실", "커튼", "3중겹 단면 · 암막＋벨벳＋벨벳"),
+    ("2026-09-08-daegu-dongseongno-hotel-soundproof.html", "daegu-dongseongno-hotel-soundproof/2.jpg", "상가·사무실", "커튼", "객실 커튼 교체 · 블루에서 베이지로"),
+    ("2026-09-12-cheongsong-staff-housing-combi-blind.html", "cheongsong-staff-housing-combi-blind/1.jpg", "침실", "블라인드", "직원숙소 방 · 바닥까지 두 폭 콤비블라인드"),
+    ("2026-09-12-cheongsong-staff-housing-combi-blind.html", "cheongsong-staff-housing-combi-blind/4.jpg", "거실", "블라인드", "숙소 거실 큰 창 · 그레이 콤비 두 폭"),
+    ("2026-09-12-cheongsong-staff-housing-combi-blind.html", "cheongsong-staff-housing-combi-blind/6.jpg", "침실", "블라인드", "작은 방 창 · 한 폭 콤비블라인드"),
     ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/2.jpg", "상가·사무실", "롤스크린", "식당 홀 · 화이트 방염 채광 롤스크린"),
     ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/6.jpg", "상가·사무실", "롤스크린", "창 정면 · 아래 난간대는 남긴 길이"),
     ("2026-08-13-pohang-uhyeon-restaurant-rollscreen.html", "pohang-uhyeon-restaurant-rollscreen/7.jpg", "상가·사무실", "롤스크린", "세 면 창 · 한 줄로 이어진 라인"),
@@ -1108,8 +1114,39 @@ def _clarity_snippet():
     )
 
 
+# 푸터 사이트 안내에 싣는 목적지.
+# 헤더 nav 는 8칸이라 협력 제휴·숙박 방음관이 들어갈 자리가 없다.
+# 그 둘은 내부링크가 7개뿐이어서 푸터가 유일한 전 페이지 진입로다.
+_사이트안내 = [
+    ("services",   "커튼·블라인드 서비스"),
+    ("gallery",    "시공 갤러리"),
+    ("reviews/",   "시공후기"),
+    ("guides/",    "커튼 가이드"),
+    ("b2b",        "기업·기관 전용관"),
+    ("b2b-hotel",  "호텔·모텔 방음커튼"),
+    ("partner",    "인테리어·시공사 제휴"),
+    ("areas",      "출장지역"),
+    ("apply",      "견적 요청"),
+]
+
+
+def _sitenav(깊이, 현재):
+    """전 페이지 공통 푸터 안내. 자기 페이지는 링크하지 않는다."""
+    칸 = []
+    for 경로, 이름 in _사이트안내:
+        if 경로.rstrip("/") == 현재.rstrip("/"):
+            칸.append('<span style="opacity:.55">%s</span>' % 이름)
+        else:
+            칸.append('<a href="%s%s">%s</a>' % (깊이, 경로, 이름))
+    return ('<nav class="auto-sitenav" aria-label="사이트 안내" '
+            'style="max-width:960px;margin:0 auto;padding:26px 16px 4px;'
+            'border-top:1px solid rgba(0,0,0,.09);text-align:center;'
+            'font-size:14px;line-height:2.1">'
+            + ' · '.join(칸) + '</nav>')
+
+
 def enrich_site_tail():
-    """모든 공개 페이지에 분석 스크립트와 개인정보처리방침 링크를 넣는다.
+    """모든 공개 페이지에 사이트 안내·분석 스크립트·개인정보처리방침 링크를 넣는다.
 
     푸터 생김새가 페이지마다 달라서(홈은 크고, 후기는 한 줄, 지역 페이지는 아예 없음)
     푸터 안을 건드리지 않고 본문 끝에 한 줄을 붙이는 쪽으로 통일한다.
@@ -1128,7 +1165,9 @@ def enrich_site_tail():
             continue                       # 내부용 페이지는 건드리지 않는다
         자기링크빼기 = (f.name == "privacy.html")   # 방침 페이지가 자기를 링크할 이유는 없다
         깊이 = "../" * (len(f.relative_to(ROOT).parts) - 1)
-        조각 = [_A_시작]
+        rel = f.relative_to(ROOT).as_posix()
+        현재 = rel[:-len("index.html")] if f.name == "index.html" else rel[:-len(".html")]
+        조각 = [_A_시작, _sitenav(깊이, 현재)]
         if not 자기링크빼기:
             조각.append(링크 % 깊이)
         if 분석:
