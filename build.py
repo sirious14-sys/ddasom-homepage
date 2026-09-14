@@ -1102,6 +1102,11 @@ def enrich_reviews(확인만=False):
 # ─────────────────────────────────────────────────────────────
 CLARITY_ID = "y88nlkwv9e"      # clarity.microsoft.com 프로젝트 ID
 
+# 네이버 애널리틱스(wcslog). 파워링크 캠페인의 추적기능을 AUTO_TRACKING_MODE 로 켜 두었는데,
+# 그 값을 받아 "어느 키워드가 문의로 이어졌는지" 집계해 줄 곳이 이것뿐이다.
+# 아이디는 analytics.naver.com 에서 사이트를 등록하면 나오는 10자 안팎의 값.
+NAVER_WA_ID = "1b00676df2f64c0"   # 비어 있으면 넣지 않는다
+
 _A_시작, _A_끝 = "<!-- AUTO:site-tail -->", "<!-- /AUTO:site-tail -->"
 
 
@@ -1114,6 +1119,19 @@ def _clarity_snippet():
         't=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;'
         'y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);'
         '})(window,document,"clarity","script","%s");</script>' % CLARITY_ID.strip()
+    )
+
+
+def _naver_wa_snippet():
+    if not NAVER_WA_ID.strip():
+        return ""
+    return (
+        '<script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>'
+        '<script type="text/javascript">'
+        'if(!wcs_add) var wcs_add = {};'
+        'wcs_add["wa"] = "%s";'
+        'if(window.wcs) { wcs_do(); }'
+        '</script>' % NAVER_WA_ID.strip()
     )
 
 
@@ -1158,7 +1176,7 @@ def enrich_site_tail():
     링크 = ('<div class="auto-policy" style="text-align:center;padding:18px 16px 26px;'
             'font-size:13px;opacity:.7">'
             '<a href="%sprivacy">개인정보처리방침</a></div>')
-    분석 = _clarity_snippet()
+    분석 = "".join(s for s in (_clarity_snippet(), _naver_wa_snippet()) if s)
     바뀜 = 0
     for f in sorted(ROOT.rglob("*.html")):
         if "_to_delete" in f.parts or f.name == "_template.html":
@@ -1184,7 +1202,9 @@ def enrich_site_tail():
         if 새것 != t:
             f.write_text(새것, encoding="utf-8")
             바뀜 += 1
-    켬 = "켜짐" if 분석 else "꺼짐(CLARITY_ID 비어 있음)"
+    켬 = "clarity %s · 네이버 %s" % (
+        "켜짐" if CLARITY_ID.strip() else "꺼짐(CLARITY_ID 비어 있음)",
+        "켜짐" if NAVER_WA_ID.strip() else "꺼짐(NAVER_WA_ID 비어 있음)")
     print(f"[ok] 방침 링크·분석 스크립트 {바뀜}장 (분석: {켬})")
 
 
