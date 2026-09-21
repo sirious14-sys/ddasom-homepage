@@ -1110,6 +1110,13 @@ CLARITY_ID = "y88nlkwv9e"      # clarity.microsoft.com 프로젝트 ID
 # 아이디는 analytics.naver.com 에서 사이트를 등록하면 나오는 10자 안팎의 값.
 NAVER_WA_ID = "1b00676df2f64c0"   # 비어 있으면 넣지 않는다
 
+# 검색광고 전환추적용 「네이버공통키」(na_account_id). ★위 애널리틱스 ID 와 다른 값이다.
+# 검색광고 → 도구 → 프리미엄 로그분석 에서 발급된다(신청 후 영업일 1~2일).
+# 2026-09-21 네이버CTS 「스크립트 검수 보류」 메일 — 애널리틱스 ID 만 있어 검색광고 쪽이 안 잡혔다.
+# 공식 가이드: naver.github.io/conversion-tracking (01 · 07 페이지)
+# 애널리틱스와 둘 다 두면 로그가 2개 나가는 것이 정상이라고 가이드에 적혀 있다.
+NAVER_SA_KEY = ""   # 비어 있으면 넣지 않는다
+
 _A_시작, _A_끝 = "<!-- AUTO:site-tail -->", "<!-- /AUTO:site-tail -->"
 
 
@@ -1135,6 +1142,33 @@ def _naver_wa_snippet():
         'wcs_add["wa"] = "%s";'
         'if(window.wcs) { wcs_do(); }'
         '</script>' % NAVER_WA_ID.strip()
+    ) + _naver_sa_snippet()
+
+
+def _naver_sa_snippet():
+    # 공식 가이드 순서: 식별자 → wcs.inflow(쿠키 도메인) → wcs_do(PV) → 전환은 wcs.trans.
+    # 완료 페이지가 없는 구조라 전환은 클릭 시점에 보낸다.
+    #   tel: 클릭 → type "call" / 견적 폼 제출 → type "lead"
+    # 캡처 단계로 듣는다 — 견적 폼 핸들러가 preventDefault 를 하기 때문.
+    # 옛 방식(wcs.cnv)과 섞으면 전환이 두 번 잡히므로 쓰지 않는다.
+    if not NAVER_SA_KEY.strip():
+        return ""
+    return (
+        '<script type="text/javascript">'
+        'if(window.wcs){'
+        'if(!wcs_add) var wcs_add = {};'
+        'wcs_add["wa"] = "%s";'
+        'wcs.inflow("ddasom.com");'
+        'wcs_do();'
+        'document.addEventListener("click",function(e){'
+        'var a=e.target&&e.target.closest?e.target.closest(\'a[href^="tel:"]\'):null;'
+        'if(a&&window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"call"});}catch(x){}}'
+        '},true);'
+        'document.addEventListener("submit",function(e){'
+        'if(e.target&&e.target.id==="applyForm"&&window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"lead"});}catch(x){}}'
+        '},true);'
+        '}'
+        '</script>' % ((NAVER_SA_KEY.strip(),) * 3)
     )
 
 
