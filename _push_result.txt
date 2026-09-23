@@ -1,2 +1,16 @@
 ===RESULT=== 
 [1] add/commit 
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+ 
+[2] push  ← 여기서 실패하면 아래에 이유가 나옵니다 
+Everything up-to-date
+PUSH_EXIT_CODE=0 
+ 
+[3] local vs remote 
+3bd5109 대구 동성로 호텔 두 번째 객실 쉬폰 두배주름·방음암막 후기 추가
+3bd5109
+## main...origin/main
+ M _push_result.txt
