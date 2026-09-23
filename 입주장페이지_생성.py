@@ -214,7 +214,7 @@ def 페이지(d):
   </div>
 </main>
 
-<footer class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
+<footer class="foot">따솜커튼블라인드 · 대구·경북 전 지역 커튼·블라인드 출장 시공 · 기업·기관은 부산·울산·경남까지<br>
   <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../areas/%(area)s" style="color:var(--accent2)">%(city)s 커튼·블라인드</a> · <a href="../apply" style="color:var(--accent2)">견적 요청</a></footer>
 
 <div class="mbar">

@@ -530,7 +530,7 @@ __CARDS__
   </nav>
 </main>
 
-<footer class="foot">따솜커튼블라인드 · 대구·경북·부산·울산·경남 커튼·블라인드 출장 시공<br>
+<footer class="foot">따솜커튼블라인드 · 대구·경북 전 지역 커튼·블라인드 출장 시공 · 기업·기관은 부산·울산·경남까지<br>
   <a href="../" style="color:var(--accent2)">ddasom.com 홈으로</a> · <a href="../reviews/" style="color:var(--accent2)">전체 시공후기</a></footer>
 
 <div class="mbar">
@@ -767,7 +767,7 @@ def build_rss(posts, 개수=20):
         "<channel>\n"
         "  <title>따솜커튼블라인드 시공후기</title>\n"
         f"  <link>{BASE_URL}/reviews/</link>\n"
-        "  <description>대구·경북·부산·울산·경남 커튼·블라인드 방문 실측 시공 사례입니다.</description>\n"
+        "  <description>대구·경북 커튼·블라인드 방문 실측 시공 사례입니다.</description>\n"
         "  <language>ko</language>\n"
         f'  <atom:link href="{BASE_URL}/rss.xml" rel="self" type="application/rss+xml"/>\n'
         + "\n".join(항목) + "\n</channel>\n</rss>\n"
