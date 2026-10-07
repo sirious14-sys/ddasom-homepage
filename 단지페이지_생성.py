@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """입주 3~5년차 단지 페이지 (danji/).
 
+★사진을 넣지 않는다 — 그 집 사진은 이미 후기 페이지에 다 쓰였다. 같은 사진을 또 쓰면 중복이다
+  (사장님 지시 「사진 절대 중복 사용 금지」 2026-09-07). 사진은 후기 링크로 보게 한다.
+
 2026-09-07 사장님 지시: 「신축입주는 피하자 — 가격경쟁이 너무 치열하다. 3~5년 된 아파트가 낫다.
 전세가 만기되고 다른 사람이 또 입주할 수 있으니」.
 입주장 페이지(ipju/)와 다른 점 — 우리가 이미 시공한 단지만 만든다. 사례·사진은 그 단지 후기에서만 가져온다.
@@ -107,7 +110,7 @@ def 페이지(d):
 <meta property="og:title" content="%(danji)s 커튼·블라인드 — 이사 들어갈 때">
 <meta property="og:description" content="%(desc)s">
 <meta property="og:url" content="%(url)s">
-<meta property="og:image" content="https://ddasom.com/%(img_abs)s">
+<meta property="og:image" content="https://ddasom.com/promo-img/og-ipju-card.jpg">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -137,7 +140,6 @@ def 페이지(d):
 
   <h2>저희가 이 단지에서 한 시공</h2>
   <div class="case">
-    <img src="%(img)s" alt="%(imgalt)s" loading="lazy">
     <div>
       %(case)s
       <p class="body"><a href="%(review)s" style="color:var(--accent2);font-weight:700">이 집 시공후기 전체 보기 →</a></p>

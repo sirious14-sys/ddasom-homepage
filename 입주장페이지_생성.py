@@ -52,7 +52,9 @@ def 후기카드(area, n):
     카드들 = re.findall(r'<a class="card".*?</a>', t, re.S)
     if not 카드들:
         raise SystemExit("후기 카드를 못 찾았다: " + area)
-    return chr(10).join(카드들[:n])
+    # 사진은 빼고 글자 카드로만 — 후기 사진을 여기서 또 쓰면 중복이다(사장님 지시 2026-09-07).
+    카드들 = [re.sub(r"<picture>.*?</picture>|<img[^>]*>", "", c, flags=re.S) for c in 카드들[:n]]
+    return chr(10).join(카드들)
 
 
 def 받침(말, 있음, 없음):
@@ -64,10 +66,9 @@ def 받침(말, 있음, 없음):
 
 
 def 대표사진(area):
-    """그 지역 페이지의 og:image 를 그대로 쓴다 — 단지 사진은 우리 것이 아니다."""
-    t = open(os.path.join(HERE, "areas", area + ".html"), encoding="utf-8").read()
-    m = re.search(r'og:image" content="([^"]+)"', t)
-    return m.group(1) if m else "https://ddasom.com/promo-img/og.jpg"
+    """글자만 있는 안내 카드. 시공 사진을 쓰면 다른 페이지와 같은 사진이 또 나간다
+    — 사장님 지시 「사진 절대 중복 사용 금지」(2026-09-07). 사진은 후기 페이지 한 곳에서만 쓴다."""
+    return "https://ddasom.com/promo-img/og-ipju-card.jpg"
 
 
 def 페이지(d):
