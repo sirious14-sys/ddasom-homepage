@@ -261,8 +261,52 @@ def main():
             raise SystemExit("제어문자 %d개 (%s)" % (제어, d["file"]))
         open(os.path.join(OUT, d["file"]), "w", encoding="utf-8").write(html)
         print("%-16s %7d바이트  ipju/%s" % (d["danji"], len(html.encode("utf-8")), d["file"]))
+    open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(목록())
     print("")
-    print("%d개 생성" % len(단지들))
+    print("%d개 생성 + ipju/index.html" % len(단지들))
+
+
+def 목록():
+    """ipju/ 목록 — 단지 페이지들이 지역 페이지 한 곳에서만 연결돼 있고 /ipju/ 는 404 였다(2026-10-08)."""
+    줄 = "\n".join(
+        '    <a class="ipju-item" href="%s"><b>%s</b><span>%s 입주 · %s</span></a>'
+        % (d["file"].removesuffix(".html"), d["danji"], d["movein"], d["city"])
+        for d in sorted(단지들, key=lambda d: tuple(int(x) for x in re.findall(r"\d+", d["movein"]))))
+    return """<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대구·경북 입주 예정 아파트 커튼·블라인드 준비 일정 - 따솜커튼블라인드</title>
+<meta name="description" content="포항·영주·안동·구미 입주 예정 아파트 단지별 커튼·블라인드 준비 일정. 사전점검일에 재 오실 것과 실측 시기를 단지마다 정리했습니다.">
+<link rel="canonical" href="https://ddasom.com/ipju/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="따솜커튼블라인드">
+<meta property="og:title" content="입주 예정 아파트 커튼·블라인드 준비 일정">
+<meta property="og:url" content="https://ddasom.com/ipju/">
+%(style)s
+<style>
+.ipju-list{display:grid;gap:10px;margin-top:10px}
+.ipju-item{display:block;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px;text-decoration:none;color:inherit}
+.ipju-item b{display:block;font-size:18px;font-weight:800}
+.ipju-item span{font-size:14px;color:var(--soft)}
+</style>
+</head>
+<body>
+<main style="max-width:760px;margin:0 auto;padding:28px 16px 40px">
+  <p style="font-size:14px"><a href="../" style="color:var(--accent2)">따솜커튼블라인드</a> · <a href="../areas" style="color:var(--accent2)">출장 지역</a></p>
+  <h1>입주 예정 아파트,<br>커튼은 언제 준비하나</h1>
+  <p class="body">단지마다 사전점검일에 재 오실 것과 실측이 몰리는 시기를 정리했습니다.</p>
+  <p class="body">입주가 빠른 순서입니다. 목록에 없는 단지도 창 사진을 보내주시면 똑같이 안내드립니다.</p>
+  <div class="ipju-list">
+%(items)s
+  </div>
+  <p class="body" style="margin-top:22px"><a href="../apply" style="color:var(--accent2);font-weight:700">견적 요청하기 →</a></p>
+</main>
+%(tail)s
+</body>
+</html>
+""" % dict(style=STYLE, items=줄, tail=TAIL)
 
 
 if __name__ == "__main__":
