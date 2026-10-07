@@ -838,7 +838,7 @@ def build_picture():
     """
     감쌈 = 0
     for f in sorted(ROOT.rglob("*.html")):
-        if "_to_delete" in f.parts or f.name == "_template.html":
+        if "_to_delete" in f.parts or "tests" in f.parts or f.name == "_template.html":
             continue
         t = f.read_text(encoding="utf-8", errors="replace")
         놓친것 = [0]
@@ -1227,7 +1227,7 @@ def enrich_site_tail():
     분석 = "".join(s for s in (_clarity_snippet(), _naver_wa_snippet()) if s)
     바뀜 = 0
     for f in sorted(ROOT.rglob("*.html")):
-        if "_to_delete" in f.parts or f.name == "_template.html":
+        if "_to_delete" in f.parts or "tests" in f.parts or f.name == "_template.html":
             continue
         t = f.read_text(encoding="utf-8", errors="replace")
         if "noindex" in t.lower():
@@ -1277,7 +1277,7 @@ def 로봇메타():
     덩어리 = (_R_시작 + '\n<meta name="robots" content="max-image-preview:large">\n' + _R_끝)
     바뀜 = 건너뜀 = 0
     for f in sorted(ROOT.rglob("*.html")):
-        if "_to_delete" in f.parts or f.name == "_template.html":
+        if "_to_delete" in f.parts or "tests" in f.parts or f.name == "_template.html":
             continue
         t = f.read_text(encoding="utf-8", errors="replace")
         if _R_시작 in t:
