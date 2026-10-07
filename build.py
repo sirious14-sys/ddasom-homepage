@@ -187,6 +187,16 @@ def build_list(posts):
 #   공간 ∈ {거실, 침실, 상가·사무실}  ·  제품 ∈ {커튼, 블라인드, 롤스크린, 홀딩도어}
 #   ※ index.html의 필터 칩(data-filter)과 태그 문자열이 정확히 일치해야 함.
 GALLERY_ITEMS = [
+    # 2026-09~10 후기 (사진은 각 후기의 대표 이미지)
+    ("2026-10-02-pohang-ocheon-hillstate-combi-blackout-folding-door.html", "pohang-ocheon-hillstate-combi-blackout-folding-door/2.jpg", "거실", "블라인드", "거실 · 콤비블라인드"),
+    ("2026-10-01-uljin-hupo-ocean-castle-motorized-curtain.html", "uljin-hupo-ocean-castle-motorized-curtain/3.jpg", "거실", "커튼", "바다 쪽 거실 · 전동커튼"),
+    ("2026-09-18-pohang-uhyeondong-curtain-combi-blind.html", "pohang-uhyeondong-curtain-combi-blind/1.jpg", "거실", "커튼", "거실 · 커튼과 콤비블라인드"),
+    ("2026-09-18-uljin-apartment-livingroom-blackout-curtain.html", "uljin-apartment-livingroom-blackout-curtain/1.jpg", "거실", "커튼", "거실 · 형상기억 암막커튼"),
+    ("2026-09-23-yeongcheon-mangjeong-house-entrance-curtain.html", "yeongcheon-mangjeong-house-entrance-curtain/1.jpg", "거실", "커튼", "주택 현관 · 암막커튼"),
+    ("2026-10-02-ulsan-insurance-office-rollscreen.html", "ulsan-insurance-office-rollscreen/4.jpg", "상가·사무실", "롤스크린", "사무실 유리문 · 롤스크린"),
+    ("2026-10-01-andong-insurance-office-rollscreen.html", "andong-insurance-office-rollscreen/5.jpg", "상가·사무실", "롤스크린", "사무실 유리 칸막이 · 롤스크린"),
+    ("2026-09-18-uiseong-shop-blackout-rollscreen.html", "uiseong-shop-blackout-rollscreen/3.jpg", "상가·사무실", "롤스크린", "상가 통유리 · 암막 롤스크린"),
+    ("2026-09-15-daegu-dongseongno-hotel-sheer-curtain.html", "daegu-dongseongno-hotel-sheer-curtain/1.jpg", "상가·사무실", "커튼", "호텔 객실 · 쉬폰·방음암막커튼"),
     # 거실
     ("2026-07-18-uljin-villa.html", "uljin-villa/1.jpg", "거실", "커튼", "거실 · 헤비쉬폰 두배나비주름"),
     ("2026-07-31-pohang-hyoja-skview.html", "pohang-hyoja-skview/1.jpg", "거실", "커튼", "거실 · 인디언핑크 암막커튼"),
