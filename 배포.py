@@ -60,7 +60,22 @@ def 담기(dist: Path):
                             ignore=shutil.ignore_patterns("__pycache__", "*.py", "*.bat", "*.zip", "*.md"))
         else:
             shutil.copy2(원본, dist / 이름)
+    공개금지검사(dist)
     return 빠진것
+
+
+# 2026-10-08 코덱스 교차검증: 목록 문자열만 검사하는 시험은 append·작은따옴표 재포함을 못 잡았다.
+# 그래서 실제로 담긴 결과물(dist)을 올리기 직전에 본다. 하나라도 있으면 아무것도 안 올린다.
+공개금지_이름 = {"quote.html", "estimate.html", "quote", "estimate", "functions", "_초안_functions", "tests", ".git"}
+공개금지_확장자 = {".py", ".bat", ".md", ".zip", ".ps1", ".mjs"}
+
+
+def 공개금지검사(dist: Path):
+    걸림 = [str(p.relative_to(dist)) for p in dist.rglob("*")
+            if p.name in 공개금지_이름 or (p.is_file() and p.suffix.lower() in 공개금지_확장자)
+            or p.name.startswith(".") and p.name != ".well-known"]
+    if 걸림:
+        raise SystemExit("[배포 중단] 올리면 안 되는 파일이 담겼습니다(내부 견적·초안 함수·소스): " + ", ".join(걸림[:20]))
 
 
 INDEXNOW_KEY = "5874d855cbfb4be788976bdf69162102"   # ddasom.com 루트의 확인 파일과 같은 값
