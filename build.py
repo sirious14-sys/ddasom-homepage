@@ -373,9 +373,25 @@ NOTES = {
 }
 
 
+def _danji_block(region):
+    if region not in DANJI:
+        return ""
+    out = "\n  <h2>이미 시공한 단지 — 이사 들어가실 때</h2>\n"
+    for danji, file in DANJI[region]:
+        out += (f'  <p class="body"><a href="../danji/{링크(file)}" '
+                f'style="color:var(--accent2);font-weight:700">{danji} 커튼, 이사 들어갈 때 다시 맞추기 →</a></p>\n')
+    return out
+
+
+# 입주 3~5년차 단지 중 우리가 실제로 시공한 곳(danji/). 단지페이지_생성.py 가 만든다.
+DANJI = {
+    "포항": [("힐스테이트 포항", "hillstate-pohang.html")],
+}
+
+
 def _ipju_block(region):
     if region not in IPJU:
-        return ""
+        return _danji_block(region)
     out = "\n  <h2>입주 예정 단지</h2>\n"
     for danji, when, _file in IPJU[region]:
         조사 = "이" if "가" <= danji[-1] <= "힣" and (ord(danji[-1]) - 0xAC00) % 28 else "가"
@@ -385,7 +401,7 @@ def _ipju_block(region):
     for danji, _when, file in IPJU[region]:
         out += (f'  <p class="body"><a href="../ipju/{링크(file)}" '
                 f'style="color:var(--accent2);font-weight:700">{danji} 커튼 입주 일정 보기 →</a></p>\n')
-    return out
+    return out + _danji_block(region)
 
 
 # ── 지역 페이지 (areas/<slug>.html) ──────────────────────────────
@@ -713,6 +729,7 @@ def build_sitemap(posts, areas=()):
     urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b", today), (f"{BASE_URL}/b2b-bangyeom", today), (f"{BASE_URL}/b2b-office", today), (f"{BASE_URL}/b2b-school", today), (f"{BASE_URL}/b2b-clinic", today), (f"{BASE_URL}/b2b-shop", today), (f"{BASE_URL}/b2b-hotel", today), (f"{BASE_URL}/partner", today), (f"{BASE_URL}/services", today), (f"{BASE_URL}/gallery", today), (f"{BASE_URL}/areas", today), (f"{BASE_URL}/apply", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy", today)]
     urls += [(f"{BASE_URL}/areas/{slug}", today) for _r, slug, _n in areas]
     urls += [(f"{BASE_URL}/ipju/", today)]
+    urls += [(f"{BASE_URL}/danji/{p.stem}", today) for p in sorted((ROOT / "danji").glob("*.html"))]
     urls += [(f"{BASE_URL}/ipju/{file.removesuffix('.html')}", today) for _d, _w, file in _ipju_all()]
     # guides/ 정보글 — 파일을 두면 자동으로 사이트맵에 들어간다.
     guides = sorted(p.stem for p in (ROOT / "guides").glob("*.html") if p.stem != "index")
