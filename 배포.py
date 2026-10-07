@@ -57,7 +57,7 @@ def 담기(dist: Path):
             continue
         if 원본.is_dir():
             shutil.copytree(원본, dist / 이름,
-                            ignore=shutil.ignore_patterns("__pycache__", "*.py", "*.bat", "*.zip"))
+                            ignore=shutil.ignore_patterns("__pycache__", "*.py", "*.bat", "*.zip", "*.md"))
         else:
             shutil.copy2(원본, dist / 이름)
     return 빠진것
