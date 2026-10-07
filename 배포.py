@@ -22,13 +22,14 @@ ROOT = Path(__file__).resolve().parent
 PROJECT = "ddasom"
 
 # 올릴 것만 적는다. 여기 없는 것은 안 올라간다.
+# quote.html·estimate.html 은 내부용(원가·마진)이라 뺐다 — 사본: 바탕화면\따솜_내부용_견적계산기 (2026-10-08)
 # (예전에는 폴더째 올려서 build.py·_push.bat 이 그대로 공개돼 있었다)
 올릴것 = [
     "index.html", "services.html", "gallery.html", "areas.html", "apply.html",
-    "quote.html", "estimate.html", "privacy.html", "b2b.html", "b2b-bangyeom.html", "b2b-office.html", "b2b-school.html", "b2b-clinic.html", "b2b-shop.html", "b2b-hotel.html", "partner.html",
+    "privacy.html", "b2b.html", "b2b-bangyeom.html", "b2b-office.html", "b2b-school.html", "b2b-clinic.html", "b2b-shop.html", "b2b-hotel.html", "partner.html",
     "404.html", "site.css", "robots.txt", "sitemap.xml", "rss.xml", "llms.txt",
     "CNAME", "5874d855cbfb4be788976bdf69162102.txt",   # 네이버 사이트 확인 파일
-    "reviews", "areas", "ipju", "promo-img", "guides",
+    "reviews", "areas", "ipju", "danji", "promo-img", "guides",
 ]
 
 TOKEN_후보 = [
