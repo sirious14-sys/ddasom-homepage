@@ -55,6 +55,14 @@ def 후기카드(area, n):
     return chr(10).join(카드들[:n])
 
 
+def 받침(말, 있음, 없음):
+    """마지막 글자 받침에 맞춰 조사를 붙인다 — 「상생공원는」 같은 문장을 막는다."""
+    c = 말[-1]
+    if "가" <= c <= "힣":
+        return 말 + (있음 if (ord(c) - 0xAC00) % 28 else 없음)
+    return 말 + 없음
+
+
 def 대표사진(area):
     """그 지역 페이지의 og:image 를 그대로 쓴다 — 단지 사진은 우리 것이 아니다."""
     t = open(os.path.join(HERE, "areas", area + ".html"), encoding="utf-8").read()
@@ -187,7 +195,7 @@ def 페이지(d):
 
   <h2>사전점검일에 적어 오실 것</h2>
   <p class="body">사전점검은 법으로 정해져 있습니다.</p>
-  <p class="body">주택법 제48조의2에 따라 시공사는 입주지정기간이 시작되기 45일 전까지, 이틀 이상 사전점검을 열어야 합니다.</p>
+  <p class="body">주택법에 따라 사업주체(분양한 회사)는 입주지정기간이 시작되기 45일 전까지, 이틀 이상 사전점검을 열어야 합니다.<br>정확한 날짜는 사업주체가 입주예정자에게 따로 알립니다.</p>
   <p class="body">실제로는 입주 두세 달 전에 하는 경우가 많습니다.</p>
   <p class="body">그날이 잔금 전에 세대 안에 들어가실 수 있는 거의 유일한 날입니다.</p>
   <p class="body">줄자를 꼭 챙겨 가십시오.</p>
@@ -199,13 +207,13 @@ def 페이지(d):
 
   <h2>이웃과 날짜를 맞추시면 서로 빠릅니다</h2>
   <p class="body">입주 기간에는 엘리베이터에 이삿짐이 계속 오르내립니다.</p>
-  <p class="body">같은 날 같은 라인에 두세 집이 모이면 한 번에 올라가 끝냅니다.</p>
+  <p class="body">같은 날 같은 라인에 몇 집이 모이면 오르내리는 시간이 줄어듭니다.</p>
   <p class="body">저희도 빠르고 입주민들도 기다리는 시간이 줄어듭니다.</p>
-  <p class="body">이웃과 같이 문의하시는 경우 일정을 붙여서 잡아 드립니다.</p>
+  <p class="body">이웃과 같이 문의하시면 가능한 날짜를 확인해 함께 맞춰 보겠습니다.</p>
 
   <h2>%(city)s에서 실제로 한 시공입니다</h2>
-  <p class="body">%(danji)s는 아직 입주 전이라 이 단지 시공 사례는 없습니다.</p>
-  <p class="body">아래는 %(city)s 다른 곳에서 저희가 실제로 시공한 집들입니다.</p>
+  <p class="body">%(danji_eun)s 아직 입주 전이라 이 단지 시공 사례는 없습니다.</p>
+  <p class="body">아래는 %(city)s 다른 곳에서 저희가 실제로 시공한 현장들입니다.</p>
   <div class="cards">
     %(cards)s
   </div>
@@ -233,7 +241,7 @@ def 페이지(d):
 </body>
 </html>
 """ % dict(d, url=url, style=STYLE, extra=EXTRA, tail=TAIL, faq_ld=faq_ld,
-           ogimg=대표사진(d["area"]), faq_html=faq_html, sched=sched, chk=chk, spec=spec, body=본문,
+           ogimg=대표사진(d["area"]), danji_eun=받침(d["danji"], "은", "는"), faq_html=faq_html, sched=sched, chk=chk, spec=spec, body=본문,
            cards=후기카드(d["area"], d["ncards"]))
 
 

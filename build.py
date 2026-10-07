@@ -368,7 +368,8 @@ def _ipju_block(region):
         return ""
     out = "\n  <h2>입주 예정 단지</h2>\n"
     for danji, when, _file in IPJU[region]:
-        out += f'  <p class="body">{danji}가 {when}에 입주합니다.</p>\n'
+        조사 = "이" if "가" <= danji[-1] <= "힣" and (ord(danji[-1]) - 0xAC00) % 28 else "가"
+        out += f'  <p class="body">{danji}{조사} {when}에 입주합니다.</p>\n'
     out += ('  <p class="body">실측이 언제 몰리는지, 사전점검일에 무엇을 적어 오시면 되는지 '
             "날짜로 정리해 두었습니다.</p>\n")
     for danji, _when, file in IPJU[region]:
@@ -1156,9 +1157,9 @@ def _naver_wa_snippet():
 def _naver_sa_snippet():
     # 공식 가이드 순서: 식별자 → wcs.inflow(쿠키 도메인) → wcs_do(PV) → 전환은 wcs.trans.
     # 완료 페이지가 없는 구조라 전환은 클릭 시점에 보낸다.
-    #   tel: 클릭 → type "call" / 견적 문자 내용 완성 → type "lead"
-    # lead 는 submit 이 아니라 apply.html 이 검증 통과 후 보내는 quote:prepared 에 건다
-    # — submit 에 걸면 동의 누락으로 막힌 시도까지 전환으로 잡힌다(2026-10-07 코덱스 감사).
+    #   tel: 클릭 → type "call" / 견적 문자 내용 완성 → type "custom001"(보고서 이름: 견적 문자 작성)
+    # lead 를 쓰지 않는다 — 문자 내용을 만들어도 실제 발송은 확인할 수 없어 네이버의 lead(상담 신청 완료) 정의와 다르다.
+    # 2026-10-07 이전에는 submit 캡처에서 lead 를 보냈으므로 그 전후 수치는 같은 기준이 아니다.
     # 옛 방식(wcs.cnv)과 섞으면 전환이 두 번 잡히므로 쓰지 않는다.
     if not NAVER_SA_KEY.strip():
         return ""
@@ -1174,7 +1175,7 @@ def _naver_sa_snippet():
         'if(a&&window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"call"});}catch(x){}}'
         '},true);'
         'document.addEventListener("quote:prepared",function(){'
-        'if(window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"lead"});}catch(x){}}'
+        'if(window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"custom001"});}catch(x){}}'
         '});'
         '}'
         '</script>' % ((NAVER_SA_KEY.strip(),) * 3)
