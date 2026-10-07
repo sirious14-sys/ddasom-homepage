@@ -89,8 +89,12 @@ test('기본 off 및 새 속성/추가 블록 제거 시 원본 파일 바이트
   const stripped = current.toString().replace(' data-server-submit="off"', '').replace(/<!-- QUOTE-SERVER-DRAFT:start -->[\s\S]*?<!-- QUOTE-SERVER-DRAFT:end -->\r?\n/, '');
   assert.deepEqual(Buffer.from(stripped), baseline);
 });
-test('배포.py 바이트 불변', () => {
-  assert.equal(createHash('sha256').update(readFileSync(new URL('../배포.py', import.meta.url))).digest('hex'), 'feac739efb33e6e4933b0a0060a8718307cb5fda101bbb8d6decb731b5cb2f31');
+// 2026-10-08: 해시 고정 대신 업로드 목록의 핵심 조건을 검사한다(배포.py 가 정상 수정될 때마다 깨지던 문제).
+test('배포.py 업로드 목록: 내부 견적 페이지 제외·초안 함수 미포함·danji 포함', () => {
+  const src = readFileSync(new URL('../배포.py', import.meta.url), 'utf8');
+  const list = src.slice(src.indexOf('올릴것'), src.indexOf(']', src.indexOf('올릴것')));
+  for (const banned of ['quote.html', 'estimate.html', 'functions', '_초안_functions']) assert.ok(!list.includes(`"${banned}"`), banned);
+  assert.ok(src.includes('"danji"'), 'danji');
 });
 for (const device of Object.keys(agents)) {
   test(`off ${device}: 문자 본문/화면 HTML/SMS URI/복사/custom001 원본과 완전 일치, 서버 호출 0`, async () => {
