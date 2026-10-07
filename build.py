@@ -785,10 +785,12 @@ def build_rss(posts, 개수=20):
     항목 = []
     for p in 최신:
         주소 = f"{BASE_URL}/reviews/{p['file']}"
+        # link 는 canonical 과 같은 확장자 없는 주소로 — .html 은 308 을 한 번 더 거쳐 서치콘솔
+        # 「리디렉션 오류」로 잡혔다(2026-10-08). guid 는 그대로 둬야 리더가 같은 글을 새 글로 다시 받지 않는다.
         조각 = [
             f"    <title>{_xml탈출(p['title'])}</title>",
-            f"    <link>{주소}</link>",
-            f"    <guid isPermaLink=\"true\">{주소}</guid>",
+            f"    <link>{BASE_URL}/reviews/{링크(p['file'])}</link>",
+            f"    <guid isPermaLink=\"false\">{주소}</guid>",
             f"    <description>{_xml탈출(p['desc'])}</description>",
         ]
         날 = _rfc822(발행일(p["file"]))
