@@ -332,11 +332,19 @@ def build_home_gallery(posts):
 # 커튼은 입주할 때 산다. 입주 두세 달 전에 단지명 페이지를 깔아두면 검색을 선점한다.
 # 페이지 본문은 입주장페이지_생성.py 가 만든다. 여기서는 지역 페이지에서 거는 링크만 관리한다.
 # 입주가 끝난 단지는 이 표에서 지운다(지난 일정을 걸어두면 오히려 감점).
+# 한 지역에 단지가 여럿일 수 있다 — 입주가 빠른 순서로 적는다.
 IPJU = {
-    "영주": ("영주자이시그니처", "2026년 11월", "yeongju-xi-signature.html"),
-    "포항": ("포항자이디오션", "2026년 10월", "pohang-xi-dioceon.html"),
-    "안동": ("위파크안동호반", "2027년 1월", "wepark-andong-hoban.html"),
+    "영주": [("영주자이시그니처", "2026년 11월", "yeongju-xi-signature.html")],
+    "포항": [("포항자이디오션", "2026년 10월", "pohang-xi-dioceon.html"),
+             ("힐스테이트 더샵 상생공원", "2027년 9월", "pohang-sangsaeng-park.html")],
+    "안동": [("위파크안동호반", "2027년 1월", "wepark-andong-hoban.html"),
+             ("안동 용상 하늘채 리버스카이", "2027년 10월", "andong-yongsang-haneulchae.html")],
+    "구미": [("힐스테이트 구미더퍼스트", "2027년 4월", "gumi-hillstate-the-first.html")],
 }
+
+
+def _ipju_all():
+    return [t for v in IPJU.values() for t in v]
 
 
 # ── 티스토리 비교 노트 (지역별 1편) ──────────────────────────
@@ -358,15 +366,15 @@ NOTES = {
 def _ipju_block(region):
     if region not in IPJU:
         return ""
-    danji, when, file = IPJU[region]
-    return (
-        "\n  <h2>입주 예정 단지</h2>\n"
-        f'  <p class="body">{danji}가 {when}에 입주합니다.</p>\n'
-        '  <p class="body">실측이 언제 몰리는지, 사전점검일에 무엇을 적어 오시면 되는지 '
-        "날짜로 정리해 두었습니다.</p>\n"
-        f'  <p class="body"><a href="../ipju/{링크(file)}" '
-        f'style="color:var(--accent2);font-weight:700">{danji} 커튼 입주 일정 보기 →</a></p>\n'
-    )
+    out = "\n  <h2>입주 예정 단지</h2>\n"
+    for danji, when, _file in IPJU[region]:
+        out += f'  <p class="body">{danji}가 {when}에 입주합니다.</p>\n'
+    out += ('  <p class="body">실측이 언제 몰리는지, 사전점검일에 무엇을 적어 오시면 되는지 '
+            "날짜로 정리해 두었습니다.</p>\n")
+    for danji, _when, file in IPJU[region]:
+        out += (f'  <p class="body"><a href="../ipju/{링크(file)}" '
+                f'style="color:var(--accent2);font-weight:700">{danji} 커튼 입주 일정 보기 →</a></p>\n')
+    return out
 
 
 # ── 지역 페이지 (areas/<slug>.html) ──────────────────────────────
@@ -549,8 +557,8 @@ def _area_jsonld(region, slug, mgr, tel, ogimg):
         "@graph": [
             {
                 "@type": "WebPage",
-                "@id": f"https://ddasom.com/areas/{slug}.html#webpage",
-                "url": f"https://ddasom.com/areas/{slug}.html",
+                "@id": f"https://ddasom.com/areas/{slug}#webpage",
+                "url": f"https://ddasom.com/areas/{slug}",
                 "name": f"{region} 커튼집·블라인드 전문점 | 따솜커튼블라인드",
                 "inLanguage": "ko",
                 "about": {"@type": "City", "name": region},
@@ -562,7 +570,7 @@ def _area_jsonld(region, slug, mgr, tel, ogimg):
                 "@type": "BreadcrumbList",
                 "itemListElement": [
                     {"@type": "ListItem", "position": 1, "name": "따솜커튼블라인드", "item": "https://ddasom.com/"},
-                    {"@type": "ListItem", "position": 2, "name": f"{region} 커튼·블라인드 시공", "item": f"https://ddasom.com/areas/{slug}.html"},
+                    {"@type": "ListItem", "position": 2, "name": f"{region} 커튼·블라인드 시공", "item": f"https://ddasom.com/areas/{slug}"},
                 ],
             },
             {
@@ -693,7 +701,7 @@ def build_sitemap(posts, areas=()):
     today = date.today().isoformat()
     urls = [(f"{BASE_URL}/", today), (f"{BASE_URL}/b2b", today), (f"{BASE_URL}/b2b-bangyeom", today), (f"{BASE_URL}/b2b-office", today), (f"{BASE_URL}/b2b-school", today), (f"{BASE_URL}/b2b-clinic", today), (f"{BASE_URL}/b2b-shop", today), (f"{BASE_URL}/b2b-hotel", today), (f"{BASE_URL}/partner", today), (f"{BASE_URL}/services", today), (f"{BASE_URL}/gallery", today), (f"{BASE_URL}/areas", today), (f"{BASE_URL}/apply", today), (f"{BASE_URL}/reviews/", today), (f"{BASE_URL}/privacy", today)]
     urls += [(f"{BASE_URL}/areas/{slug}", today) for _r, slug, _n in areas]
-    urls += [(f"{BASE_URL}/ipju/{file.removesuffix('.html')}", today) for _d, _w, file in IPJU.values()]
+    urls += [(f"{BASE_URL}/ipju/{file.removesuffix('.html')}", today) for _d, _w, file in _ipju_all()]
     # guides/ 정보글 — 파일을 두면 자동으로 사이트맵에 들어간다.
     guides = sorted(p.stem for p in (ROOT / "guides").glob("*.html") if p.stem != "index")
     urls += [(f"{BASE_URL}/guides/", today)]
@@ -1148,8 +1156,9 @@ def _naver_wa_snippet():
 def _naver_sa_snippet():
     # 공식 가이드 순서: 식별자 → wcs.inflow(쿠키 도메인) → wcs_do(PV) → 전환은 wcs.trans.
     # 완료 페이지가 없는 구조라 전환은 클릭 시점에 보낸다.
-    #   tel: 클릭 → type "call" / 견적 폼 제출 → type "lead"
-    # 캡처 단계로 듣는다 — 견적 폼 핸들러가 preventDefault 를 하기 때문.
+    #   tel: 클릭 → type "call" / 견적 문자 내용 완성 → type "lead"
+    # lead 는 submit 이 아니라 apply.html 이 검증 통과 후 보내는 quote:prepared 에 건다
+    # — submit 에 걸면 동의 누락으로 막힌 시도까지 전환으로 잡힌다(2026-10-07 코덱스 감사).
     # 옛 방식(wcs.cnv)과 섞으면 전환이 두 번 잡히므로 쓰지 않는다.
     if not NAVER_SA_KEY.strip():
         return ""
@@ -1164,9 +1173,9 @@ def _naver_sa_snippet():
         'var a=e.target&&e.target.closest?e.target.closest(\'a[href^="tel:"]\'):null;'
         'if(a&&window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"call"});}catch(x){}}'
         '},true);'
-        'document.addEventListener("submit",function(e){'
-        'if(e.target&&e.target.id==="applyForm"&&window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"lead"});}catch(x){}}'
-        '},true);'
+        'document.addEventListener("quote:prepared",function(){'
+        'if(window.wcs&&wcs.trans){try{wcs_add["wa"]="%s";wcs.trans({type:"lead"});}catch(x){}}'
+        '});'
         '}'
         '</script>' % ((NAVER_SA_KEY.strip(),) * 3)
     )
@@ -1350,10 +1359,9 @@ def 관련후기(posts):
         # 후기는 이미 색인된 페이지라 여기서 걸어주면 크롤러가 따라 들어간다.
         # 읽는 사람에게도 맞다 — 그 지역 시공을 보고 있는 사람이 그 지역 입주 예정자다.
         입주줄 = ""
-        if 내지역 in IPJU:
-            단지, 시기, 파일 = IPJU[내지역]
-            입주줄 = (f'\n  <p class="rel-ipju"><a href="../ipju/{링크(파일)}">'
-                     f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
+        for 단지, 시기, 파일 in IPJU.get(내지역, []):
+            입주줄 += (f'\n  <p class="rel-ipju"><a href="../ipju/{링크(파일)}">'
+                      f'{단지}({시기} 입주) 커튼 준비 일정 보기 →</a></p>')
 
         # 그 지역 비교 노트 한 줄. 위 IPJU 주석과 같은 이유로 건다.
         노트줄 = ""

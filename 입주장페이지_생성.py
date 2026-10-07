@@ -55,6 +55,13 @@ def 후기카드(area, n):
     return chr(10).join(카드들[:n])
 
 
+def 대표사진(area):
+    """그 지역 페이지의 og:image 를 그대로 쓴다 — 단지 사진은 우리 것이 아니다."""
+    t = open(os.path.join(HERE, "areas", area + ".html"), encoding="utf-8").read()
+    m = re.search(r'og:image" content="([^"]+)"', t)
+    return m.group(1) if m else "https://ddasom.com/promo-img/og.jpg"
+
+
 def 페이지(d):
     # ddasom.com 은 /x.html 을 308 로 /x 에 넘긴다. canonical·og:url·JSON-LD 가
     # .html 을 가리키면 「리디렉션이 포함된 페이지」로 색인이 막힌다(2026-09-08 실측).
@@ -90,6 +97,7 @@ def 페이지(d):
 <meta property="og:title" content="%(ogtitle)s">
 <meta property="og:description" content="%(desc)s">
 <meta property="og:url" content="%(url)s">
+<meta property="og:image" content="%(ogimg)s">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -225,7 +233,7 @@ def 페이지(d):
 </body>
 </html>
 """ % dict(d, url=url, style=STYLE, extra=EXTRA, tail=TAIL, faq_ld=faq_ld,
-           faq_html=faq_html, sched=sched, chk=chk, spec=spec, body=본문,
+           ogimg=대표사진(d["area"]), faq_html=faq_html, sched=sched, chk=chk, spec=spec, body=본문,
            cards=후기카드(d["area"], d["ncards"]))
 
 
