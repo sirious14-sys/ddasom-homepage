@@ -18,6 +18,7 @@
   사장님 원칙: 원본은 네이버 한 곳에만 한 번 · 홈페이지는 홈페이지 전용 변형본만 · 같은 채널 재사용 금지.
   담기() 뒤에, 지난 배포 기록과 비교해 「이번 배포로 새로 추가·변경되는 사진」만
   사진체크.업로드전검사(채널="홈페이지") 로 검사한다. 사진체크 모듈이 없거나·기록이 없거나·걸리면 배포를 멈춘다.
+  2026-10-08e: 토큰 없음·명령 시작 실패(업로드 전 확실한 실패)만 예약해제. wrangler 종료값≠0 은 원격 반영 여부를 모르므로 결과모름.
 """
 import hashlib
 import importlib.util
@@ -242,14 +243,28 @@ def main():
     환경 = dict(os.environ)
     환경["CLOUDFLARE_API_TOKEN"] = tk
     # --branch=main 을 안 주면 로컬 깃 가지를 보고 미리보기로 올라간다.
-    r = subprocess.run(
-        ["npx", "--yes", "wrangler", "pages", "deploy", str(dist),
-         "--project-name=" + PROJECT, "--branch=main", "--commit-dirty=true"],
-        cwd=str(ROOT), shell=True, env=환경)
-    if r.returncode != 0:
-        print("   [실패] 업로드가 안 됐다 — 사이트는 그대로다")
+    # 2026-10-08e(코덱스 20261008h §1-4): 명령을 시작조차 못 한 것만 확실한 실패(예약해제).
+    #   명령이 돌다가 종료값≠0 이면 일부·전부가 이미 Cloudflare 에 반영됐을 수 있다 → 예약을 풀지 않고 「결과모름」(계속 막음).
+    try:
+        r = subprocess.run(
+            ["npx", "--yes", "wrangler", "pages", "deploy", str(dist),
+             "--project-name=" + PROJECT, "--branch=main", "--commit-dirty=true"],
+            cwd=str(ROOT), shell=True, env=환경)
+    except OSError as e:
+        print("   [실패] 업로드 명령을 시작하지 못했다(%s) — 아무것도 안 올라갔다" % e)
         if 새사진:
-            사진체크.예약해제("홈페이지 배포 실패")
+            사진체크.예약해제("배포 명령 시작 못 함 — 업로드 안 함")
+        return 1
+    if r.returncode != 0:
+        print("   [실패] 업로드 명령이 종료값 %d 로 끝났다 — 일부가 이미 올라갔는지 모른다(결과모름)" % r.returncode)
+        if 새사진:
+            모름 = getattr(사진체크, "예약결과모름", None)
+            if 모름:
+                모름("홈페이지 배포 명령 종료값 %d — 원격 반영 여부 모름" % r.returncode)
+            else:   # 옛 사진체크: 예약을 풀지 않는다(프로세스가 끝날 때 「결과모름」으로 남아 계속 막음)
+                print("   ★사진 예약을 풀지 않고 남긴다 — ddasom.com 에 새 사진이 올라갔는지 확인 후 사진체크.py --예약해제 <id>")
+            print("   → ddasom.com 에서 새 사진 반영 여부를 확인: 안 올라갔으면 `python 사진체크.py --예약해제 <id>` 후 다시 배포 /"
+                  " 올라갔으면 사진사용등록 + --예약해제 후 기준 갱신")
         return r.returncode
     print("   올라갔다 → https://ddasom.com/")
     if 새사진:

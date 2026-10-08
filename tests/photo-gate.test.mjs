@@ -25,6 +25,8 @@ def 사용등록(paths, where):
     _w("등록", len(paths), where)
 def 예약해제(이유="", rid=None):
     _w("해제", 이유)
+def 예약결과모름(이유="", rid=None):
+    _w("결과모름", 이유)
 `;
 writeFileSync(join(work, '사진체크.py'), fake, 'utf8');
 
@@ -108,11 +110,65 @@ test('배포.py 사진 관문: 새로·바뀐 사진만 홈페이지 채널로 �
   assert.equal(out['새것_관문통과'][0], '통과:2');
   // 관문 실패면 wrangler 를 부르지 않는다
   assert.deepEqual(out['실행_관문실패'], ['중단', ['검사']]);
-  // 업로드 실패면 예약을 풀고 기록은 그대로
-  assert.deepEqual(out['실행_업로드실패'], [1, ['검사', 'wrangler', '해제']]);
+  // 업로드 명령 종료값≠0 이면 원격 반영 여부를 모른다 → 예약을 풀지 않고 결과모름, 기록은 그대로 (2026-10-08e, 코덱스 20261008h §1-4)
+  assert.deepEqual(out['실행_업로드실패'], [1, ['검사', 'wrangler', '결과모름']]);
   // 성공하면 검사 → 업로드 → 사용 등록, 기록 갱신
   assert.deepEqual(out['실행_성공'], [0, ['검사', 'wrangler', '등록']]);
   assert.deepEqual(out['기록갱신'], [1, 4]);
   // 갱신된 기록 기준으로는 새 사진이 없다 → 검사 없이 업로드
   assert.deepEqual(out['다시_실행'], [0, ['wrangler']]);
+});
+
+// 2026-10-08e 코덱스 교차검증 20261008h §1-4: 업로드 전의 확실한 실패(토큰 없음·명령 시작 못 함)만 예약해제,
+// 명령이 돌다가 종료값≠0 이면 결과모름(예약 유지). 옛 사진체크(예약결과모름 없음)면 예약을 풀지 않는다.
+const py2 = `
+import importlib.util, sys, json, os, pathlib, shutil
+spec = importlib.util.spec_from_file_location("deploy", "배포.py"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+W = pathlib.Path(sys.argv[1]); LOG = W / "log.jsonl"
+os.environ["FAKE_SAJIN_LOG"] = str(LOG); os.environ["FAKE_SAJIN_OK"] = "1"; os.environ["TEMP"] = str(W)
+m.사진도구 = W
+def fake_담기(d):
+    d = pathlib.Path(d)
+    if d.exists(): shutil.rmtree(d)
+    (d / "reviews/img").mkdir(parents=True); (d / "reviews/img/new.jpg").write_bytes(b"N"); return []
+m.담기 = fake_담기
+m.사진기록쓰기({}, "시험")
+m.색인알림 = lambda d: None
+class R: returncode = 0
+def log():
+    return [json.loads(l)[0] for l in LOG.read_text(encoding="utf-8").splitlines()] if LOG.exists() else []
+def run(token, how):
+    if LOG.exists(): LOG.unlink()
+    m.토큰 = (lambda: "TEST") if token else (lambda: None)
+    def fake_run(args, **kw):
+        if how == "oserror": raise FileNotFoundError("cmd 없음")
+        open(LOG, "a", encoding="utf-8").write(json.dumps(["wrangler"]) + "\\n"); R.returncode = how; return R
+    m.subprocess.run = fake_run
+    sys.argv = ["배포.py", "--실행"]
+    return [m.main(), log()]
+out = {}
+out["토큰없음"] = run(False, 0)
+out["명령시작실패"] = run(True, "oserror")
+out["종료값1"] = run(True, 1)
+out["종료값1_기록"] = len(json.loads(m.배포기록경로().read_text(encoding="utf-8"))["사진"])
+import types
+옛 = m.사진모듈
+def 옛모듈():
+    C = 옛(); C2 = types.SimpleNamespace(**{k: getattr(C, k) for k in ("업로드전검사", "사용등록", "예약해제")}); return C2
+m.사진모듈 = 옛모듈
+out["옛모듈_종료값1"] = run(True, 1)
+print(json.dumps(out, ensure_ascii=False))
+`;
+
+test('배포.py 결과모름: 토큰 없음·명령 시작 실패만 예약해제, wrangler 종료값≠0 은 결과모름(예약 유지)', () => {
+  const work2 = mkdtempSync(join(tmpdir(), 'ddasom-photogate2-'));
+  writeFileSync(join(work2, '사진체크.py'), fake, 'utf8');
+  const r = spawnSync('python', ['-X', 'utf8', '-c', py2, work2], { cwd: root, encoding: 'utf8', env: { ...process.env, PYTHONIOENCODING: 'utf-8' } });
+  assert.equal(r.status, 0, r.stderr + r.stdout);
+  const out = JSON.parse(r.stdout.trim().split('\n').pop());
+  assert.deepEqual(out['토큰없음'], [1, ['검사', '해제']]);             // 명령 실행 전 — 확실히 안 올라감
+  assert.deepEqual(out['명령시작실패'], [1, ['검사', '해제']]);         // 명령을 시작조차 못 함
+  assert.deepEqual(out['종료값1'], [1, ['검사', 'wrangler', '결과모름']]); // 돌다가 실패 — 원격 반영 모름
+  assert.equal(out['종료값1_기록'], 0);                                  // 배포 기록은 갱신하지 않는다
+  assert.deepEqual(out['옛모듈_종료값1'], [1, ['검사', 'wrangler']]);    // 예약결과모름이 없는 옛 모듈이어도 해제하지 않는다
 });
