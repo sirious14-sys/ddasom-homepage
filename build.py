@@ -188,6 +188,8 @@ def build_list(posts):
 #   ※ index.html의 필터 칩(data-filter)과 태그 문자열이 정확히 일치해야 함.
 GALLERY_ITEMS = [
     # 2026-09~10 후기 (사진은 각 후기의 대표 이미지)
+    ("2026-09-16-jeju-jungmun-restaurant-blind.html", "jeju-jungmun-restaurant-blind/1.jpg", "상가·사무실", "블라인드", "고깃집 통창 · 가로 블라인드"),
+    ("2026-10-08-busan-busanjin-insurance-office-rollscreen.html", "busan-busanjin-insurance-office-rollscreen/2.jpg", "상가·사무실", "롤스크린", "회의실 유리벽 · 롤스크린"),
     ("2026-10-06-daegu-duryu-education-office-rollscreen.html", "daegu-duryu-education-office-rollscreen/1.jpg", "상가·사무실", "롤스크린", "교육장 · 롤스크린"),
     ("2026-10-08-pohang-chogok-hillstate-combi-blackout-curtain.html", "pohang-chogok-hillstate-combi-blackout-curtain/2.jpg", "거실", "블라인드", "ㄱ자 거실 · 콤비블라인드·속커튼"),
     ("2026-10-07-cheongsong-solgi-apartment-blackout-rollscreen.html", "cheongsong-solgi-apartment-blackout-rollscreen/11.jpg", "침실", "롤스크린", "작은방 · 암막 롤스크린"),
